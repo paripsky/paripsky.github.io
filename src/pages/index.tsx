@@ -34,7 +34,10 @@ const Home: NextPage = () => {
     'linear(to-r, blue.100, teal.400)',
   );
   const { colorMode } = useColorMode();
-  const fullPageSize = useBreakpointValue({ base: '100vh', md: 'calc(100vh - 56px)' });
+  const fullPageSize = useBreakpointValue({
+    base: ['fill-available'],
+    md: 'calc(100vh - 56px)',
+  });
   const skillIcons = useMemo(() => skills(colorMode), [colorMode]);
 
   return (
