@@ -1,3 +1,4 @@
+import { ColorMode } from '@chakra-ui/react';
 import {
   SiAerospike,
   SiAmazonaws,
@@ -43,7 +44,7 @@ import {
   SiWebpack,
 } from 'react-icons/si';
 
-const skills = [
+const skills = (theme: ColorMode) => [
   {
     hoverColor: '#61DAFB',
     icon: SiReact,
@@ -201,7 +202,7 @@ const skills = [
     href: 'https://mochajs.org/',
   },
   {
-    hoverColor: 'white',
+    hoverColor: theme === 'dark' ? 'white' : 'black',
     icon: SiNextdotjs,
     'aria-label': 'Next.js',
     href: 'https://nextjs.org/',

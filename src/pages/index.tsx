@@ -5,9 +5,11 @@ import {
   SimpleGrid,
   Text,
   useBreakpointValue,
+  useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
+import { useMemo } from 'react';
 import { BsArrowDownCircle } from 'react-icons/bs';
 import {
   FaGithub,
@@ -31,7 +33,9 @@ const Home: NextPage = () => {
     'linear(to-r, blue.500, purple.700)',
     'linear(to-r, blue.100, teal.400)',
   );
+  const { colorMode } = useColorMode();
   const fullPageSize = useBreakpointValue({ base: '100vh', md: 'calc(100vh - 56px)' });
+  const skillIcons = useMemo(() => skills(colorMode), [colorMode]);
 
   return (
     <DefaultLayout>
@@ -95,7 +99,7 @@ const Home: NextPage = () => {
         <Box d="flex" flexDir="column" alignItems="center" mt="2">
           <Text>Skills</Text>
           <SimpleGrid columns={{ base: 6, md: 14 }} mt="2">
-            {skills.map((skill) => (
+            {skillIcons.map((skill) => (
               <IconLink
                 key={skill.href}
                 hoverColor={skill.hoverColor}
