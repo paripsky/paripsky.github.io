@@ -44,7 +44,7 @@ const Home: NextPage = () => {
         h={fullPageSize}
         scrollSnapAlign="start">
         <Text
-          mt="20vh"
+          mt={{ base: '10vh', md: '20vh' }}
           d="inline-block"
           bgGradient={topTextGradient}
           bgClip="text"
