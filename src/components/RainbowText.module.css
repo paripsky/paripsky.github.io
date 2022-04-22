@@ -1,0 +1,63 @@
+.text {
+    fill: none;
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-dasharray: 70 280;
+    stroke-dashoffset: 0;
+    -webkit-animation: stroke 10s infinite linear;
+    animation: stroke 10s infinite linear;
+    font: 4em/1 Oswald, sans-serif;
+}
+
+.text:nth-child(5n + 1) {
+    stroke: #f2385a;
+    -webkit-animation-delay: -2s;
+    animation-delay: -2s;
+}
+
+.text:nth-child(5n + 2) {
+    stroke: #f5a503;
+    -webkit-animation-delay: -4s;
+    animation-delay: -4s;
+}
+
+.text:nth-child(5n + 3) {
+    stroke: #e9f1df;
+    -webkit-animation-delay: -6s;
+    animation-delay: -6s;
+}
+
+.text:nth-child(5n + 4) {
+    stroke: #56d9cd;
+    -webkit-animation-delay: -8s;
+    animation-delay: -8s;
+}
+
+.text:nth-child(5n + 5) {
+    stroke: #3aa1bf;
+    -webkit-animation-delay: -10s;
+    animation-delay: -10s;
+}
+
+.svg {
+    pointer-events: none;
+    transform: scale(1);
+}
+
+/* @media only screen and (min-width: 768px) {
+    .svg {
+        transform: scale(2);
+   }
+} */
+
+@-webkit-keyframes stroke {
+    100% {
+        stroke-dashoffset: -350;
+   }
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: -350;
+   }
+}

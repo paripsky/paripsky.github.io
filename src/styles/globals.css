@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+
+html,
+body, p {
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+  /* font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none !important;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-10px); }
+}
+
+.float-animation {
+  animation: float 1s infinite alternate;
+}
+
+@media (prefers-reduced-motion) {
+  .float-animation {
+    animation: none;
+  }
+}
