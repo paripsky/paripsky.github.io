@@ -32,7 +32,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
       <Head />
       <MouseTrail isEnabled={mouseTrailEnabled} />
       <Box
-        height="100vh"
+        h="100vh"
         w="full"
         scrollSnapType={{ base: 'y mandatory', sm: 'none' }}
         scrollBehavior="smooth"

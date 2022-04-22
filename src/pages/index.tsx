@@ -44,7 +44,7 @@ const Home: NextPage = () => {
         d="flex"
         flexDir="column"
         alignItems="center"
-        h={fullPageSize}
+        minH={fullPageSize}
         scrollSnapAlign="start">
         <Text
           mt={{ base: '10vh', md: '20vh' }}
@@ -109,7 +109,7 @@ const Home: NextPage = () => {
             ))}
           </SimpleGrid>
         </Box>
-        <Link href="#timeline" bottom="2" pos="absolute" className="float-animation">
+        <Link href="#timeline" mt="10" className="float-animation">
           <Icon as={BsArrowDownCircle} w={8} h={8} />
         </Link>
       </Box>
