@@ -4,7 +4,6 @@ import {
   Link,
   SimpleGrid,
   Text,
-  useBreakpointValue,
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -34,10 +33,7 @@ const Home: NextPage = () => {
     'linear(to-r, blue.100, teal.400)',
   );
   const { colorMode } = useColorMode();
-  const fullPageSize = useBreakpointValue({
-    base: ['fill-available'],
-    md: 'calc(100vh - 56px)',
-  });
+  const fullPageSize = 'calc(100vh - 56px)';
   const skillIcons = useMemo(() => skills(colorMode), [colorMode]);
 
   return (

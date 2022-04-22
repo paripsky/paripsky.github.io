@@ -24,7 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ mouseTrailEnabled, setMouseTrailEnabled
   const { toggleColorMode } = useColorMode();
 
   return (
-    <chakra.header pos={{ base: 'absolute', md: 'sticky' }} top="0" w="full" zIndex="1">
+    <chakra.header pos="sticky" top="0" w="full" zIndex="1">
       <chakra.nav d="flex" p="2" backdropFilter="blur(.4em)" bg="transparent">
         <NextLink href="/" passHref>
           <Button as="a" variant="ghost" fontWeight="normal">
