@@ -19,6 +19,7 @@ const tokenToColorMap = {
   success: 'green',
   warning: 'orange',
   error: 'red',
+  neutral: 'gray',
 };
 
 const colors = Object.entries(tokenToColorMap).reduce((acc, [token, color]) => {
