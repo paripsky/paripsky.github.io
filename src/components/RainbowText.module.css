@@ -10,33 +10,53 @@
 }
 
 .text:nth-child(5n + 1) {
-    stroke: #f2385a;
+    stroke: var(--chakra-colors-pink-500);
     -webkit-animation-delay: -2s;
     animation-delay: -2s;
 }
 
 .text:nth-child(5n + 2) {
-    stroke: #f5a503;
+    stroke: var(--chakra-colors-purple-500);
     -webkit-animation-delay: -4s;
     animation-delay: -4s;
 }
 
 .text:nth-child(5n + 3) {
-    stroke: #e9f1df;
+    stroke: var(--chakra-colors-purple-300);
     -webkit-animation-delay: -6s;
     animation-delay: -6s;
 }
 
 .text:nth-child(5n + 4) {
-    stroke: #56d9cd;
+    stroke: var(--chakra-colors-cyan-500);
     -webkit-animation-delay: -8s;
     animation-delay: -8s;
 }
 
 .text:nth-child(5n + 5) {
-    stroke: #3aa1bf;
+    stroke: var(--chakra-colors-blue-500);
     -webkit-animation-delay: -10s;
     animation-delay: -10s;
+}
+
+.chakra-ui-dark .text:nth-child(5n + 1) {
+    stroke: var(--chakra-colors-pink-500);
+}
+
+.chakra-ui-dark .text:nth-child(5n + 2) {
+    stroke: var(--chakra-colors-purple-500);
+}
+
+.chakra-ui-dark .text:nth-child(5n + 3) {
+    stroke: var(--chakra-colors-teal-500);
+}
+
+.chakra-ui-dark .text:nth-child(5n + 4) {
+    stroke: var(--chakra-colors-cyan-500);
+}
+
+.chakra-ui-dark .text:nth-child(5n + 5) {
+    stroke: var(--chakra-colors-blue-500);
 }
 
 .svg {

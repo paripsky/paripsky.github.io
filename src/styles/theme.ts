@@ -24,8 +24,8 @@ const tokenToColorMap = {
 const colors = Object.entries(tokenToColorMap).reduce((acc, [token, color]) => {
   availableColorTins.forEach((tint) => {
     acc[`${token}-${tint}`] = {
-      default: `${color}-${tint}`,
-      _dark: `${color}-${tint}`,
+      default: `${color}.${tint}`,
+      _dark: `${color}.${tint}`,
     };
   });
   return acc;
@@ -39,13 +39,13 @@ const theme = extendTheme({
   config: {
     initialColorMode: 'dark',
     useSystemColorMode: false,
-    semanticTokens: {
-      colors: {
-        ...colors,
-        text: {
-          default: 'gray.900',
-          _dark: 'gray.50',
-        },
+  },
+  semanticTokens: {
+    colors: {
+      ...colors,
+      text: {
+        default: 'gray.900',
+        _dark: 'gray.50',
       },
     },
   },
