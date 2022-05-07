@@ -34,7 +34,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
       <Box
         h="100vh"
         w="full"
-        scrollSnapType={{ base: 'y mandatory', sm: 'none' }}
+        // scrollSnapType={{ base: 'y mandatory', sm: 'none' }}
         scrollBehavior="smooth"
         overflowY="auto"
         onScroll={onContainerScroll}>

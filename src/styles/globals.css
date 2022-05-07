@@ -16,7 +16,7 @@ body.chakra-ui-light {
 
 body.chakra-ui-dark::before {
   content: "";
-  position: absolute;
+  position: fixed;
   height: 200px;
   width: 200px;
   filter: blur(140px);
@@ -25,7 +25,7 @@ body.chakra-ui-dark::before {
 
 body.chakra-ui-dark::after {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 200px;
   left: 250px;
   height: 200px;
