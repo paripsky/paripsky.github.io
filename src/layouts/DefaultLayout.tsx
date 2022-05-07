@@ -1,5 +1,5 @@
 import { Box, chakra, Fade, Icon, Link } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsArrowUpCircle } from 'react-icons/bs';
 
 import Head from '../components/Head';
@@ -18,26 +18,29 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
   );
   const [showScrollToTop, setShowScrollToTop] = useState(false);
 
-  const onContainerScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop } = e.currentTarget;
-    setShowScrollToTop(scrollTop > 100);
+  useEffect(() => {
+    const onContainerScroll = () => {
+      const { scrollTop } = document.scrollingElement as HTMLElement;
+      setShowScrollToTop(scrollTop > 100);
 
-    if (scrollTop === 0 && typeof window !== 'undefined') {
-      location.hash = '';
-    }
-  };
+      if (scrollTop === 0 && typeof window !== 'undefined') {
+        location.hash = '';
+      }
+    };
+
+    document.addEventListener('scroll', onContainerScroll);
+
+    return () => document.removeEventListener('scroll', onContainerScroll);
+  }, [setShowScrollToTop]);
 
   return (
     <>
       <Head />
       <MouseTrail isEnabled={mouseTrailEnabled} />
       <Box
-        h="100vh"
         w="full"
         // scrollSnapType={{ base: 'y mandatory', sm: 'none' }}
-        scrollBehavior="smooth"
-        overflowY="auto"
-        onScroll={onContainerScroll}>
+        scrollBehavior="smooth">
         <Navbar
           mouseTrailEnabled={mouseTrailEnabled}
           setMouseTrailEnabled={setMouseTrailEnabled}
