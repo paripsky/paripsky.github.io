@@ -1,74 +1,77 @@
 import {
   Box,
+  Button,
+  Flex,
   Icon,
   Link,
+  List,
+  ListIcon,
+  ListItem,
   SimpleGrid,
   Text,
   useColorMode,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import { useMemo } from 'react';
-import { BsArrowDownCircle } from 'react-icons/bs';
+import { BsArrowDownCircle, BsPhone, BsShield } from 'react-icons/bs';
 import {
+  FaCoffee,
   FaGithub,
   FaLinkedinIn,
   FaMediumM,
   FaStackOverflow,
   FaTwitter,
 } from 'react-icons/fa';
+import { SiNodedotjs, SiVuedotjs } from 'react-icons/si';
 
 import IconLink from '../components/IconLink';
-import RainbowText from '../components/RainbowText';
+import Timeline from '../components/Timeline';
 import skills from '../constants/skills';
 import DefaultLayout from '../layouts/DefaultLayout';
 
 const Home: NextPage = () => {
-  const topTextGradient = useColorModeValue(
-    'linear(to-l, blue.200, teal.400)',
-    'linear(to-l, pink.200, purple.400)',
-  );
-  const bottomTextGradient = useColorModeValue(
-    'linear(to-r, blue.500, purple.700)',
-    'linear(to-r, blue.100, teal.400)',
-  );
   const { colorMode } = useColorMode();
   const fullPageSize = 'calc(100vh - 56px)';
   const skillIcons = useMemo(() => skills(colorMode), [colorMode]);
 
+  function scrollToTimeline() {
+    return document.querySelector('#timeline')?.scrollIntoView();
+  }
+
   return (
     <DefaultLayout>
-      <Box
+      <Flex
         id="main"
         pos="relative"
-        d="flex"
         flexDir="column"
         alignItems="center"
         minH={fullPageSize}
         scrollSnapAlign="start">
-        <Text
-          mt={{ base: '5vh', md: '20vh' }}
-          d="inline-block"
-          bgGradient={topTextGradient}
-          bgClip="text"
-          textAlign="center"
-          fontSize="6xl"
-          fontWeight="bold">
-          Hey, I&apos;m Yonatan
-        </Text>
-        <Box w="full" maxW="400px">
-          <RainbowText text="a Full Stack" viewBox="0 0 400 120"></RainbowText>
+        <Box mt={{ base: '2em', md: '20vh' }}>
+          <Text display="inline-block" fontSize="6xl" fontWeight="bold">
+            Hey!
+          </Text>
+          <Text
+            display="inline-block"
+            fontSize="6xl"
+            ml="4"
+            fontWeight="bold"
+            color="primary.300">
+            I&apos;m Yonatan
+          </Text>
         </Box>
-        <Text
-          my="-10"
-          d="inline-block"
-          bgGradient={bottomTextGradient}
-          bgClip="text"
-          fontSize="2xl"
-          fontWeight="bold">
-          Web developer
-        </Text>
-        <Box mt="14">
+        <Box>
+          <Text fontSize="xl" color="neutral.300">
+            A Full Stack Web Developer
+          </Text>
+        </Box>
+        <Flex gap="1em" mt="4">
+          <Button bg="primary.300" color="neutral.900" _hover={{ bg: 'primary.200' }}>
+            Download CV
+          </Button>
+          <Button onClick={scrollToTimeline}>Learn more</Button>
+        </Flex>
+        <Box mt="8">
           <IconLink
             href="https://medium.com/@paripsky"
             aria-label="navigate to Medium"
@@ -95,7 +98,7 @@ const Home: NextPage = () => {
             icon={FaTwitter}
           />
         </Box>
-        <Box d="flex" flexDir="column" alignItems="center" mt="2">
+        <Box display="flex" flexDir="column" alignItems="center" mt="2">
           <Text>Skills</Text>
           <SimpleGrid columns={{ base: 6, md: 14 }} mt="2">
             {skillIcons.map((skill) => (
@@ -112,14 +115,83 @@ const Home: NextPage = () => {
         <Link href="#timeline" mt="10" className="float-animation">
           <Icon as={BsArrowDownCircle} w={8} h={8} />
         </Link>
-      </Box>
-      <Box mt="4" pt="14" id="timeline" h={fullPageSize} scrollSnapAlign="start">
-        skills react icon, vue icon, redux, material ui, ant design, chakra ui, etc, java,
-        php, mysql
-      </Box>
-      <Box mt="4" pt="14" id="timeline" h={fullPageSize} scrollSnapAlign="start">
-        Timeline
-      </Box>
+      </Flex>
+      <Flex
+        justifyContent="center"
+        mt="4"
+        pt="14"
+        id="timeline"
+        h={fullPageSize}
+        scrollSnapAlign="start">
+        <Flex flexDirection="column" justifyContent="center">
+          <Text fontSize="xl" color="neutral.300" mb="4">
+            Timeline
+          </Text>
+          <Timeline
+            entries={[
+              {
+                date: '2020 - Present',
+                title: (
+                  <>
+                    Full Stack Developer @{' '}
+                    <Link href="https://www.is.com/" isExternal>
+                      ironSource
+                    </Link>
+                  </>
+                ),
+                description: (
+                  <>
+                    <List mt="2" spacing="1">
+                      <ListItem display="flex" alignItems="center">
+                        <ListIcon as={SiNodedotjs} color="accent.500" />
+                        Built NodeJS services with Typescript, Express, TypeORM
+                      </ListItem>
+                      <ListItem display="flex" alignItems="center">
+                        <ListIcon
+                          as={SiVuedotjs}
+                          color="accent.500"
+                          alignSelf="baseline"
+                          mt="1"
+                        />
+                        Created UIs with VueJS, Vuex, Vue Router, Vite, Sass
+                        <br />
+                        Worked on a migration of AngularJS pages to Vue
+                      </ListItem>
+                    </List>
+                  </>
+                ),
+                icon: <Icon as={BsPhone} />,
+              },
+              {
+                date: '2020',
+                title: (
+                  <>
+                    Full Stack Developer @{' '}
+                    <Link href="https://www.drinkripples.com/" isExternal>
+                      Ripples
+                    </Link>
+                  </>
+                ),
+                description: (
+                  <>
+                    Built a Web Content Management System & Web apps with React,
+                    <br />
+                    TypeScript, NodeJS, Express, MongoDB, and AWS
+                  </>
+                ),
+                icon: <Icon as={FaCoffee} />,
+              },
+              {
+                date: '2015 - 2020',
+                title: 'Full Stack Developer @ IDF Matzpen',
+                description:
+                  'Built a Complex Map Component with React, Redux, Material-UI and ArcGIS',
+                icon: <Icon as={BsShield} />,
+              },
+            ]}
+          />
+        </Flex>
+      </Flex>
       <Box mt="4" pt="14" id="timeline" h={fullPageSize} scrollSnapAlign="start">
         Contact me
       </Box>

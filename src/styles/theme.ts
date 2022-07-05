@@ -23,9 +23,9 @@ const tokenToColorMap = {
 };
 
 const colors = Object.entries(tokenToColorMap).reduce((acc, [token, color]) => {
-  availableColorTins.forEach((tint) => {
-    acc[`${token}-${tint}`] = {
-      default: `${color}.${tint}`,
+  availableColorTins.forEach((tint, index) => {
+    acc[`${token}.${tint}`] = {
+      default: `${color}.${availableColorTins[availableColorTins.length - 1 - index]}`,
       _dark: `${color}.${tint}`,
     };
   });

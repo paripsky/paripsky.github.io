@@ -9,23 +9,21 @@ import {
 import NextLink from 'next/link';
 import React from 'react';
 import { FaBloggerB, FaMoon, FaSun } from 'react-icons/fa';
-import { GiTrail } from 'react-icons/gi';
 import { HiDocumentDownload } from 'react-icons/hi';
 import { IoLogoGameControllerB } from 'react-icons/io';
 
 type NavbarProps = {
-  mouseTrailEnabled: boolean;
-  setMouseTrailEnabled: (enabled: boolean) => void;
+  children?: React.ReactNode;
 };
 
-const Navbar: React.FC<NavbarProps> = ({ mouseTrailEnabled, setMouseTrailEnabled }) => {
+const Navbar: React.FC<NavbarProps> = ({}) => {
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
   const text = useColorModeValue('dark', 'light');
   const { toggleColorMode } = useColorMode();
 
   return (
     <chakra.header pos="sticky" top="0" w="full" zIndex="1">
-      <chakra.nav d="flex" p="2" backdropFilter="blur(.4em)" bg="transparent">
+      <chakra.nav display="flex" p="2" backdropFilter="blur(.4em)" bg="transparent">
         <NextLink href="/" passHref>
           <Button as="a" variant="ghost" fontWeight="normal">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -62,17 +60,6 @@ const Navbar: React.FC<NavbarProps> = ({ mouseTrailEnabled, setMouseTrailEnabled
             Game
           </Button>
         </NextLink>
-        <IconButton
-          size="md"
-          fontSize="lg"
-          aria-label="toggle mouse trail"
-          variant="ghost"
-          color="current"
-          ml="2"
-          textColor={mouseTrailEnabled ? 'current' : 'gray.500'}
-          onClick={() => setMouseTrailEnabled(!mouseTrailEnabled)}
-          icon={<GiTrail />}
-        />
         <IconButton
           size="md"
           fontSize="lg"

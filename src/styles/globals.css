@@ -10,27 +10,11 @@ body {
 }
 
 body.chakra-ui-light {
-  background: var(--chakra-colors-gray-100);
+  background: var(--chakra-colors-neutral-800);
 }
 
-body.chakra-ui-dark::before {
-  content: "";
-  position: fixed;
-  height: 200px;
-  width: 200px;
-  filter: blur(140px);
-  background: var(--chakra-colors-cyan-300);
-}
-
-body.chakra-ui-dark::after {
-  content: "";
-  position: fixed;
-  top: 200px;
-  left: 250px;
-  height: 200px;
-  width: 200px;
-  filter: blur(140px);
-  background: var(--chakra-colors-pink-500);
+body.chakra-ui-dark {
+  background: var(--chakra-colors-neutral-900);
 }
 
 a {
