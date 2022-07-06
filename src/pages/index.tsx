@@ -48,20 +48,20 @@ const Home: NextPage = () => {
         minH={fullPageSize}
         scrollSnapAlign="start">
         <Box mt={{ base: '2em', md: '20vh' }}>
-          <Text display="inline-block" fontSize="6xl" fontWeight="bold">
+          <Text display="inline-block" fontSize="5xl" fontWeight="bold">
             Hey!
           </Text>
           <Text
             display="inline-block"
-            fontSize="6xl"
-            ml="4"
+            fontSize="5xl"
+            ml="2"
             fontWeight="bold"
             color="primary.300">
             I&apos;m Yonatan
           </Text>
         </Box>
         <Box>
-          <Text fontSize="xl" color="neutral.300">
+          <Text fontSize="lg" color="neutral.300">
             A Full Stack Web Developer
           </Text>
         </Box>
@@ -123,7 +123,7 @@ const Home: NextPage = () => {
         id="timeline"
         h={fullPageSize}
         scrollSnapAlign="start">
-        <Flex flexDirection="column" justifyContent="center">
+        <Flex flexDirection="column" justifyContent="center" mx="4">
           <Text fontSize="xl" color="neutral.300" mb="4">
             Timeline
           </Text>
@@ -143,7 +143,12 @@ const Home: NextPage = () => {
                   <>
                     <List mt="2" spacing="1">
                       <ListItem display="flex" alignItems="center">
-                        <ListIcon as={SiNodedotjs} color="accent.500" />
+                        <ListIcon
+                          as={SiNodedotjs}
+                          color="accent.500"
+                          alignSelf="baseline"
+                          mt="1"
+                        />
                         Built NodeJS services with Typescript, Express, TypeORM
                       </ListItem>
                       <ListItem display="flex" alignItems="center">
