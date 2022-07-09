@@ -2,17 +2,22 @@ import {
   Box,
   Button,
   Flex,
+  FormControl,
+  FormLabel,
+  Heading,
   Icon,
+  Input,
   Link,
   List,
   ListIcon,
   ListItem,
   SimpleGrid,
   Text,
+  Textarea,
   useColorMode,
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { BsArrowDownCircle, BsPhone, BsShield } from 'react-icons/bs';
 import {
   FaCoffee,
@@ -29,8 +34,16 @@ import Timeline from '../components/Timeline';
 import skills from '../constants/skills';
 import DefaultLayout from '../layouts/DefaultLayout';
 
+const MY_EMAIL = 'paripsky';
+
 const Home: NextPage = () => {
   const { colorMode } = useColorMode();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const subject = `${name} sent you a message from your portfolio`;
+  const body = encodeURIComponent(`${message}\n\n${email}`);
+  const emailHref = `mailto:${MY_EMAIL}@gmail.com?subject=${subject}&body=${body}`;
   const fullPageSize = 'calc(100vh - 56px)';
   const skillIcons = useMemo(() => skills(colorMode), [colorMode]);
 
@@ -41,6 +54,7 @@ const Home: NextPage = () => {
   return (
     <DefaultLayout>
       <Flex
+        as="main"
         id="main"
         pos="relative"
         flexDir="column"
@@ -63,6 +77,9 @@ const Home: NextPage = () => {
         <Box>
           <Text fontSize="lg" color="neutral.300">
             A Full Stack Web Developer
+          </Text>
+          <Text display="flex" justifyContent="center" fontSize="md" color="neutral.300">
+            ❤️ React, Node &amp; Anything JS
           </Text>
         </Box>
         <Flex gap="1em" mt="4">
@@ -195,11 +212,64 @@ const Home: NextPage = () => {
               },
             ]}
           />
+          <Link href="#contact" mt="10" className="float-animation" alignSelf="center">
+            <Icon as={BsArrowDownCircle} w={8} h={8} />
+          </Link>
         </Flex>
       </Flex>
-      <Box mt="4" pt="14" id="timeline" h={fullPageSize} scrollSnapAlign="start">
-        Contact me
-      </Box>
+      <Flex
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        mt="4"
+        pt="14"
+        id="contact"
+        h={fullPageSize}
+        scrollSnapAlign="start">
+        <Heading mb="4">Contact Me</Heading>
+        <Flex
+          as="form"
+          flexDirection="column"
+          bg="neutral.800"
+          w="md"
+          p="4"
+          borderRadius="4">
+          <FormControl>
+            <FormLabel htmlFor="name">Name</FormLabel>
+            <Input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </FormControl>
+          <FormControl mt="2">
+            <FormLabel htmlFor="email">Email address</FormLabel>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </FormControl>
+          <FormControl mt="2">
+            <FormLabel htmlFor="message">Message</FormLabel>
+            <Textarea
+              id="message"
+              rows={4}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+          </FormControl>
+          <Button
+            as="a"
+            mt="2"
+            disabled={!name || !email || !message}
+            href={name && email && message ? emailHref : undefined}>
+            Send
+          </Button>
+        </Flex>
+      </Flex>
     </DefaultLayout>
   );
 };

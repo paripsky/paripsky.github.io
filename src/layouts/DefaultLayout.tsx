@@ -1,9 +1,10 @@
-import { Box, chakra, Fade, Icon, IconButton } from '@chakra-ui/react';
+import { Box, Fade, Flex, Icon, IconButton } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { BsArrowUpCircle } from 'react-icons/bs';
 
 import Head from '../components/Head';
 import Navbar from '../components/Navbar';
+import Terminal from '../components/Terminal';
 import { scrollToTop } from '../utils/scroll';
 
 export type DefaultLayoutProps = {
@@ -32,12 +33,13 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
     <>
       <Head />
       <Box w="full" scrollBehavior="smooth">
+        <Terminal />
         <Navbar />
 
         {children}
-        <chakra.footer scrollSnapAlign="start" h="5em">
-          built with Next.js + Chakra UI
-        </chakra.footer>
+        <Flex as="footer" p="4" justifyContent="center">
+          Built with Next.js + Chakra UI
+        </Flex>
 
         <Fade in={showScrollToTop}>
           <IconButton

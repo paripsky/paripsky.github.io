@@ -8,9 +8,12 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import React from 'react';
+import { BsTerminal } from 'react-icons/bs';
 import { FaBloggerB, FaMoon, FaSun } from 'react-icons/fa';
 import { HiDocumentDownload } from 'react-icons/hi';
 import { IoLogoGameControllerB } from 'react-icons/io';
+
+import { useTerminal } from '../context/terminal';
 
 type NavbarProps = {
   children?: React.ReactNode;
@@ -20,6 +23,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
   const text = useColorModeValue('dark', 'light');
   const { toggleColorMode } = useColorMode();
+  const { onToggle: onToggleTerminal } = useTerminal();
 
   return (
     <chakra.header pos="sticky" top="0" w="full" zIndex="1">
@@ -60,6 +64,16 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             Game
           </Button>
         </NextLink>
+        <IconButton
+          size="md"
+          fontSize="lg"
+          aria-label="Toggle terminal"
+          variant="ghost"
+          color="current"
+          ml="2"
+          onClick={onToggleTerminal}
+          icon={<BsTerminal />}
+        />
         <IconButton
           size="md"
           fontSize="lg"
