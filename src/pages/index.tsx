@@ -14,6 +14,7 @@ import {
   SimpleGrid,
   Text,
   Textarea,
+  useBreakpointValue,
   useColorMode,
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
@@ -231,7 +232,7 @@ const Home: NextPage = () => {
           as="form"
           flexDirection="column"
           bg="neutral.800"
-          w="md"
+          w={useBreakpointValue({ base: 'xs', md: 'md' })}
           p="4"
           borderRadius="4">
           <FormControl>
