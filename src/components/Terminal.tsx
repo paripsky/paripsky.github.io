@@ -3,6 +3,7 @@ import {
   Input,
   Slide,
   Text,
+  useBreakpointValue,
   useColorModeValue,
   useOutsideClick,
 } from '@chakra-ui/react';
@@ -98,7 +99,7 @@ function Terminal({}: TerminalProps) {
         flexDirection="column"
         justifyContent="center"
         fontFamily="'Press Start 2P'"
-        fontSize="xs"
+        fontSize={useBreakpointValue({ base: 'md', md: 'xs' })}
         p="4"
         ref={ref}
         maxH="md"

@@ -66,7 +66,7 @@ const commands: Record<string, Command> = {
 };
 
 function handleCommand(command: string, commandAPI: CommandAPI) {
-  const cmd = command.split(' ')[0];
+  const cmd = command.split(' ')[0].toLowerCase();
   const args = command.split(' ').slice(1);
 
   if (!commands[cmd]) {
