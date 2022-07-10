@@ -232,6 +232,8 @@ const Home: NextPage = () => {
           as="form"
           flexDirection="column"
           bg="neutral.800"
+          border="1px solid"
+          borderColor="neutral.700"
           w={useBreakpointValue({ base: 'xs', md: 'md' })}
           p="4"
           borderRadius="4">
@@ -265,6 +267,7 @@ const Home: NextPage = () => {
           <Button
             as="a"
             mt="2"
+            bg="accent.600"
             disabled={!name || !email || !message}
             href={name && email && message ? emailHref : undefined}>
             Send
