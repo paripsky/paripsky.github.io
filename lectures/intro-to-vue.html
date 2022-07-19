@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <title>Vue for beginners</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/moon.css" id="theme">
+
+  <!-- Theme used for syntax highlighted code -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css" id="highlight-theme" />
+  <style>
+    .drop-shadow {
+      filter: drop-shadow(0 0 8px darkgreen);
+    }
+
+    .subtitle {
+      opacity: 0.7;
+      font-size: 0.7em;
+    }
+
+    note {
+      position: fixed;
+      top: 0;
+      left: 0;
+      font-size: 0.5em;
+      background: white;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(6px);
+    }
+
+    .js-ex-help-list {
+      font-size: 0.7em;
+      list-style-type: none;
+    }
+
+    .js-ex-help-list>li {
+      margin-top: 0.5em;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <h1 class="drop-shadow">Vue for beginners</h1>
+        <h6>Session I - Introduction to Vue</h6>
+      </section>
+      <section>
+        <h3>Why do we need a UI Framework?</h3>
+        <ul>
+          <li>Binding - To events & observables</li>
+          <li>Performace - Components are compiled to performant render functions (VDOM)</li>
+          <li>Huge community and ecosystem</li>
+          <li>Get started quickly (cdn, vue-cli, create react app)</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Vue</h3>
+        <ul>
+          <li>A Javascript UI Framework</li>
+          <li>Open Source & Community driven</li>
+          <li>Designed from the ground up to be incrementally adoptable</li>
+          <li>As performant if not more than other UI frameworks (React/Angular)</li>
+          <li>4th most starred project on github (182,035 ⭐)</li>
+        </ul>
+      </section>
+      <section>
+        <note>Vue</note>
+        <h3>A Vue Instance</h3>
+        <pre><code data-trim data-line-numbers>
+						const app1 = new Vue({
+        // #app is a selector for our Vue app container
+        el: '#app',
+        // data is always a function that returns the initial state
+        data() {
+          // message is an observable value
+          // and will update the UI when changed
+          return { message: 'Hello world!' };
+        },
+        methods: {
+          reverse() {
+            // access data observables using 'this'
+            this.message = this.message.split('').reverse().join('');
+          }
+        }
+      });</code></pre>
+      </section>
+      <section>
+        <note>Vue - app1</note>
+        <h3>Declerative Rendering</h3>
+        <pre><code data-trim data-line-numbers>
+						<div id="app">
+        <p>Message: {{ message }}</p>
+        <p>12 x 12 = {{ 12 * 12 }}</p>
+        <p>0.1 + 0.2 != {{ 0.1 + 0.2 }}</p>
+        <p>Message: {{ message ? message : 'Default Message' }}</p>
+      </div>
+        </code></pre>
+        <div id="app1">
+          <p>Message: {{ message }}</p>
+          <p>12 x 12 = {{ 12 * 12 }}</p>
+          <p>0.1 + 0.2 != {{ 0.1 + 0.2 }}</p>
+          <p>Message: {{ message ? message : 'Default Message' }}</p>
+        </div>
+        <!-- <button onclick="app1.message ? app1.message = '' : app1.message = 'Hello world!'">Toggle Message</button> -->
+        <div class="subtitle">To change the message variable,<br /> open the dev console and edit app1.message</div>
+        <script>
+          app1 = new Vue({
+            el: '#app1',
+            data() {
+              return { message: 'Hello world!' };
+            },
+            methods: {
+              reverse() {
+                this.message = this.message.split('').reverse().join('');
+              }
+            }
+          });
+        </script>
+      </section>
+      <!-- <section>
+        <note>Vue</note>
+        <h3>Vue lifecycle</h3>
+        <div style="overflow-y: auto;height: 500px;">
+          <img src="images/vue-lifecycle.png" style="max-width: 98%; max-height: initial;" />
+        </div>
+      </section> -->
+      <section>
+        <note>Vue</note>
+        <h3>DOM & VDOM</h3>
+        <div class="subtitle">
+          Document Object Model - VNode vs Node
+        </div>
+        <pre><code data-trim data-line-numbers>
+          <div>
+            <h1>My title</h1>
+            Some text content
+            <!-- TODO: Add tagline -->
+          </div>
+        </code></pre>
+        <img src="images/vdom-tree.png" height="400px" style="margin: 0;" />
+      </section>
+      <section>
+        <note>Directives - app2</note>
+        <h3>Directives</h3>
+        <div class="subtitle">
+          They are Vue extended html attributes that tell the vue to do something to a DOM element.
+        </div>
+        <div class="fragment">
+          <h5>v-if</h5>
+          <pre><code data-trim data-line-numbers>
+						<div id="app">
+        <p v-if="user === 'admin'">Admin Panel</p>
+        <p v-else-if="user === 'user'">Homepage</p>
+        &lt;p v-else&gt;Login&lt;/p&gt;
+      </div>
+        </code></pre>
+          <div id="app2">
+            <p v-if="user === 'admin'">Admin Panel</p>
+            <p v-else-if="user === 'user'">Homepage</p>
+            <p v-else>Login</p>
+          </div>
+          <button onclick="app2.user = 'admin'">admin</button>
+          <button onclick="app2.user = 'user'">user</button>
+          <button onclick="app2.user = 'guest'">guest</button>
+        </div>
+        <script>
+          app2 = new Vue({
+            el: '#app2',
+            data() {
+              return { user: '' }
+            }
+          });
+        </script>
+      </section>
+      <section>
+        <note>Loops - app3</note>
+        <h3>v-for</h3>
+        <div class="subtitle">
+          v-for Allows us to render a list of items based on an array [or object]
+        </div>
+        <pre><code data-trim data-line-numbers>
+						<div id="app">
+        <ul>
+          <li v-for="item in items">{{ item }}</li>
+        </ul>
+      </div>
+        </code></pre>
+        <div id="app3">
+          <ul>
+            <li v-for="item in items">{{ item }}</li>
+          </ul>
+        </div>
+        <button onclick="app3.items.push(window.prompt('Enter item to add'))">Add Item</button>
+        <script>
+          app3 = new Vue({
+            el: '#app3',
+            data() {
+              return {
+                items: ['Item 1', 'Item 2', 'Item 3']
+              };
+            }
+          });
+        </script>
+      </section>
+      <section>
+        <note>Binding - app4</note>
+        <h3>v-bind</h3>
+        <div class="subtitle">
+          v-bind Allows us to manipulate HTML attributes with dynamic data
+        </div>
+        <pre><code data-trim data-line-numbers>
+						<div id="app">
+        <a v-bind:href="url" v-bind:title="tooltip">Home</a>
+        <a :href="url" :title="tooltip + ' but cooler'">Home</a>
+        <a :href="url" :title="tooltip" :class="{ 'drop-shadow': glow }">Home With Glow</a>
+      </div>
+        </code></pre>
+        <div id="app4">
+          <a v-bind:href="url" v-bind:title="tooltip">Home</a> <br />
+          <a :href="url" :title="tooltip + ' but cooler'">Home</a> <br />
+          <a :href="url" :title="tooltip" :class="{ 'drop-shadow': glow }">Home With Glow</a>
+        </div>
+        <button onclick="app4.glow = !app4.glow">Toggle glow</button>
+        <script>
+          app4 = new Vue({
+            el: '#app4',
+            data() {
+              return {
+                tooltip: 'I\'m a tooltip',
+                url: '#',
+                glow: true
+              };
+            }
+          });
+        </script>
+      </section>
+      <section>
+        <note>Event Listeners - app5</note>
+        <h3>v-on</h3>
+        <div class="subtitle">
+          v-on Allows us to attach JavaScript functions to
+          common events (click, change, submit, etc..)
+        </div>
+        <pre><code data-trim data-line-numbers="2-8|11-25|1-26">
+						<div id="app">
+        <button v-on:click="alert('clicked!'); clickCount++;">
+          Clicked {{ clickCount }} times
+        </button>
+        <button @mouseenter="enterCount++">
+          Mouse entered {{ enterCount }} times
+        </button>
+        <button @click="reset">reset</button>
+      </div>
+      &lt;script&gt;
+      app5 = new Vue({
+        el: '#app5',
+        data() {
+          return {
+            clickCount: 0,
+            enterCount: 0
+          };
+        },
+        methods: {
+          reset() {
+            this.clickCount = 0;
+            this.enterCount = 0;
+          }
+        }
+      });
+      &lt;/script&gt;
+        </code></pre>
+        <div id="app5">
+          <button v-on:click="alert('clicked!'); clickCount++;">Clicked {{ clickCount }} times</button>
+          <button @mouseenter="enterCount++">Mouse entered {{ enterCount }} times</button>
+          <button @click="reset">reset</button>
+        </div>
+        <script>
+          app5 = new Vue({
+            el: '#app5',
+            data() {
+              return {
+                clickCount: 0,
+                enterCount: 0
+              };
+            },
+            methods: {
+              alert: (msg) => window.alert(msg),
+              reset() {
+                this.clickCount = 0;
+                this.enterCount = 0;
+              }
+            }
+          });
+        </script>
+      </section>
+      <section>
+        <note>2-Way Binding - app6</note>
+        <h3>v-model</h3>
+        <div class="subtitle">
+          v-model Allows us to use two-way
+          data binding
+        </div>
+        <pre><code data-trim data-line-numbers="2-3|4-6|9-17|1-18">
+						<div id="app">
+        <input type="number" v-model="count" />
+        <button @click="count++">Clicked {{ count }} times!</button>
+        <input type="text" v-model="name" />
+        <span>Hello {{ name }}!</span>
+        <button @click="name = 'world'">reset</button>
+      </div>
+      &lt;script&gt;
+      app6 = new Vue({
+        el: '#app6',
+        data() {
+          return {
+            count: 0,
+            name: 'world'
+          };
+        }
+      });
+      &lt;/script&gt;
+        </code></pre>
+        <div id="app6">
+          <input type="number" v-model="count" />
+          <button @click="count++">Clicked {{ count }} times!</button> <br />
+          <input type="text" v-model="name" />
+          <span>Hello {{ name }}!</span>
+          <button @click="name = 'world'">reset</button>
+        </div>
+        <script>
+          app6 = new Vue({
+            el: '#app6',
+            data() {
+              return {
+                count: 0,
+                name: 'world'
+              };
+            }
+          });
+        </script>
+      </section>
+      <section>
+        <h3>Exercise 01 - Todo app</h3>
+        <ol>
+          <li>Add v-model binding to the form input, bind to the value variable</li>
+          <li>Add v-if to the 'The todo list is empty.' div</li>
+          <li>Complete the missing v-for and :class bindings of the list item </li>
+          <li>Replace 'Item 1' with an {{ expression }} that shows the todo's title</li>
+          <li>Fix the addTodo & toggleTodo methods</li>
+          <li>You should now be able to add todo items</li>
+        </ol>
+      </section>
+      <section>
+        <h3>Exercise 01-b - Clear done todos</h3>
+        <ol>
+          <li>Add a clear done button <br /> &lt;button @click="clearDone"&gt;Clear Done&lt;/button&gt;</li>
+          <li>Add a clear done method (clearDone) to the Vue instance</li>
+        </ol>
+      </section>
+      <section>
+        <h3>What we've learned</h3>
+        <ul>
+          <li>The Vue Instance (el, data, methods)</li>
+          <li>Directives (v-if, v-for)</li>
+          <li>Binding (v-model, v-bind)</li>
+          <li>Event listeners (v-on)</li>
+        </ul>
+      </section>
+      <section>
+        <h3>What's next</h3>
+        <ul>
+          <li>Components & SFC</li>
+          <li>Lifecycle Hooks</li>
+          <li>Props & Slots</li>
+          <li>State management & Routing</li>
+        </ul>
+      </section>
+      <section>
+        <div class="rainbow">
+          <svg viewBox="0 0 1400 300" style="width: 100%">
+            <!-- Symbol -->
+            <symbol id="s-text">
+              <text text-anchor="middle" x="50%" y="50%" dy=".35em">
+                Question Time!
+              </text>
+            </symbol>
+
+            <!-- Duplicate symbols -->
+            <use xlink:href="#s-text" class="text"></use>
+            <use xlink:href="#s-text" class="text"></use>
+            <use xlink:href="#s-text" class="text"></use>
+            <use xlink:href="#s-text" class="text"></use>
+            <use xlink:href="#s-text" class="text"></use>
+          </svg>
+        </div>
+        <img src="images/any-questions.jpeg" height="450" style="margin-top: -50px;" />
+      </section>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+  <script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+
+      // Learn about plugins: https://revealjs.com/plugins/
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+    });
+  </script>
+</body>
+
+</html>
