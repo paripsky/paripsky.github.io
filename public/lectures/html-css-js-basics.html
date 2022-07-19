@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>Vue for beginners</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/moon.css">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/monokai.css"
+      id="highlight-theme"
+    />
+    <style>
+      .drop-shadow {
+        filter: drop-shadow(0 0 8px darkgreen);
+      }
+
+      .subtitle {
+        opacity: 0.7;
+        font-size: 0.7em;
+      }
+
+      note {
+        position: fixed;
+        top: 0;
+        left: 0;
+        font-size: 0.5em;
+        background: white;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(6px);
+      }
+
+      .js-ex-help-list {
+        font-size: 0.7em;
+        list-style-type: none;
+      }
+
+      .js-ex-help-list > li {
+        margin-top: 0.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h1 class="drop-shadow">Vue for beginners</h1>
+          <h6>Session 1 - The Basics</h6>
+          <p>(HTML, DOM API, CSS)</p>
+        </section>
+        <section>
+          <h3>Web</h3>
+          <ul>
+            <li>HTML - Markup - Build the UI</li>
+            <li class="fragment">CSS - Stylesheets - Style the UI</li>
+            <li class="fragment">
+              Javascript - Interactivity - Make the UI interactive
+            </li>
+            <li class="fragment">Static assets - Images, Fonts, Videos</li>
+          </ul>
+        </section>
+        <section>
+          <note>HTML</note>
+          <h3>HTML Page</h3>
+          <div class="subtitle">HTML is a tree</div>
+          <pre><code data-trim>
+						&lt;html&gt;
+							<header>
+								<title>My Title</title>
+								<link rel="stylesheet" href="path/to/main.css" />
+								<style>.inline-css {}</style>
+							</header>
+							&lt;body&gt;
+								<header>Header</header>
+								<main>Content</main>
+								<footer>Footer</footer>
+								<script src="path/to/js/someScript.js"></script>
+							&lt;/body&gt;
+						&lt;/html&gt;
+						</code></pre>
+        </section>
+		        <section>
+          <note>HTML</note>
+          <h3>HTML Tree</h3>
+          <img src="images/dom-tree.png" />
+        </section>
+        <section>
+          <h3>Request Flow</h3>
+          <img src="images/html-flow-chart.png" />
+        </section>
+        <section>
+          <note>HTML</note>
+          <h3>Basic common tags</h3>
+          <pre><code data-trim data-line-numbers="1|2-3|4|5|6">
+						<div>Block content</div>
+						<span>Inline content</span>
+						<span>Inline content 2</span>
+      <p>Paragraph</p>
+      <button>OK</button>
+      <img src="croc.png" alt="crocodile" />
+						</code></pre>
+          <div>Block content</div>
+          <span>Inline content</span>
+          <span>Inline content 2</span>
+          <p>Paragraph</p>
+          <button>OK</button>
+          <img
+            src="https://images.emojiterra.com/google/android-11/128px/1f40a.png"
+            alt="crocodile"
+          />
+        </section>
+        <section>
+          <note>HTML</note>
+          <h3>Basic common tags</h3>
+          <pre><code data-trim data-line-numbers="1|2-5|6-9">
+							<h6>Header size 6</h6>
+							<ul>
+								<li>unordered list item 1</li>
+								<li>unordered list item 2</li>
+							</ul>
+							<ol>
+								<li>ordered list item 1</li>
+								<li>ordered list item 2</li>
+							</ol>
+						</code></pre>
+          <h6>Header size 6</h6>
+          <ul>
+            <li>unordered list item 1</li>
+            <li>unordered list item 2</li>
+          </ul>
+          <ol>
+            <li>ordered list item 1</li>
+            <li>ordered list item 2</li>
+          </ol>
+        </section>
+        <section>
+          <note>HTML</note>
+          <h3>HTML Attributes</h3>
+          <pre><code data-trim data-line-numbers="1|2-4">
+            <tag attribute="value"></tag>
+            <!-- Examples -->
+            <div id="login-page-container" class="container">...</div>
+            <button id="login-btn" onclick="alert('hello');">Alert</button>
+          </code></pre>
+          <div>
+            <div id="login-page-container" class="container">...</div>
+            <button id="login-btn" onclick="alert('hello');">Alert</button>
+          </div>
+        </section>
+        <section>
+          <note>HTML</note>
+          <h3>HTML Form</h3>
+          <pre><code data-trim data-line-numbers>
+            <form onsubmit="alert('Form saved!')">
+              <label for="age">Age:</label>
+              <!-- input is childless tag can be self closed -->
+              <input
+                id="age"
+                name="age"
+                type="number"
+                value="18"
+                required
+                min="20"
+              />
+              <button>Save</button>
+            </form></code></pre>
+          <div>
+            <form onsubmit="alert('Form saved!'); event.preventDefault();">
+              <label for="age" class="subtitle">Age:</label>
+              <input
+                id="age"
+                name="age"
+                type="number"
+                value="18"
+                required
+                min="20"
+              />
+              <button>Save</button>
+            </form>
+          </div>
+        </section>
+        <section>
+          <h3>Let's build a simple Todo List</h3>
+          <h6>That allows us to:</h6>
+          <ol>
+            <li>Show a list of tasks</li>
+            <li>Add a task</li>
+            <li>
+              Click a task to archive it (crosses it out and turns the text
+              gray)
+            </li>
+          </ol>
+        </section>
+        <section>
+          <h3>Exercise 1 - Layout</h3>
+          <div class="subtitle">Build a simple todo list layout</div>
+          <ol style="font-size: 0.7em; margin-top: 20px">
+            <li>
+              Open the file index.html in the folder exercises/ex1 in chrome
+            </li>
+            <li>
+              Create a todo app layout with a form with two elements inside:
+              <ul>
+                <li>an input with the id "todoInput"</li>
+                <li>A button with the text "Add"</li>
+              </ul>
+            </li>
+            <li>
+              below the form add a simple unordered list of 4 todo items with
+              the id "todolist"
+            </li>
+          </ol>
+          <div style="display: flex">
+            <pre><code style="padding: 0" data-trim>
+              <input id="someId" />
+              <button>some button text</button>
+              <ul id="listId">
+                <li>list item 1</li>
+              </ul>
+              </code></pre>
+            <img style="margin: 0" src="images/todolist-ugly.PNG" />
+          </div>
+        </section>
+        <section>
+          <note>CSS</note>
+          <h3>Add styles to HTML (CSS)</h3>
+          <pre><code data-trim data-line-numbers="1-5|6">
+            <style>
+                .class-name {
+                  font-size: 14px;
+                }
+            </style>
+            <link rel="stylesheet" href="main.css" />
+						</code></pre>
+          <span class="subtitle">Added to the &lt;head&gt; tag</span>
+        </section>
+        <section>
+          <note>CSS</note>
+          <h3>CSS Selectors</h3>
+          <pre><code data-trim data-line-numbers="1-4|6-9">
+            /* class selector */
+            .class-name {
+              background-color: blue;
+            }
+
+            /* id selector */
+            #elementId {
+              color: red;
+            }
+					</code></pre>
+        </section>
+        <section>
+          <note>CSS</note>
+          <h3>Add a style to Exercise 1</h3>
+          <div class="subtitle">
+            add the following stylesheet to your html file:
+          </div>
+          <pre><code data-trim>
+            &lt;link rel="stylesheet" href="https://cdn.rawgit.com/kimeiga/bahunya/css/bahunya-0.1.3.css" /&gt;
+					</code></pre>
+        </section>
+        <section>
+          <note>Javascript</note>
+          <h3>Add interactivity to HTML (JS)</h3>
+          <pre><code data-trim data-line-numbers="1-4|5">
+            <script>
+              // some inline Javascript code
+              const myVar = 5;
+            </script>
+            <script src="index.js"></script>
+						</code></pre>
+          <span class="subtitle">Added to the end of the &lt;body&gt; tag</span>
+        </section>
+        <section>
+          <note>Javascript</note>
+          <h3>DOM API - Query Selector</h3>
+          <pre><code data-trim data-line-numbers="1|2-3">
+						const container = document.querySelector('#someId');
+						// These methods can be called on any DOM elements
+						const containerChild = container.querySelectorAll('.some-class');
+					</code></pre>
+        </section>
+        <section>
+          <note>Javascript</note>
+          <h3>DOM API - Create & Append</h3>
+          <pre><code data-trim data-line-numbers="1|2|3|4">
+						const tasklist = document.createElement('ul');
+						const listItem = document.createElement('li');
+						listItem.textContent = 'List item text';
+						tasklist.appendChild(listItem);
+					</code></pre>
+        </section>
+        <section>
+          <note>Javascript</note>
+          <h3>DOM API - Listening to events</h3>
+          <pre><code data-trim>
+      // listen to the click event on an element
+						document.addEventListener('click', () => console.log('clicked'));
+					</code></pre>
+        </section>
+        <section>
+          <note>Javascript</note>
+          <h3>Add some interactivity to Exercise 1</h3>
+          <div class="subtitle">
+            Make the script part in ex1/index.html work
+          </div>
+          <ul class="js-ex-help-list">
+            <li>
+              Query selector api - Get a reference to a dom element -
+              document.querySelector('#elementId')
+            </li>
+            <li>
+              Create new element in code (without adding to the DOM) -
+              document.createElement('tagname');
+            </li>
+            <li>Get input text - inputElement.value</li>
+            <li>
+              Change element text content (list item text for ex.) -
+              element.textContent = 'some text'
+            </li>
+            <li>
+              DOM Event api - element.addEventListener('eventName',
+              handlerFunction)
+            </li>
+            <li>
+              Add an element to the dom -
+              parentElement.appendChild(childElement)
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h3>Live editable style</h3>
+          <div class="subtitle">
+            Normally, style elements have display: none; by the user agent
+            <br />
+            But we can force them to be visible by setting them to display:
+            block
+          </div>
+          <style
+            id="editable-style"
+            contenteditable="true"
+            style="display: block; margin-top: 2em"
+          >
+            #editable-style {
+              color: green;
+              font-size: 0.8em;
+              transform: rotate(-3deg);
+            }
+          </style>
+        </section>
+        <section>
+          <h3>What we've learned</h3>
+          <ul>
+            <li>HTML tags and attributes</li>
+            <li>Event listeners</li>
+            <li>CSS Stylesheets</li>
+            <li>DOM Javascript api</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Question Time!</h3>
+          <img src="images/patrick.gif" />
+        </section>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+        slideNumber: 'c/t',
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>

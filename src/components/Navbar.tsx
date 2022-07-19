@@ -7,11 +7,11 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { BsTerminal } from 'react-icons/bs';
 import { FaBloggerB, FaMoon, FaSun } from 'react-icons/fa';
-import { HiDocumentDownload } from 'react-icons/hi';
-import { IoLogoGameControllerB } from 'react-icons/io';
+import { HiDocumentDownload, HiOutlinePresentationChartLine } from 'react-icons/hi';
 
 import { useTerminal } from '../context/terminal';
 
@@ -24,6 +24,15 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   const text = useColorModeValue('dark', 'light');
   const { toggleColorMode } = useColorMode();
   const { onToggle: onToggleTerminal } = useTerminal();
+  const router = useRouter();
+
+  function isRouteActive(route: string) {
+    return router.pathname === route;
+  }
+
+  function getButtonVariant(route: string) {
+    return isRouteActive(route) ? 'solid' : 'ghost';
+  }
 
   return (
     <chakra.header pos="sticky" top="0" w="full" zIndex="1">
@@ -37,31 +46,21 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
         <NextLink href="/blog" passHref>
           <Button
             as="a"
-            variant="ghost"
+            variant={getButtonVariant('/blog')}
+            fontWeight="normal"
             ml="auto"
-            fontWeight="normal"
-            leftIcon={<Icon as={HiDocumentDownload} w="4" h="6" />}>
-            CV
-          </Button>
-        </NextLink>
-        <NextLink href="/blog" passHref>
-          <Button
-            as="a"
-            variant="ghost"
-            fontWeight="normal"
-            ml="2"
             leftIcon={<Icon as={FaBloggerB} w="3" h="4" />}>
             Blog
           </Button>
         </NextLink>
-        <NextLink href="/game" passHref>
+        <NextLink href="/lectures" passHref>
           <Button
             as="a"
-            variant="ghost"
+            variant={getButtonVariant('/lectures')}
             fontWeight="normal"
             ml="2"
-            leftIcon={<Icon as={IoLogoGameControllerB} w="5" h="14" />}>
-            Game
+            leftIcon={<Icon as={HiOutlinePresentationChartLine} w="5" h="14" />}>
+            Lectures
           </Button>
         </NextLink>
         <IconButton

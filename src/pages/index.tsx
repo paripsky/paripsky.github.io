@@ -52,6 +52,10 @@ const Home: NextPage = () => {
     return document.querySelector('#timeline')?.scrollIntoView();
   }
 
+  function scrollToContact() {
+    return document.querySelector('#contact')?.scrollIntoView();
+  }
+
   return (
     <DefaultLayout>
       <Flex
@@ -84,8 +88,12 @@ const Home: NextPage = () => {
           </Text>
         </Box>
         <Flex gap="1em" mt="4">
-          <Button bg="primary.300" color="neutral.900" _hover={{ bg: 'primary.200' }}>
-            Download CV
+          <Button
+            onClick={scrollToContact}
+            bg="primary.300"
+            color="neutral.900"
+            _hover={{ bg: 'primary.200' }}>
+            Contact me
           </Button>
           <Button onClick={scrollToTimeline}>Learn more</Button>
         </Flex>
