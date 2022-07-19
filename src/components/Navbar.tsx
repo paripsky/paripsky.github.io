@@ -20,11 +20,11 @@ type NavbarProps = {
 };
 
 const Navbar: React.FC<NavbarProps> = ({}) => {
+  const router = useRouter();
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
   const text = useColorModeValue('dark', 'light');
   const { toggleColorMode } = useColorMode();
   const { onToggle: onToggleTerminal } = useTerminal();
-  const router = useRouter();
 
   function isRouteActive(route: string) {
     return router.pathname === route;
