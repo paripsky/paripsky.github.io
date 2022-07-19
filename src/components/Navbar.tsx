@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { BsTerminal } from 'react-icons/bs';
 import { FaBloggerB, FaMoon, FaSun } from 'react-icons/fa';
-import { HiDocumentDownload, HiOutlinePresentationChartLine } from 'react-icons/hi';
+import { HiOutlinePresentationChartLine } from 'react-icons/hi';
 
 import { useTerminal } from '../context/terminal';
 
