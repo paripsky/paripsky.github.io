@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   const { onToggle: onToggleTerminal } = useTerminal();
 
   function isRouteActive(route: string) {
-    return router.pathname === route;
+    return router.pathname.startsWith(route);
   }
 
   function getButtonVariant(route: string) {

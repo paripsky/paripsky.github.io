@@ -9,9 +9,15 @@ import { scrollToTop } from '../utils/scroll';
 
 export type DefaultLayoutProps = {
   children: React.ReactNode;
+  title?: string;
+  description?: string;
 };
 
-const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
+const DefaultLayout: React.FC<DefaultLayoutProps> = ({
+  children,
+  title,
+  description,
+}) => {
   const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   useEffect(() => {
@@ -31,7 +37,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
 
   return (
     <>
-      <Head />
+      <Head title={title} description={description} />
       <Box w="full" scrollBehavior="smooth">
         <Terminal />
         <Navbar />

@@ -16,7 +16,6 @@ const getPosts = async () => {
     dirFiles.map(async (file) => {
       if (!file.name.endsWith('.mdx')) return;
 
-      // const filePath = path.join(process.cwd(), 'src', 'pages', 'posts', file.name);
       const { meta } = await import(`../pages/blog/${file.name}`);
 
       const slug = file.name.replace(/.mdx$/, '');

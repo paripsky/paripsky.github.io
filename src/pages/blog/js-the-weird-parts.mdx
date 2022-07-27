@@ -1,0 +1,34 @@
+export const meta = {
+    title: 'Javascript: The Weird Parts',
+    author: '@paripsky',
+    updatedAt: '2022-07-27T11:30:28.142Z',
+    description: 'Some interesting behaviours of javascript and why they happen',
+    tags: ['Javascript'],
+}
+import BlogPost from '../../components/BlogPost';
+
+
+<BlogPost {...meta}>
+
+# Numbers in js
+
+1. Adding 0.1 + 0.2 will give the wrong result
+```js
+const result = 0.1 + 0.2;
+console.log(result); // 0.30000000000000004
+```
+2. Same for multiplying 0.56 by 100
+```js
+const result = 0.56 * 100;
+console.log(result); // 56.00000000000001
+```
+3. The maximum safe integer in javascript is 2^53 - 1
+```js
+const result = 2 ** 53 === 2 ** 53 + 1;
+console.log(result); // true
+```
+</BlogPost>
+
+
+
+

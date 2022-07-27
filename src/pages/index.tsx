@@ -22,6 +22,7 @@ import { useMemo, useState } from 'react';
 import { BsArrowDownCircle, BsPhone, BsShield } from 'react-icons/bs';
 import {
   FaCoffee,
+  FaDiscord,
   FaGithub,
   FaLinkedinIn,
   FaMediumM,
@@ -84,7 +85,7 @@ const Home: NextPage = () => {
             A Full Stack Web Developer
           </Text>
           <Text display="flex" justifyContent="center" fontSize="md" color="neutral.300">
-            ❤️ React, Node &amp; Anything JS
+            React, Node &amp; Anything JS
           </Text>
         </Box>
         <Flex gap="1em" mt="4">
@@ -122,6 +123,11 @@ const Home: NextPage = () => {
             href="https://twitter.com/pepechuuu"
             aria-label="navigate to Twitter"
             icon={FaTwitter}
+          />
+          <IconLink
+            href="https://discord.com/users/140373456305782785"
+            aria-label="navigate to Discord"
+            icon={FaDiscord}
           />
         </Box>
         <Box display="flex" flexDir="column" alignItems="center" mt="2">

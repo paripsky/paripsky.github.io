@@ -6,7 +6,7 @@ import DefaultLayout from '../layouts/DefaultLayout';
 
 const Lectures: NextPage = () => {
   return (
-    <DefaultLayout>
+    <DefaultLayout title="Lectures by @yonatanparipsky">
       <Flex
         alignItems="center"
         m="4"

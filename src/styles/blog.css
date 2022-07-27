@@ -1,0 +1,14 @@
+.blog-post pre {
+  background: var(--chakra-colors-accent-800);
+  width: fit-content;
+  padding: 1em;
+  border-radius: 0.5em;
+  margin: 1em;
+  overflow: auto;
+  max-width: 100%;
+}
+
+.blog-post h1 {
+  font-size: 24px;
+  margin-bottom: .5em;
+}
