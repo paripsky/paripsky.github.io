@@ -7,11 +7,11 @@ export type HeadProps = {
   imageUrl?: string;
 };
 
-const Head: React.FC = ({
+function Head({
   title = 'A Portfolio website by @yonatanparipsky',
   description = 'A portfolio website by Yonatan Paripsky, A full stack web developer',
   imageUrl,
-}: HeadProps) => {
+}: HeadProps) {
   return (
     <NextHead>
       <title>{title}</title>
@@ -23,6 +23,6 @@ const Head: React.FC = ({
       {imageUrl && <meta property="og:image" content={imageUrl} />}
     </NextHead>
   );
-};
+}
 
 export default Head;
