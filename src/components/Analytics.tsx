@@ -1,7 +1,14 @@
 import Script from 'next/script';
 import React from 'react';
 
+import isLocalhost from '../utils/isLocalhost';
+
 function Analytics() {
+  if (isLocalhost) {
+    console.info('Analytics is disabled on localhost');
+    return null;
+  }
+
   return (
     <>
       <Script
