@@ -5,6 +5,9 @@ export type PostMeta = {
   author: string;
   description: string;
   slug: string;
+  title: string;
+  updatedAt: string;
+  tags: string[];
 };
 
 const getPosts = async () => {

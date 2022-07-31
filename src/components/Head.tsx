@@ -8,7 +8,7 @@ export type HeadProps = {
 };
 
 function Head({
-  title = 'A Portfolio website by @yonatanparipsky',
+  title = 'A Portfolio website by @paripsky',
   description = 'A portfolio website by Yonatan Paripsky, A full stack web developer',
   imageUrl,
 }: HeadProps) {

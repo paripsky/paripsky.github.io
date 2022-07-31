@@ -28,7 +28,12 @@ function BlogPost({
       title={`A blog post about ${title} by ${author}`}
       description={`A blog post about ${description}`}>
       <Flex>
-        <Box display="inline-block" className="blog-post" maxWidth="5xl" m="auto" p="4">
+        <Box
+          display="inline-block"
+          className="blog-post"
+          maxWidth={{ base: '100vw', md: '5xl' }}
+          m="auto"
+          p="4">
           <Heading size="xl">{title}</Heading>
           <Box>
             <Text as="span">by {author}</Text>

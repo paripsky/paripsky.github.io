@@ -1,7 +1,9 @@
-import { Box } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { Box, Flex, Heading, Link, Tag, Text } from '@chakra-ui/react';
 import { NextPage } from 'next';
 
 import DefaultLayout from '../../layouts/DefaultLayout';
+import { dateFromISO, formatDate } from '../../utils/dates';
 import getPosts, { PostMeta } from '../../utils/getPosts';
 
 export type BlogProps = {
@@ -10,16 +12,46 @@ export type BlogProps = {
 
 const Blog: NextPage<BlogProps> = ({ posts }) => {
   return (
-    <DefaultLayout>
-      <Box>
-        {posts.map((post) => {
-          return (
-            <Box as="a" href={`/blog/${post.slug}`} key={post.slug}>
-              {post.description}
-            </Box>
-          );
-        })}
-      </Box>
+    <DefaultLayout title="Blog by @paripsky">
+      <Flex
+        alignItems="center"
+        m="4"
+        flexDirection="column"
+        minHeight="calc(100vh - 144px)">
+        <Box display="inline-block" className="blog-post" maxWidth="5xl" mx="auto">
+          <Heading textAlign="center" fontSize="4xl" mt={{ base: '2em', md: '20vh' }}>
+            Blog
+          </Heading>
+          <Box m="8" minHeight="xl">
+            {posts.map((post) => {
+              return (
+                <Box key={post.slug}>
+                  <Link href={`/blog/${post.slug}`}>
+                    <Heading fontSize="xl">
+                      {post.title} <ExternalLinkIcon mx="2" />
+                    </Heading>
+                  </Link>
+                  <Box>
+                    <Text as="span">by {post.author}</Text>
+                    <Text as="span" ml="2" fontSize="md" color="neutral.300">
+                      Last updated {formatDate(dateFromISO(post.updatedAt))}
+                    </Text>
+                  </Box>
+                  <Text fontSize="lg" color="neutral.300">
+                    {post.description}
+                  </Text>
+
+                  <Box mt="2">
+                    {post.tags.map((tag) => (
+                      <Tag key={tag}>{tag}</Tag>
+                    ))}
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
+      </Flex>
     </DefaultLayout>
   );
 };

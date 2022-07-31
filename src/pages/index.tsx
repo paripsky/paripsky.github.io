@@ -29,7 +29,7 @@ import {
   FaStackOverflow,
   FaTwitter,
 } from 'react-icons/fa';
-import { SiNodedotjs, SiVuedotjs } from 'react-icons/si';
+import { SiLeetcode, SiNodedotjs, SiVuedotjs } from 'react-icons/si';
 
 import IconLink from '../components/IconLink';
 import Timeline from '../components/Timeline';
@@ -128,6 +128,11 @@ const Home: NextPage = () => {
             href="https://discord.com/users/140373456305782785"
             aria-label="navigate to Discord"
             icon={FaDiscord}
+          />
+          <IconLink
+            href="https://leetcode.com/paripsky/"
+            aria-label="navigate to Leetcode"
+            icon={SiLeetcode}
           />
         </Box>
         <Box display="flex" flexDir="column" alignItems="center" mt="2">
