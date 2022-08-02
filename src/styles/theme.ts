@@ -1,6 +1,6 @@
 import { extendTheme } from '@chakra-ui/react';
 
-const availableColorTins = [
+const availableColorTints = [
   '50',
   '100',
   '200',
@@ -23,9 +23,9 @@ const tokenToColorMap = {
 };
 
 const colors = Object.entries(tokenToColorMap).reduce((acc, [token, color]) => {
-  availableColorTins.forEach((tint, index) => {
+  availableColorTints.forEach((tint, index) => {
     acc[`${token}.${tint}`] = {
-      default: `${color}.${availableColorTins[availableColorTins.length - 1 - index]}`,
+      default: `${color}.${availableColorTints[availableColorTints.length - 1 - index]}`,
       _dark: `${color}.${tint}`,
     };
   });
