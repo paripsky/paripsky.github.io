@@ -34,8 +34,8 @@ const colors = Object.entries(tokenToColorMap).reduce((acc, [token, color]) => {
 
 const theme = extendTheme({
   fonts: {
-    heading: 'Oswald, sans-serif',
-    body: 'Oswald, sans-serif',
+    heading: `'Open Sans', sans-serif`,
+    body: `'Open Sans', sans-serif`,
   },
   config: {
     initialColorMode: 'dark',

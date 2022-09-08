@@ -13,16 +13,16 @@ export type BlogProps = {
 const Blog: NextPage<BlogProps> = ({ posts }) => {
   return (
     <DefaultLayout title="Blog by @paripsky">
-      <Flex
-        alignItems="center"
-        m="4"
-        flexDirection="column"
-        minHeight="calc(100vh - 144px)">
+      <Flex alignItems="center" m="4" flexDirection="column">
         <Box display="inline-block" className="blog-post" maxWidth="5xl" mx="auto">
-          <Heading textAlign="center" fontSize="4xl" mt={{ base: '2em', md: '20vh' }}>
+          <Heading
+            textAlign="center"
+            fontSize="4xl"
+            mt={{ base: '1em', md: '20vh' }}
+            mb="4">
             Blog
           </Heading>
-          <Box m="8" minHeight="xl">
+          <Box m="4">
             {posts.map((post) => {
               return (
                 <Box key={post.slug}>

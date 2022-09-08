@@ -23,7 +23,7 @@ const commands: Record<string, Command> = {
     handler: () => '(╯°□°）╯︵ ┻━┻',
   },
   shrug: {
-    description: 'Shrug',
+    description: 'Do a Shrug',
     handler: () => '¯\\_(ツ)_/¯',
   },
   eval: {

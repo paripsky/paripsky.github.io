@@ -12,10 +12,10 @@ const Lectures: NextPage = () => {
         m="4"
         flexDirection="column"
         minHeight="calc(100vh - 144px)">
-        <Heading fontSize="4xl" mt={{ base: '2em', md: '20vh' }}>
+        <Heading fontSize="4xl" mt={{ base: '1em', md: '20vh' }} mb="4">
           Lectures
         </Heading>
-        <Stack m="8" gap="4">
+        <Stack m="4" gap="4">
           <LinkCard
             title="HTML, CSS, JS - The Basics"
             description={`The basics of HTML, CSS & JS, what are they,\nwhen to use them & more`}

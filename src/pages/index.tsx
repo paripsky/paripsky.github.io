@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  chakra,
   Flex,
   FormControl,
   FormLabel,
@@ -22,14 +23,13 @@ import { useMemo, useState } from 'react';
 import { BsArrowDownCircle, BsPhone, BsShield } from 'react-icons/bs';
 import {
   FaCoffee,
-  FaDiscord,
   FaGithub,
   FaLinkedinIn,
   FaMediumM,
   FaStackOverflow,
   FaTwitter,
 } from 'react-icons/fa';
-import { SiLeetcode, SiNodedotjs, SiVuedotjs } from 'react-icons/si';
+import { SiDevdotto, SiLeetcode, SiNodedotjs, SiVuedotjs } from 'react-icons/si';
 
 import IconLink from '../components/IconLink';
 import Timeline from '../components/Timeline';
@@ -65,9 +65,10 @@ const Home: NextPage = () => {
         pos="relative"
         flexDir="column"
         alignItems="center"
+        p="4"
         minH={fullPageSize}
         scrollSnapAlign="start">
-        <Box mt={{ base: '2em', md: '20vh' }}>
+        <Box mt={{ base: '1em', md: '20vh' }} textAlign="center">
           <Text display="inline-block" fontSize="5xl" fontWeight="bold">
             Hey!
           </Text>
@@ -85,7 +86,7 @@ const Home: NextPage = () => {
             A Full Stack Web Developer
           </Text>
           <Text display="flex" justifyContent="center" fontSize="md" color="neutral.300">
-            React, Node &amp; Anything JS
+            I do React, Node &amp; Anything JS
           </Text>
         </Box>
         <Flex gap="1em" mt="4">
@@ -100,11 +101,6 @@ const Home: NextPage = () => {
         </Flex>
         <Box mt="8">
           <IconLink
-            href="https://medium.com/@paripsky"
-            aria-label="navigate to Medium"
-            icon={FaMediumM}
-          />
-          <IconLink
             href="https://www.linkedin.com/in/paripsky"
             aria-label="navigate to Linkedin"
             icon={FaLinkedinIn}
@@ -113,6 +109,16 @@ const Home: NextPage = () => {
             href="https://github.com/paripsky"
             aria-label="navigate to Github"
             icon={FaGithub}
+          />
+          <IconLink
+            href="https://dev.to/paripsky"
+            aria-label="navigate to Dev.to"
+            icon={SiDevdotto}
+          />
+          <IconLink
+            href="https://medium.com/@paripsky"
+            aria-label="navigate to Medium"
+            icon={FaMediumM}
           />
           <IconLink
             href="https://stackoverflow.com/users/4109475/paripsky"
@@ -125,12 +131,7 @@ const Home: NextPage = () => {
             icon={FaTwitter}
           />
           <IconLink
-            href="https://discord.com/users/140373456305782785"
-            aria-label="navigate to Discord"
-            icon={FaDiscord}
-          />
-          <IconLink
-            href="https://leetcode.com/paripsky/"
+            href="https://leetcode.com/paripsky"
             aria-label="navigate to Leetcode"
             icon={SiLeetcode}
           />
@@ -158,16 +159,35 @@ const Home: NextPage = () => {
         mt="4"
         pt="14"
         id="timeline"
-        h={fullPageSize}
+        minH={fullPageSize}
         scrollSnapAlign="start">
-        <Flex flexDirection="column" justifyContent="center" mx="4">
+        <Flex flexDirection="column" justifyContent="center" mx="6">
           <Text fontSize="xl" color="neutral.300" mb="4">
-            Timeline
+            Experience
           </Text>
           <Timeline
             entries={[
               {
-                date: '2020 - Present',
+                date: '2022 - Present',
+                title: (
+                  <>
+                    Full Stack Developer @{' '}
+                    <Link href="https://monday.com/" isExternal>
+                      Monday
+                    </Link>
+                  </>
+                ),
+                icon: (
+                  <chakra.img
+                    w="4"
+                    transform="scale(1.2)"
+                    src="https://cdn.worldvectorlogo.com/logos/monday-1.svg"
+                    alt="Monday logo"
+                  />
+                ),
+              },
+              {
+                date: '2020 - 2022',
                 title: (
                   <>
                     Full Stack Developer @{' '}
@@ -179,6 +199,10 @@ const Home: NextPage = () => {
                 description: (
                   <>
                     <List mt="2" spacing="1">
+                      <ListItem display="flex" alignItems="center" ml="6">
+                        Maintained a web platform that is used by thousands of app
+                        developers.
+                      </ListItem>
                       <ListItem display="flex" alignItems="center">
                         <ListIcon
                           as={SiNodedotjs}
@@ -186,7 +210,7 @@ const Home: NextPage = () => {
                           alignSelf="baseline"
                           mt="1"
                         />
-                        Built NodeJS services with Typescript, Express, TypeORM
+                        Built high scale NodeJS services with Typescript, Express, TypeORM
                       </ListItem>
                       <ListItem display="flex" alignItems="center">
                         <ListIcon
@@ -202,7 +226,7 @@ const Home: NextPage = () => {
                     </List>
                   </>
                 ),
-                icon: <Icon as={BsPhone} />,
+                icon: <Icon as={BsPhone} color="accent.200" />,
               },
               {
                 date: '2020',
@@ -221,17 +245,26 @@ const Home: NextPage = () => {
                     TypeScript, NodeJS, Express, MongoDB, and AWS
                   </>
                 ),
-                icon: <Icon as={FaCoffee} />,
+                icon: <Icon as={FaCoffee} color="#dc4d58" />,
               },
               {
                 date: '2015 - 2020',
                 title: 'Full Stack Developer @ IDF Matzpen',
                 description:
                   'Built a Complex Map Component with React, Redux, Material-UI and ArcGIS',
-                icon: <Icon as={BsShield} />,
+                icon: <Icon as={BsShield} color="#e4bd52" />,
               },
             ]}
           />
+          <Button
+            as="a"
+            color="primary.100"
+            textDecor="underline"
+            variant="link"
+            ml="2"
+            href="https://www.linkedin.com/in/paripsky">
+            Check out my Linkedin to see more
+          </Button>
           <Link href="#contact" mt="10" className="float-animation" alignSelf="center">
             <Icon as={BsArrowDownCircle} w={8} h={8} />
           </Link>
@@ -244,7 +277,7 @@ const Home: NextPage = () => {
         mt="4"
         pt="14"
         id="contact"
-        h={fullPageSize}
+        minH={fullPageSize}
         scrollSnapAlign="start">
         <Heading mb="4">Contact Me</Heading>
         <Flex

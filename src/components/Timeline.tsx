@@ -4,7 +4,7 @@ import React from 'react';
 export type TimelineEntry = {
   date: string | React.ReactNode;
   title: string | React.ReactNode;
-  description: string | React.ReactNode;
+  description?: string | React.ReactNode;
   icon?: React.ReactElement;
 };
 
@@ -31,12 +31,10 @@ function Timeline({ entries }: TimelineProps) {
               {entry.icon}
             </Flex>
             <Flex flexDirection="column" mt="-1">
-              <Flex>
-                <Text as="span">{entry.title}</Text>
-                <Text as="span">
-                  &nbsp;{'//'}&nbsp;
-                  {entry.date}
-                </Text>
+              <Flex flexWrap="wrap">
+                {entry.title}
+                &nbsp;{'//'}&nbsp;
+                {entry.date}
               </Flex>
               <Flex>
                 <Text as="span">{entry.description}</Text>

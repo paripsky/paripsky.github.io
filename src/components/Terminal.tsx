@@ -26,7 +26,12 @@ function Terminal({}: TerminalProps) {
       command: string;
       result: string;
     }[]
-  >([]);
+  >(() => [
+    {
+      command: 'help',
+      result: onCommand('help'),
+    },
+  ]);
 
   useOutsideClick({
     ref,

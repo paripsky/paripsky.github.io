@@ -1,5 +1,5 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Flex, Heading, Link, Tag, Text } from '@chakra-ui/react';
+import { Flex, Heading, Link, Tag, Text, useBreakpointValue } from '@chakra-ui/react';
 import React from 'react';
 
 export type LinkCardProps = {
@@ -17,7 +17,10 @@ function LinkCard({ title, description, href, tags }: LinkCardProps) {
           {title} <ExternalLinkIcon mx="2" />
         </Heading>
       </Link>
-      <Text fontSize="md" whiteSpace="pre" color="neutral.300">
+      <Text
+        fontSize="md"
+        whiteSpace={useBreakpointValue({ base: 'initial', md: 'pre' })}
+        color="neutral.300">
         {description}
       </Text>
       <Flex gap="2" mt="2">
