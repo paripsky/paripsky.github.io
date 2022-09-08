@@ -11,7 +11,6 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { BsTerminal } from 'react-icons/bs';
 import { FaBloggerB, FaMoon, FaSun } from 'react-icons/fa';
-import { HiOutlinePresentationChartLine } from 'react-icons/hi';
 
 import { useTerminal } from '../context/terminal';
 
@@ -51,16 +50,6 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             ml="auto"
             leftIcon={<Icon as={FaBloggerB} w="3" h="4" />}>
             Blog
-          </Button>
-        </NextLink>
-        <NextLink href="/lectures" passHref>
-          <Button
-            as="a"
-            variant={getButtonVariant('/lectures')}
-            fontWeight="normal"
-            ml="2"
-            leftIcon={<Icon as={HiOutlinePresentationChartLine} w="5" h="14" />}>
-            Lectures
           </Button>
         </NextLink>
         <IconButton

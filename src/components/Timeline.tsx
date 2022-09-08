@@ -31,7 +31,7 @@ function Timeline({ entries }: TimelineProps) {
               {entry.icon}
             </Flex>
             <Flex flexDirection="column" mt="-1">
-              <Flex flexWrap="wrap">
+              <Flex flexWrap="wrap" fontWeight="semibold">
                 {entry.title}
                 &nbsp;{'//'}&nbsp;
                 {entry.date}

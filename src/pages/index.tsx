@@ -13,6 +13,7 @@ import {
   ListIcon,
   ListItem,
   SimpleGrid,
+  Stack,
   Text,
   Textarea,
   useBreakpointValue,
@@ -32,6 +33,7 @@ import {
 import { SiDevdotto, SiLeetcode, SiNodedotjs, SiVuedotjs } from 'react-icons/si';
 
 import IconLink from '../components/IconLink';
+import LinkCard from '../components/LinkCard';
 import Timeline from '../components/Timeline';
 import skills from '../constants/skills';
 import DefaultLayout from '../layouts/DefaultLayout';
@@ -49,8 +51,8 @@ const Home: NextPage = () => {
   const fullPageSize = 'calc(100vh - 56px)';
   const skillIcons = useMemo(() => skills(colorMode), [colorMode]);
 
-  function scrollToTimeline() {
-    return document.querySelector('#timeline')?.scrollIntoView();
+  function scrollToLectures() {
+    return document.querySelector('#lectures')?.scrollIntoView();
   }
 
   function scrollToContact() {
@@ -97,7 +99,7 @@ const Home: NextPage = () => {
             _hover={{ bg: 'primary.200' }}>
             Contact me
           </Button>
-          <Button onClick={scrollToTimeline}>Learn more</Button>
+          <Button onClick={scrollToLectures}>Learn more</Button>
         </Flex>
         <Box mt="8">
           <IconLink
@@ -150,9 +152,39 @@ const Home: NextPage = () => {
             ))}
           </SimpleGrid>
         </Box>
-        <Link href="#timeline" mt="10" className="float-animation">
+        <Link href="#lectures" mt="10" className="float-animation">
           <Icon as={BsArrowDownCircle} w={8} h={8} />
         </Link>
+      </Flex>
+      <Flex id="lectures" justifyContent="center" m="4" pt="14" minH={fullPageSize}>
+        <Flex flexDirection="column" justifyContent="center" mx="6">
+          <Text fontSize="xl" color="neutral.300" mb="4" alignSelf="flex-start">
+            Lectures
+          </Text>
+          <Stack gap="4">
+            <LinkCard
+              title="HTML, CSS, JS - The Basics"
+              description={`The basics of HTML, CSS & JS, what are they,\nwhen to use them & more`}
+              href="/lectures/html-css-js-basics.html"
+              tags={['HTML', 'CSS', 'JS']}
+            />
+            <LinkCard
+              title="Into to Vue 2"
+              description={`An interactive presentation that teaches the\nbasics of Vue 2, what it's used for & more`}
+              href="/lectures/intro-to-vue.html"
+              tags={['Vue']}
+            />
+            <LinkCard
+              title="Into to NodeJS"
+              description={`A presentation that teaches the basics of NodeJS,\nhow to create a simple server with express & more`}
+              href="https://docs.google.com/presentation/d/1d0NwWU7ZvB0TwMsalfm8mBjEdqGUHWEO7SGMG_gzMyM"
+              tags={['NodeJS', 'Express', 'JS']}
+            />
+          </Stack>
+          <Link href="#timeline" mt="10" className="float-animation" alignSelf="center">
+            <Icon as={BsArrowDownCircle} w={8} h={8} />
+          </Link>
+        </Flex>
       </Flex>
       <Flex
         justifyContent="center"
