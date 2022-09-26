@@ -11,7 +11,7 @@ function useLocalStorageState<T>(key: string, defaultValue: T): [T, (value: T) =
     const item = localStorage.getItem(key);
 
     setState(item ? JSON.parse(item) : defaultValue);
-  }, []);
+  }, [defaultValue, key]);
 
   const setStateAndKey = (value: T) => {
     localStorage.setItem(key, JSON.stringify(value));

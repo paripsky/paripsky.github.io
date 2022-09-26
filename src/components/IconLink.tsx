@@ -1,10 +1,8 @@
 import { Icon, IconButton, IconButtonProps, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
-import { IconType } from 'react-icons';
 
-export type IconLinkProps = Omit<IconButtonProps, 'icon'> & {
+export type IconLinkProps = IconButtonProps & {
   href: string;
-  icon: IconType;
   hoverColor?: string;
 };
 
