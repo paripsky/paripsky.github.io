@@ -1,8 +1,10 @@
-import { Icon, IconButton, IconButtonProps, useColorModeValue } from '@chakra-ui/react';
+import { Icon, IconButton, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
+import { IconType } from 'react-icons';
 
-export type IconLinkProps = IconButtonProps & {
+export type IconLinkProps = {
   href: string;
+  icon: IconType;
   hoverColor?: string;
 };
 
@@ -16,6 +18,7 @@ const IconLink: React.FC<IconLinkProps> = ({ href, icon, hoverColor, ...props })
       fontSize="2xl"
       variant="ghost"
       ml="2"
+      aria-label={href}
       color={{ base: hoverColor, md: 'current' }}
       _hover={{
         color: hoverColor,
