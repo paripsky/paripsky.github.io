@@ -11,12 +11,14 @@ export type DefaultLayoutProps = {
   children: React.ReactNode;
   title?: string;
   description?: string;
+  showFooter?: boolean;
 };
 
 const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   children,
   title,
   description,
+  showFooter = true,
 }) => {
   const [showScrollToTop, setShowScrollToTop] = useState(false);
 
@@ -43,11 +45,13 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
         <Navbar />
 
         {children}
-        <Flex as="footer" p="4" justifyContent="center">
-          Built with Next.js + Chakra UI
-        </Flex>
+        {showFooter && (
+          <Flex as="footer" p="4" justifyContent="center">
+            Built with Next.js + Chakra UI
+          </Flex>
+        )}
 
-        <Fade in={showScrollToTop}>
+        <Fade in={showScrollToTop} unmountOnExit>
           <IconButton
             pos="fixed"
             right="2em"

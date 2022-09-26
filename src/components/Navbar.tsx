@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { BsTerminal } from 'react-icons/bs';
 import { FaBloggerB, FaMoon, FaSun } from 'react-icons/fa';
+import { Tb3DCubeSphere } from 'react-icons/tb';
 
 import { useTerminal } from '../context/terminal';
 
@@ -51,6 +52,16 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             leftIcon={<Icon as={FaBloggerB} w="3" h="4" />}>
             Blog
           </Button>
+        </NextLink>
+        <NextLink href="/skills" passHref>
+          <IconButton
+            as="a"
+            title="Skills"
+            variant={getButtonVariant('/skills')}
+            fontWeight="normal"
+            aria-label="skills"
+            ml="2"
+            icon={<Icon as={Tb3DCubeSphere} />}></IconButton>
         </NextLink>
         <IconButton
           size="md"

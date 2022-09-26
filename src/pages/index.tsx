@@ -37,6 +37,7 @@ import LinkCard from '../components/LinkCard';
 import Timeline from '../components/Timeline';
 import skills from '../constants/skills';
 import DefaultLayout from '../layouts/DefaultLayout';
+import { fullPageSize } from '../utils/fullPageSize';
 
 const MY_EMAIL = 'paripsky';
 
@@ -48,7 +49,6 @@ const Home: NextPage = () => {
   const subject = `${name} sent you a message from your portfolio`;
   const body = encodeURIComponent(`${message}\n\n${email}`);
   const emailHref = `mailto:${MY_EMAIL}@gmail.com?subject=${subject}&body=${body}`;
-  const fullPageSize = 'calc(100vh - 56px)';
   const skillIcons = useMemo(() => skills(colorMode), [colorMode]);
 
   function scrollToLectures() {
