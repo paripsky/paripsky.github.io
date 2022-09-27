@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  chakra,
   Flex,
   FormControl,
   FormLabel,
@@ -199,25 +198,6 @@ const Home: NextPage = () => {
           </Text>
           <Timeline
             entries={[
-              {
-                date: '2022 - Present',
-                title: (
-                  <>
-                    Full Stack Developer @{' '}
-                    <Link href="https://monday.com/" isExternal>
-                      Monday
-                    </Link>
-                  </>
-                ),
-                icon: (
-                  <chakra.img
-                    w="4"
-                    transform="scale(1.2)"
-                    src="https://cdn.worldvectorlogo.com/logos/monday-1.svg"
-                    alt="Monday logo"
-                  />
-                ),
-              },
               {
                 date: '2020 - 2022',
                 title: (
