@@ -3,6 +3,7 @@ import tryEval from './eval';
 export type CommandAPI = {
   onClose: () => void;
   onClear: () => void;
+  toggleMatrix: () => void;
 };
 
 export type Command = {
@@ -42,6 +43,13 @@ const commands: Record<string, Command> = {
     handler: (_, commandAPI) => {
       commandAPI.onClear();
       return '';
+    },
+  },
+  matrix: {
+    description: 'Enter the matrix',
+    handler: (_, commandAPI) => {
+      commandAPI.toggleMatrix();
+      return 'Welcome, Neo!';
     },
   },
   linkedin: {

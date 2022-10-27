@@ -1,24 +1,44 @@
 import { useDisclosure } from '@chakra-ui/react';
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+
+import handleCommand from '../utils/commands';
 
 type TerminalContext = {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
   onToggle: () => void;
+  commandHistory: {
+    command: string;
+    result: string;
+  }[];
+  setCommandHistory: React.Dispatch<
+    React.SetStateAction<
+      {
+        command: string;
+        result: string;
+      }[]
+    >
+  >;
+  onCommand(command: string): string;
+  showMatrix: boolean;
+  setShowMatrix: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const unimplemented = () => {
+  throw new Error('function must be implemented');
 };
 
 const terminalContext = createContext<TerminalContext>({
   isOpen: false,
-  onOpen: () => {
-    throw new Error('onOpen must be implemented');
-  },
-  onClose: () => {
-    throw new Error('onClose must be implemented');
-  },
-  onToggle: () => {
-    throw new Error('onToggle must be implemented');
-  },
+  onOpen: unimplemented,
+  onClose: unimplemented,
+  onToggle: unimplemented,
+  commandHistory: [],
+  setCommandHistory: unimplemented,
+  onCommand: unimplemented,
+  showMatrix: false,
+  setShowMatrix: unimplemented,
 });
 
 export const useTerminal = () => {
@@ -36,9 +56,43 @@ type TerminalProviderProps = {
 
 export function TerminalProvider({ children }: TerminalProviderProps) {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  const [commandHistory, setCommandHistory] = useState<
+    {
+      command: string;
+      result: string;
+    }[]
+  >(() => [
+    {
+      command: 'help',
+      result: onCommand('help'),
+    },
+  ]);
+  const [showMatrix, setShowMatrix] = useState(false);
+
+  function onCommand(command: string) {
+    return handleCommand(command, {
+      onClose,
+      onClear: () => {
+        console.log('clear');
+        setCommandHistory([]);
+      },
+      toggleMatrix: () => setShowMatrix(!showMatrix),
+    });
+  }
 
   return (
-    <terminalContext.Provider value={{ isOpen, onOpen, onClose, onToggle }}>
+    <terminalContext.Provider
+      value={{
+        isOpen,
+        onOpen,
+        onClose,
+        onToggle,
+        commandHistory,
+        setCommandHistory,
+        onCommand,
+        showMatrix,
+        setShowMatrix,
+      }}>
       {children}
     </terminalContext.Provider>
   );

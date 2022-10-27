@@ -7,10 +7,9 @@ import {
   useColorModeValue,
   useOutsideClick,
 } from '@chakra-ui/react';
-import React, { FormEvent, useEffect, useRef, useState } from 'react';
+import React, { FormEvent, useEffect, useRef } from 'react';
 
 import { useTerminal } from '../context/terminal';
-import handleCommand from '../utils/commands';
 
 export type TerminalProps = {
   children?: React.ReactNode;
@@ -18,20 +17,10 @@ export type TerminalProps = {
 
 function Terminal({}: TerminalProps) {
   const bg = useColorModeValue('white', 'black');
-  const { isOpen, onClose, onOpen } = useTerminal();
+  const { isOpen, onClose, onOpen, commandHistory, setCommandHistory, onCommand } =
+    useTerminal();
   const ref = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [commandHistory, setCommandHistory] = useState<
-    {
-      command: string;
-      result: string;
-    }[]
-  >(() => [
-    {
-      command: 'help',
-      result: onCommand('help'),
-    },
-  ]);
 
   useOutsideClick({
     ref,
@@ -67,16 +56,6 @@ function Terminal({}: TerminalProps) {
     if (!inputRef.current) return;
     inputRef.current.scrollIntoView();
   }, [commandHistory]);
-
-  function onCommand(command: string) {
-    return handleCommand(command, {
-      onClose,
-      onClear: () => {
-        console.log('clear');
-        setCommandHistory([]);
-      },
-    });
-  }
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();

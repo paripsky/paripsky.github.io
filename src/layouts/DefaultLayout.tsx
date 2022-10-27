@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import { BsArrowUpCircle } from 'react-icons/bs';
 
 import Head from '../components/Head';
+import Matrix from '../components/Matrix';
 import Navbar from '../components/Navbar';
 import Terminal from '../components/Terminal';
+import { useTerminal } from '../context/terminal';
 import { scrollToTop } from '../utils/scroll';
 
 export type DefaultLayoutProps = {
@@ -21,6 +23,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   showFooter = true,
 }) => {
   const [showScrollToTop, setShowScrollToTop] = useState(false);
+  const { showMatrix } = useTerminal();
 
   useEffect(() => {
     const onContainerScroll = () => {
@@ -42,6 +45,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
       <Head title={title} description={description} />
       <Box w="full" scrollBehavior="smooth">
         <Terminal />
+        {showMatrix && <Matrix position="fixed" zIndex="-1" />}
         <Navbar />
 
         {children}
