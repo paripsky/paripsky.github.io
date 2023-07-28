@@ -338,6 +338,7 @@ const Home: NextPage = () => {
             as="a"
             mt="2"
             bg={name && email && message ? 'accent.600' : undefined}
+            _hover={{ background: name && email && message ? 'accent.600' : undefined }}
             disabled={!name || !email || !message}
             href={name && email && message ? emailHref : undefined}>
             Send

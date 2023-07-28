@@ -44,7 +44,6 @@ const Word: React.FC<WordProps> = ({ children, hoverColor, href, ...props }) => 
   useFrame(({ camera }) => {
     if (!ref.current) return;
     ref.current.quaternion.copy(camera.quaternion);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (ref.current.material as any).color.lerp(
       color.set(hovered ? hoverColor : textColor),
       0.1,

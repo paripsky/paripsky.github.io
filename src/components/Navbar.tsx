@@ -39,7 +39,6 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
       <chakra.nav display="flex" p="2" backdropFilter="blur(.4em)" bg="transparent">
         <NextLink href="/" passHref legacyBehavior>
           <Button as="a" variant="ghost" fontWeight="normal">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <chakra.img src="/favicon.ico" alt="logo" width="8" />
           </Button>
         </NextLink>
