@@ -13,11 +13,10 @@ import {
   SiGithubactions,
   SiGraphql,
   SiHtml5,
-  SiJava,
   SiJavascript,
   SiJest,
   SiJss,
-  SiMaterialui,
+  SiMui,
   SiMocha,
   SiMongodb,
   SiMysql,
@@ -43,6 +42,7 @@ import {
   SiVuedotjs,
   SiWebpack,
 } from 'react-icons/si';
+import { FaJava } from 'react-icons/fa';
 
 const skills = (theme: ColorMode) => [
   {
@@ -65,7 +65,7 @@ const skills = (theme: ColorMode) => [
   },
   {
     hoverColor: '#007fff',
-    icon: SiMaterialui,
+    icon: SiMui,
     'aria-label': 'Material UI',
     href: 'https://material-ui.com/',
   },
@@ -167,7 +167,7 @@ const skills = (theme: ColorMode) => [
   },
   {
     hoverColor: '#f8981d',
-    icon: SiJava,
+    icon: FaJava,
     'aria-label': 'Java',
     href: 'https://www.java.com/',
   },
