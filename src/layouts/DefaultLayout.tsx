@@ -1,4 +1,4 @@
-import { Box, Fade, Flex, Icon, IconButton } from '@chakra-ui/react';
+import { Box, Fade, Icon, IconButton } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { BsArrowUpCircle } from 'react-icons/bs';
 
@@ -13,14 +13,12 @@ export type DefaultLayoutProps = {
   children: React.ReactNode;
   title?: string;
   description?: string;
-  showFooter?: boolean;
 };
 
 const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   children,
   title,
   description,
-  showFooter = true,
 }) => {
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const { showMatrix } = useTerminal();
@@ -43,17 +41,12 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   return (
     <>
       <Head title={title} description={description} />
-      <Box w="full" scrollBehavior="smooth">
+      <Box w="full" scrollBehavior="smooth" minH="100dvh">
         <Terminal />
         {showMatrix && <Matrix position="fixed" zIndex="-1" />}
         <Navbar />
 
         {children}
-        {showFooter && (
-          <Flex as="footer" p="4" justifyContent="center">
-            Built with Next.js + Chakra UI
-          </Flex>
-        )}
 
         <Fade in={showScrollToTop} unmountOnExit>
           <IconButton

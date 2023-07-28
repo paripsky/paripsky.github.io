@@ -158,7 +158,7 @@ const Home: NextPage = () => {
       <Flex id="lectures" justifyContent="center" m="4" pt="14" minH={fullPageSize}>
         <Flex flexDirection="column" justifyContent="center" mx="6">
           <Text fontSize="xl" color="neutral.300" mb="4" alignSelf="flex-start">
-            Lectures
+            Lectures & Posts
           </Text>
           <Stack gap="4">
             <LinkCard
@@ -178,6 +178,12 @@ const Home: NextPage = () => {
               description={`A presentation that teaches the basics of NodeJS,\nhow to create a simple server with express & more`}
               href="https://docs.google.com/presentation/d/1d0NwWU7ZvB0TwMsalfm8mBjEdqGUHWEO7SGMG_gzMyM"
               tags={['NodeJS', 'Express', 'JS']}
+            />
+            <LinkCard
+              title="Semantic Tokens in Chakra UI ⚛"
+              description="A guide on how to use semantic tokens in ChakraUI"
+              href="https://dev.to/paripsky/semantic-tokens-in-chakra-ui-4k1b"
+              tags={['React', 'ChakraUI']}
             />
           </Stack>
           <Link href="#timeline" mt="10" className="float-animation" alignSelf="center">
@@ -331,7 +337,7 @@ const Home: NextPage = () => {
           <Button
             as="a"
             mt="2"
-            bg="accent.600"
+            bg={name && email && message ? 'accent.600' : undefined}
             disabled={!name || !email || !message}
             href={name && email && message ? emailHref : undefined}>
             Send

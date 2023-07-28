@@ -9,7 +9,7 @@ import { fullPageSize } from '../utils/fullPageSize';
 
 const Skills: NextPage = ({}) => {
   return (
-    <DefaultLayout showFooter={false} title="Skills">
+    <DefaultLayout title="Skills">
       <Box h={fullPageSize} maxH={fullPageSize}>
         <SkillsSphere />
       </Box>

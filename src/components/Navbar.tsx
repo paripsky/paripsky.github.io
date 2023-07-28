@@ -37,13 +37,13 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   return (
     <chakra.header pos="sticky" top="0" w="full" zIndex="1">
       <chakra.nav display="flex" p="2" backdropFilter="blur(.4em)" bg="transparent">
-        <NextLink href="/" passHref>
+        <NextLink href="/" passHref legacyBehavior>
           <Button as="a" variant="ghost" fontWeight="normal">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <chakra.img src="/favicon.ico" alt="logo" width="8" />
           </Button>
         </NextLink>
-        <NextLink href="/blog" passHref>
+        <NextLink href="/blog" passHref legacyBehavior>
           <Button
             as="a"
             variant={getButtonVariant('/blog')}
@@ -53,7 +53,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             Blog
           </Button>
         </NextLink>
-        <NextLink href="/skills" passHref>
+        <NextLink href="/skills" passHref legacyBehavior>
           <IconButton
             as="a"
             title="Skills"
