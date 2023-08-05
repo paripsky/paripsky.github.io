@@ -1,0 +1,50 @@
+---
+const posts = [
+  {
+    title: "HTML, CSS, JS - The Basics",
+    description: `The basics of HTML, CSS & JS, what are they,\nwhen to use them & more`,
+    href: "/lectures/html-css-js-basics.html",
+    tags: ["HTML", "CSS", "JS"],
+  },
+  {
+    title: "Into to Vue 2",
+    description: `An interactive presentation that teaches the\nbasics of Vue 2, what it's used for & more`,
+    href: "/lectures/intro-to-vue.html",
+    tags: ["Vue"],
+  },
+  {
+    title: "Into to NodeJS",
+    description: `A presentation that teaches the basics of NodeJS,\nhow to create a simple server with express & more`,
+    href: "https://docs.google.com/presentation/d/1d0NwWU7ZvB0TwMsalfm8mBjEdqGUHWEO7SGMG_gzMyM",
+    tags: ["NodeJS", "Express", "JS"],
+  },
+  {
+    title: "Semantic Tokens in Chakra UI ⚛",
+    description: "A guide on how to use semantic tokens in ChakraUI",
+    href: "https://dev.to/paripsky/semantic-tokens-in-chakra-ui-4k1b",
+    tags: ["React", "ChakraUI"],
+  },
+];
+---
+
+<ul class="flex flex-col gap-4 w-full">
+  {
+    posts.map((post) => (
+      <li>
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <a class="link link-hover" href={post.href} target="_blank">
+              <h2 class="card-title">{post.title}</h2>
+            </a>
+            <p class="whitespace-pre-wrap">{post.description}</p>
+            <div class="card-actions justify-end mt-2">
+              {post.tags.map((tag) => (
+                <div class="badge badge-outline">{tag}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </li>
+    ))
+  }
+</ul>

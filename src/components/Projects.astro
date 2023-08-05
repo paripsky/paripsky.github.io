@@ -1,0 +1,103 @@
+---
+const projects = [
+  {
+    title: "OG Scrapi",
+    description:
+      "An API that retrieves Open Graph (OG) meta tags and other metadata from a given URL, providing a convenient way to access and utilize website metadata.",
+    githubUrl: "https://github.com/paripsky/og-scrapi",
+    siteUrl:
+      "https://og-scrapi.deno.dev/api/meta?url=https://develist.vercel.app/",
+    image: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Deno_2021.svg",
+    tags: ["Deno", "Open Graph", "Scrape"],
+  },
+  {
+    title: "Develist",
+    description:
+      "Develist is a web application built using Nuxt 3 and Supabase, designed to help developers manage and organize their development tools and resources.",
+    githubUrl: "https://github.com/paripsky/develist",
+    siteUrl: "https://develist.vercel.app",
+    image: "https://develist.vercel.app/favicon.ico",
+    tags: ["Nuxt", "Supabase"],
+  },
+  {
+    title: "node-context-storage",
+    description: `A simple utility for managing a context across asynchronous boundaries in NodeJS.`,
+    githubUrl: "https://github.com/paripsky/node-context-storage",
+    siteUrl: "https://www.npmjs.com/package/node-context-storage",
+    image: "https://nodejs.dev/static/images/brand/logos-js-right/light.svg",
+    tags: ["NodeJS", "Express", "Typescript"],
+  },
+  {
+    title: "QTerminal",
+    description: "A Quake-style console for your website.",
+    githubUrl: "https://github.com/paripsky/qterminal",
+    siteUrl: "https://paripsky.github.io/qterminal",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/5/51/Windows_Terminal_logo.svg",
+    tags: ["Typescript", "CSS Theming"],
+  },
+];
+---
+
+<ul class="grid grid-cols-1 lg:grid-cols-2 grid-rows gap-4 w-full">
+  {
+    projects.map((project) => (
+      <li class="h-full">
+        <div class="card bg-base-100 shadow-xl h-full relative">
+          <img
+            class="absolute right-2 top-2 w-10 h-10"
+            src={project.image}
+            alt={project.title}
+          />
+          <div class="card-body">
+            <h2 class="card-title">{project.title}</h2>
+            <p class="whitespace-pre-wrap">{project.description}</p>
+            <div class="card-actions justify-between items-center mt-2">
+              <div class="flex gap-2">
+                <a href={project.githubUrl} target="_blank">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1024"
+                    height="1024"
+                    viewBox="0 0 1024 1024"
+                    fill="white"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z"
+                      transform="scale(64)"
+                      fill="white"
+                    />
+                  </svg>
+                </a>
+                {project.siteUrl && (
+                  <a href={project.siteUrl} target="_blank">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="128"
+                      height="128"
+                      viewBox="0 0 128 128"
+                      class="w-6 h-6"
+                    >
+                      <path
+                        fill="white"
+                        d="M64 .29C28.87.29.29 28.87.28 64 .29 99.13 28.87 127.71 64 127.71c35.13 0 63.71-28.59 63.71-63.71C127.71 28.87 99.13.29 64 .29zm25.2 84.96c-6.24-1.85-13.4-3.09-21.59-3.38V67.61h24.18c-.26 6.62-1.21 12.45-2.59 17.64zM38.75 42.74c6.26 1.86 13.43 3.11 21.64 3.4v14.25H36.16c.25-6.63 1.2-12.46 2.59-17.65zm-2.53 24.87h24.17v14.25c-8.17.29-15.31 1.52-21.55 3.37-1.4-5.19-2.36-11.01-2.62-17.62zm55.57-7.22H67.61V46.13c8.17-.29 15.31-1.52 21.55-3.37 1.4 5.2 2.37 11.02 2.63 17.63zm28.58 0h-21.3c-.26-7.53-1.35-14.17-2.96-20.05 5.73-2.35 10.52-5.19 14.49-8.17 5.58 8.14 9.1 17.79 9.77 28.22zm-14.23-33.91c-3.39 2.51-7.44 4.93-12.28 6.96-4.3-11.24-10.54-19.06-16.1-24.23 11.15 2.8 20.95 8.95 28.38 17.27zm-19.22 9.4c-5.58 1.64-11.97 2.75-19.31 3.03V10.3c5.43 3.88 13.95 11.8 19.31 25.58zM60.39 10.22v28.69c-7.38-.28-13.82-1.41-19.43-3.07 5.37-13.9 13.96-21.78 19.43-25.62zM50.24 9.21c-5.55 5.17-11.79 12.99-16.09 24.23-4.84-2.03-8.89-4.45-12.28-6.96 7.42-8.32 17.23-14.47 28.37-17.27zM17.41 32.17c3.97 2.97 8.77 5.82 14.49 8.16-1.61 5.88-2.7 12.52-2.96 20.05H7.64c.66-10.42 4.19-20.07 9.77-28.21zm11.53 35.44c.26 7.53 1.36 14.17 2.96 20.06-5.73 2.34-10.52 5.19-14.49 8.16-5.58-8.14-9.11-17.79-9.78-28.22h21.31zm-7.06 33.91c3.38-2.51 7.43-4.92 12.28-6.96 4.3 11.23 10.53 19.06 16.09 24.23-11.15-2.8-20.96-8.95-28.37-17.27zm19.2-9.4c5.58-1.64 11.97-2.75 19.3-3.03v28.62c-5.41-3.88-13.93-11.81-19.3-25.59zm26.53 25.65V89.09c7.37.28 13.79 1.4 19.38 3.05-5.36 13.9-13.91 21.79-19.38 25.63zm10.16 1.02c5.55-5.17 11.79-12.99 16.09-24.23 4.84 2.03 8.89 4.45 12.27 6.96-7.42 8.32-17.22 14.47-28.36 17.27zm32.83-22.96c-3.97-2.97-8.77-5.82-14.49-8.16 1.61-5.89 2.7-12.52 2.96-20.06h21.3c-.66 10.43-4.19 20.08-9.77 28.22z"
+                      />
+                    </svg>
+                  </a>
+                )}
+              </div>
+              <div class="flex gap-1">
+                {project.tags.map((tag) => (
+                  <div class="badge badge-outline">{tag}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    ))
+  }
+</ul>

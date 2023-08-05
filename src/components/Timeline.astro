@@ -1,0 +1,63 @@
+---
+const entries = [
+  {
+    date: "2022 - Now",
+    title: "Full Stack Engineer @FinOut",
+    description:
+      "Building a cloud cost optimization app for multiple cloud providers using JavaScript, Node.js, React, Vite, Tailwind, and Headless UI.",
+  },
+  {
+    date: "2020 - 2022",
+    title: "Full Stack Engineer @ironSource",
+    description:
+      "Built a web platform used by thousands of app developers using Vue, managed and maintained a high-load Node.js API.",
+  },
+  {
+    date: "2020",
+    title: "Full Stack Engineer @Ripples",
+    description:
+      "Engineered React web applications and Node.js microservices, enhancing user experiences and application performance.",
+  },
+  {
+    date: "2016 - 2020",
+    title: "Full Stack Engineer @Matzpen, IDF",
+    description:
+      "Designed and deployed a complex web command and control platform with Java, Node.js microservices, and AngularJS.",
+  },
+];
+---
+
+<div class="ml-0 md:ml-12 lg:w-2/3 sticky">
+  <div class="container mx-auto w-full h-full">
+    <div class="relative wrap overflow-hidden h-full">
+      <div
+        class="hidden lg:block border-r-2 border-accent right-1/2 absolute h-full border"
+      >
+      </div>
+      <div
+        class="hidden lg:block border-l-2 border-accent left-1/2 absolute h-full border"
+      >
+      </div>
+      {
+        entries.map((entry, index) => (
+          <div
+            class={`mb-8 flex justify-between items-center w-full ${
+              index % 2 === 0 ? "flex-row-reverse" : ""
+            }`}
+          >
+            <div class="hidden lg:block order-1 w-5/12" />
+            <div class="order-1 lg:w-5/12 px-1 py-4 text-left">
+              <p class="mb-3 text-base text-accent">{entry.date}</p>
+              <h4 class="mb-3 font-bold text-lg md:text-2xl">{entry.title}</h4>
+              <p>{entry.description}</p>
+            </div>
+          </div>
+        ))
+      }
+      <!-- <img
+        class="mx-auto -mt-36 md:-mt-36"
+        src="https://user-images.githubusercontent.com/54521023/116968861-ef21a000-acd2-11eb-95ac-a34b5b490265.png"
+      /> -->
+    </div>
+  </div>
+</div>
