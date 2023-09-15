@@ -2,25 +2,33 @@
 const entries = [
   {
     date: "2022 - Now",
-    title: "Full Stack Engineer @FinOut",
+    title: "Full Stack Engineer",
+    name: "FinOut",
+    url: "https://www.finout.io/",
     description:
       "Building a cloud cost optimization app for multiple cloud providers using JavaScript, Node.js, React, Vite, Tailwind, and Headless UI.",
   },
   {
     date: "2020 - 2022",
-    title: "Full Stack Engineer @ironSource",
+    title: "Full Stack Engineer",
+    name: "ironSource",
+    url: "https://www.is.com/",
     description:
       "Built a web platform used by thousands of app developers using Vue, managed and maintained a high-load Node.js API.",
   },
   {
     date: "2020",
-    title: "Full Stack Engineer @Ripples",
+    title: "Full Stack Engineer",
+    name: "Ripples",
+    url: "https://www.drinkripples.com/",
     description:
       "Engineered React web applications and Node.js microservices, enhancing user experiences and application performance.",
   },
   {
     date: "2016 - 2020",
-    title: "Full Stack Engineer @Matzpen, IDF",
+    title: "Full Stack Engineer",
+    name: "Matzpen, IDF",
+    url: "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99-%D7%99%D7%97%D7%99%D7%93%D7%95%D7%AA/%D7%90%D7%92%D7%A3-%D7%94%D7%AA%D7%A7%D7%A9%D7%95%D7%91-%D7%95%D7%94%D7%94%D7%92%D7%A0%D7%94-%D7%91%D7%A1%D7%99%D7%99%D7%91%D7%A8/%D7%9B%D7%9C-%D7%94%D7%9B%D7%AA%D7%91%D7%95%D7%AA/%D7%9B%D7%AA%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9C%D7%99%D7%95%D7%AA/%D7%9E%D7%A6%D7%A4-%D7%9F/",
     description:
       "Designed and deployed a complex web command and control platform with Java, Node.js microservices, and AngularJS.",
   },
@@ -48,7 +56,10 @@ const entries = [
             <div class="hidden lg:block order-1 w-5/12" />
             <div class="order-1 lg:w-5/12 px-1 py-4 text-left">
               <p class="mb-3 text-base text-accent">{entry.date}</p>
-              <h4 class="mb-3 font-bold text-lg md:text-2xl">{entry.title}</h4>
+              <h4 class="mb-3 font-bold text-lg md:text-2xl">
+                <span>{entry.title}</span>
+                @<a href={entry.url} target="_blank" class="underline">{entry.name}</a>
+              </h4>
               <p>{entry.description}</p>
             </div>
           </div>
