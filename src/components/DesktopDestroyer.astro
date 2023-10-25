@@ -1,0 +1,167 @@
+---
+import { Icon } from "astro-icon";
+
+const tools = [
+  {
+    id: "elementRemover",
+    description: "Remove DOM elements",
+    icon: "mdi:crosshairs-gps",
+  },
+  {
+    id: "haxor",
+    description: "Make DOM elements more hacker like",
+    icon: "mdi:terminal",
+  },
+  {
+    id: "duck",
+    description: "DUCK",
+    icon: "mdi:duck",
+  },
+  {
+    id: "fire",
+    description: "Add some fire",
+    icon: "mdi:fire",
+  },
+  {
+    id: "close",
+    description: "Close fun mode",
+    icon: "mdi:close",
+  },
+];
+---
+
+<div
+  id="container"
+  class="fixed bottom-4 left-2 -translate-x-[150%] transition-transform"
+>
+  <ul id="toolsList" class="menu bg-base-300 rounded-box">
+    {
+      tools.map((tool) => (
+        <li>
+          <button
+            id={tool.id}
+            class="tooltip tooltip-right"
+            data-tip={tool.description}
+          >
+            <Icon name={tool.icon} class="h-5 w-5" />
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+  <audio id="shotSound" src="sounds/pistol_shot.wav" preload="none"></audio>
+</div>
+
+<script>
+  let activeTool = null;
+  const container = document.querySelector("#container");
+  let isOn = false;
+
+  const start = () => {
+    window.addEventListener("click", onWindowClick, { capture: true });
+    container.style.transform = "none";
+    isOn = true;
+  };
+
+  const stop = () => {
+    window.removeEventListener("click", onWindowClick, { capture: true });
+    container.style.transform = "";
+    activeTool = null;
+    document.body.style.cursor = "";
+    isOn = false;
+  };
+
+  window.addEventListener("keypress", (e) => {
+    if (e.code === "Backquote") {
+      if (!isOn) {
+        start();
+      } else {
+        stop();
+      }
+    }
+  });
+
+  const toolsList = document.querySelector("#toolsList");
+  toolsList.querySelectorAll("button").forEach(
+    (b) =>
+      (b.onclick = () => {
+        activeTool = b.id;
+        document.body.style.cursor = "crosshair";
+
+        if (activeTool === "close") {
+          stop();
+        }
+      }),
+  );
+
+  const clickHandlers = {
+    elementRemover: (e) => e.target.remove(),
+    haxor: (e) => {
+      e.target.style.color = "lime";
+      e.target.style.backgroundColor = "black";
+    },
+    duck: (e) => {
+      const newDuck = document.createElement("img");
+      newDuck.src = "images/duck.gif";
+      newDuck.style.scale = "-1 1";
+      newDuck.style.maxHeight = e.target.clientHeight
+        ? `${e.target.clientHeight}px`
+        : "";
+      newDuck.style.maxWidth = e.target.clientWidth
+        ? `${e.target.clientWidth}px`
+        : "";
+      newDuck.className = e.target.className;
+      e.target.replaceWith(newDuck);
+    },
+    fire: (e) => {
+      const step = [
+        {
+          from: "yellow",
+          to: "red",
+          scale: 1,
+        },
+        {
+          from: "red",
+          to: "orange",
+          scale: 0.8,
+        },
+        {
+          from: "orange",
+          to: "yellow",
+          scale: 1.1,
+        },
+      ];
+
+      const transition = "all 200ms";
+      e.target.style.backgroundColor = "yellow";
+      e.target.style.transition = transition;
+      e.target.style.scale = 0.8;
+      e.target.style.backgroundColor = "red";
+
+      let stepIndex = 0;
+      e.target.ontransitionend = () => {
+        if (!step[stepIndex]) {
+          stepIndex = 0;
+        }
+        e.target.style.transition = "none";
+        e.target.style.backgroundColor = step[stepIndex].from;
+        e.target.style.transition = transition;
+        e.target.style.scale = step[stepIndex].scale;
+        e.target.style.backgroundColor = step[stepIndex].to;
+        stepIndex++;
+      };
+    },
+  };
+
+  const onWindowClick = (e) => {
+    if (!activeTool) return;
+    if (
+      toolsList.contains(e.target) ||
+      [document.body, document.body.parentElement].includes(e.target)
+    )
+      return;
+    clickHandlers[activeTool](e);
+    e.stopPropagation();
+    e.preventDefault();
+  };
+</script>
