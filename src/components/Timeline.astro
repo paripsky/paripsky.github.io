@@ -35,7 +35,7 @@ const entries = [
 ];
 ---
 
-<div class="ml-0 md:ml-12 lg:w-2/3 sticky">
+<div class="m-auto sticky">
   <div class="container mx-auto w-full h-full">
     <div class="relative wrap overflow-hidden h-full">
       <div
@@ -58,7 +58,10 @@ const entries = [
               <p class="mb-3 text-base text-accent">{entry.date}</p>
               <h4 class="mb-3 font-bold text-lg md:text-2xl">
                 <span>{entry.title}</span>
-                @<a href={entry.url} target="_blank" class="underline">{entry.name}</a>
+                <span class="ml-1">@</span>
+                <a href={entry.url} target="_blank" class="underline">
+                  {entry.name}
+                </a>
               </h4>
               <p>{entry.description}</p>
             </div>

@@ -27,21 +27,21 @@ const posts = [
 ];
 ---
 
-<ul class="flex flex-col gap-4 w-full">
+<ul class="grid grid-cols-1 lg:grid-cols-2 grid-rows gap-4 w-full">
   {
     posts.map((post) => (
-      <li>
-        <div class="card bg-base-100 border border-gray-600 hover:border-purple-400 shadow-lg hover:shadow-purple-800 transition-all duration-300">
+      <li class="h-full">
+        <div class="card bg-base-100 border border-gray-600 hover:border-purple-400 shadow-lg hover:shadow-purple-800 transition-all duration-300 h-full">
           <div class="card-body">
             <a class="link link-hover" href={post.href} target="_blank">
               <h2 class="card-title">{post.title}</h2>
             </a>
             <p class="whitespace-pre-wrap">{post.description}</p>
-            <div class="card-actions justify-end mt-2">
+            <ul class="card-actions justify-end mt-2">
               {post.tags.map((tag) => (
-                <div class="badge badge-outline">{tag}</div>
+                <li class="badge badge-outline">{tag}</li>
               ))}
-            </div>
+            </ul>
           </div>
         </div>
       </li>

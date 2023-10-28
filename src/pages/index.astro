@@ -11,10 +11,10 @@ import Tilt from "../components/Tilt.astro";
 
 <Layout title="Welcome to Astro.">
   <main class="container m-auto p-4 sm:p-8">
-    <section
-      class="pt-36 sm:pt-0 h-screen flex flex-col md:flex-row md:justify-between items-center gap-10"
+    <div
+      class="pt-[15vh] sm:pt-[30vh] h-screen flex flex-col items-center gap-20"
     >
-      <article class="prose w-full">
+      <article class="prose w-full block">
         <h1
           class="inline-block mb-4 text-4xl md:text-6xl !leading-normal font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400"
         >
@@ -43,83 +43,59 @@ import Tilt from "../components/Tilt.astro";
           <Logos />
         </div>
       </Tilt>
-    </section>
+    </div>
     <section id="projects">
       <div
-        class="container mt-36 md:mt-0 sm:min-h-[100dvh] mx-auto flex flex-col items-center md:flex-row"
+        class="container mt-36 md:mt-0 sm:min-h-[100dvh] mx-auto flex flex-col"
       >
-        <div
-          class="flex flex-col w-full md:top-36 lg:w-1/3 my-2 md:mt-12 gap-2"
+        <h1
+          class="text-3xl py-8 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-sky-400 inline"
         >
-          <article class="prose w-full md:top-36">
-            <h1
-              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-sky-400 inline"
-            >
-              Projects
-            </h1>
-          </article>
-        </div>
+          Projects
+        </h1>
         <Projects />
       </div>
     </section>
     <section id="posts">
       <div
-        class="container mt-36 md:mt-0 sm:min-h-[100dvh] mx-auto flex flex-col items-center md:flex-row"
+        class="container mt-36 md:mt-0 sm:min-h-[100dvh] mx-auto flex flex-col"
       >
-        <div
-          class="flex flex-col w-full md:top-36 lg:w-1/3 my-2 md:mt-12 gap-2"
+        <h1
+          class="text-3xl py-8 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-purple-400 inline"
         >
-          <article class="prose w-full md:top-36">
-            <h1
-              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-purple-400 inline"
-            >
-              Posts
-            </h1>
-          </article>
-        </div>
+          Posts
+        </h1>
         <Posts />
       </div>
     </section>
     <section id="timeline">
       <div
-        class="container mt-36 md:mt-12 sm:min-h-[100dvh] mx-auto flex flex-col items-center md:flex-row"
+        class="container mt-36 md:mt-0 sm:min-h-[100dvh] mx-auto flex flex-col"
       >
-        <div
-          class="flex flex-col w-full md:top-36 lg:w-1/3 mt-2 md:mt-12 gap-2"
+        <h1
+          class="text-3xl pb-2 pt-8 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-teal-400 inline"
         >
-          <article class="prose w-full">
-            <h1
-              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-teal-400 inline"
-            >
-              Timeline
-            </h1>
-          </article>
-          <a
-            class="link"
-            href="https://www.linkedin.com/in/paripsky"
-            target="_blank"
-          >
-            Check out my Linkedin page</a
-          >
-        </div>
+          Timeline
+        </h1>
+        <a
+          class="link"
+          href="https://www.linkedin.com/in/paripsky"
+          target="_blank"
+        >
+          Check out my Linkedin page</a
+        >
         <Timeline />
       </div>
     </section>
     <section id="contact">
       <div
-        class="container mt-36 mb-10 md:mt-0 sm:min-h-[100dvh] mx-auto flex flex-col items-center md:flex-row"
+        class="container mt-36 md:mt-0 sm:min-h-[100dvh] mx-auto flex flex-col"
       >
-        <div
-          class="flex flex-col w-full md:top-36 lg:w-1/3 mt-2 md:mt-12 gap-2"
+        <h1
+          class="text-3xl py-8 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-200 to-pink-400 inline"
         >
-          <article class="prose w-full">
-            <h1
-              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-200 to-pink-400 inline"
-            >
-              Contact
-            </h1>
-          </article>
-        </div>
+          Contact
+        </h1>
         <ContactForm />
       </div>
     </section>
