@@ -43,14 +43,14 @@ const projects = [
   {
     projects.map((project) => (
       <li class="h-full">
-        <div class="card bg-base-100 h-full relative  border border-gray-600 hover:border-sky-400 shadow-lg hover:shadow-sky-800 transition-all duration-300">
+        <div class="card bg-base-100/50 h-full relative border border-gray-600 hover:border-sky-400 shadow-lg hover:shadow-sky-800 transition-all duration-300">
           <img
             class="absolute right-2 top-2 w-10 h-10"
             src={project.image}
             alt={project.title}
           />
           <div class="card-body">
-            <h2 class="card-title">{project.title}</h2>
+            <h2 class="card-title font-bold">{project.title}</h2>
             <p class="whitespace-pre-wrap">{project.description}</p>
             <div class="card-actions justify-between items-center mt-2">
               <div class="flex gap-2">

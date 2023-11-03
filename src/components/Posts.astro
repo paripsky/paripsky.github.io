@@ -31,10 +31,10 @@ const posts = [
   {
     posts.map((post) => (
       <li class="h-full">
-        <div class="card bg-base-100 border border-gray-600 hover:border-purple-400 shadow-lg hover:shadow-purple-800 transition-all duration-300 h-full">
+        <div class="card bg-base-100/50 border border-gray-600 hover:border-purple-400 shadow-lg hover:shadow-purple-800 transition-all duration-300 h-full">
           <div class="card-body">
             <a class="link link-hover" href={post.href} target="_blank">
-              <h2 class="card-title">{post.title}</h2>
+              <h2 class="card-title font-bold">{post.title}</h2>
             </a>
             <p class="whitespace-pre-wrap">{post.description}</p>
             <ul class="card-actions justify-end mt-2">
