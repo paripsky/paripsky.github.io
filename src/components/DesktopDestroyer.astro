@@ -1,5 +1,5 @@
 ---
-import { Icon } from "astro-icon";
+import { Icon } from "astro-icon/components";
 
 const tools = [
   {
@@ -54,7 +54,7 @@ const tools = [
 
 <script>
   let activeTool = null;
-  const container = document.querySelector("#container");
+  const container = document.querySelector("#container") as HTMLElement;
   let isOn = false;
 
   const start = () => {
@@ -81,7 +81,7 @@ const tools = [
     }
   });
 
-  const toolsList = document.querySelector("#toolsList");
+  const toolsList = document.querySelector("#toolsList") as HTMLElement;
   toolsList.querySelectorAll("button").forEach(
     (b) =>
       (b.onclick = () => {
@@ -91,7 +91,7 @@ const tools = [
         if (activeTool === "close") {
           stop();
         }
-      }),
+      })
   );
 
   const clickHandlers = {
