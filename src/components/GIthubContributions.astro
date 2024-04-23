@@ -1,0 +1,48 @@
+<div id="github-contributions"></div>
+
+<script>
+  const contributions = await fetch(
+    "https://gh-contributions.deno.dev/paripsky",
+  ).then((c) => c.json());
+
+  const colors = {
+    level0: "black",
+    level1: "#006d32",
+    level2: "#006d32",
+    level3: "#26a641",
+    level4: "#39d353",
+  };
+
+  const getColor = (level) => {
+    return colors[`level${level}`];
+  };
+
+  document.querySelector("#github-contributions").innerHTML =
+    `<div class="contributions-container">
+    ${contributions.map((contribution) => `<div data-date="${contribution.date}" title="${contribution.date}" class="contributions-item" style="background: ${getColor(contribution.level)};"></div>`).join("")}
+  </div>`;
+</script>
+
+<style is:global>
+  .contributions-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 30px;
+    width: 70px;
+    align-items: center;
+  }
+
+  .contributions-item {
+    position: relative;
+    width: 4px;
+    height: 4px;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+
+  .contributions-item:hover {
+    opacity: 0.5;
+    box-shadow: 0px 0px 8px gray;
+  }
+</style>
