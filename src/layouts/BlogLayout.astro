@@ -53,7 +53,7 @@ const { frontmatter, url } = Astro.props;
       ><Icon name="mdi:arrow-back" class="size-4" /> Back</a
     >
     <main class="max-w-xl my-4 mx-auto px-4">
-      <h1 class="text-4xl">{frontmatter.title}</h1>
+      <h1 class="text-4xl text-white">{frontmatter.title}</h1>
       <h5 class="py-4 flex justify-between flex-wrap">
         <span>
           {
@@ -70,7 +70,7 @@ const { frontmatter, url } = Astro.props;
         class="prose dark:prose-invert
   prose-h1:font-bold prose-h1:text-2xl
   prose-a:text-blue-300 prose-p:text-justify prose-img:rounded-xl
-  prose-headings:mt-0"
+  prose-headings:mt-0 prose-headings:text-white prose-p:text-slate-200 prose-li:text-slate-200"
       >
         <slot />
       </div>
