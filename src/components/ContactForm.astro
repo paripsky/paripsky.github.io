@@ -1,26 +1,74 @@
-<form class="flex flex-col gap-4 w-full max-w-4xl">
-  <div class="form-control w-full">
-    <label class="label">
-      <span class="label-text text-gray-200">Subject</span>
-    </label>
-    <input
-      type="text"
-      placeholder="Type here"
-      class="input input-bordered w-full bg-base-100/50 placeholder:text-gray-400"
-      name="subject"
-    />
-  </div>
-  <div class="form-control w-full">
-    <label class="label">
-      <span class="label-text text-gray-200">Content</span>
-    </label>
-    <textarea
-      placeholder="Type here"
-      class="textarea textarea-bordered bg-base-100/50 w-full min-h-[10rem] placeholder:text-gray-400"
-      name="content"></textarea>
-  </div>
-  <div class="form-control w-full">
-    <button class="btn bg-base-300/50 text-gray-200">Send</button>
+---
+import { Icon } from "astro-icon/components";
+---
+
+<form class="flex flex-col gap-4 w-full">
+  <div class="mt-6 bg-slate-700 rounded-lg">
+    <div class="grid lg:grid-cols-2 gap-4 sm:p-8 p-4 font-[sans-serif]">
+      <div>
+        <h1 class="text-4xl font-bold text-white">Get in Touch</h1>
+        <p class="text-sm text-gray-300 mt-4 leading-relaxed">
+          Let's Talk! Connect with me:
+        </p>
+
+        <ul class="mt-4 space-y-4">
+          <li class="flex items-center">
+            <Icon name="mdi:linkedin" class="size-6" />
+            <a
+              href="https://www.linkedin.com/in/paripsky"
+              target="_blank"
+              class="text-white text-sm ml-4"
+            >
+              Linkedin
+            </a>
+          </li>
+          <li class="flex items-center">
+            <Icon name="mdi:github" class="size-6" />
+            <a
+              href="https://github.com/paripsky"
+              target="_blank"
+              class="text-white text-sm ml-4"
+            >
+              Github
+            </a>
+          </li>
+          <li class="flex items-center">
+            <Icon name="mdi:dev-to" class="size-6" />
+            <a
+              href="https://dev.to/paripsky"
+              target="_blank"
+              class="text-white text-sm ml-4"
+            >
+              dev.to
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-gray-100 p-6 rounded-lg">
+        <div class="flex flex-col gap-4 min-h-[24rem]">
+          <input
+            type="text"
+            placeholder="Subject"
+            name="subject"
+            class="w-full rounded-lg py-3 px-4 text-gray-800 text-sm"
+          />
+          <textarea
+            name="content"
+            placeholder="Message"
+            rows="6"
+            class="w-full flex-1 rounded-lg px-4 text-gray-800 text-sm pt-3"
+          ></textarea>
+          <button
+            type="submit"
+            class="text-white bg-sky-700 tracking-wide rounded-lg text-sm px-4 py-3 flex gap-2 items-center justify-center w-full !mt-6"
+          >
+            <Icon name="mdi:send" class="size-4" />
+            Send Message
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </form>
 

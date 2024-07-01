@@ -1,0 +1,252 @@
+---
+layout: ../../layouts/BlogLayout.astro
+title: Build your own React state management library in under 40 lines of code
+author: paripsky
+description: A guide on how to built a custom state management solution for react in under 40 lines of code with typescript support
+devToUrl: https://dev.to/paripsky/build-your-own-react-state-management-library-in-under-40-lines-of-code-with-typescript-support-hji
+date: 2024-05-21
+---
+Have you ever wondered how react state management libraries are built? from solutions like redux, with a lot of boilerplate and a large bundle size to libraries like zustand or jotai that are much lighter and simpler. Today we'll build our own state management library and see the magic that happens behind the scenes.
+
+## Understanding useSyncExternalStore
+React 18 introduced a new hook called [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore) which allowes react to sync to any external store.
+```ts
+useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?)
+```
+Here's a breakdown of its parameters:
+- **subscribe** receives a callback as a parameter, and subscribes the callback to the external store so that it is called when the store state changes, it needs to return an unsubscribe function.
+- **getSnapshot** gets the current snapshot of the store, this snapshot must be a cached value as react compares this value on each render using `Object.is(getSnapshot(), oldSnapshot)`, providing a new value each time will cause an infinite loop.
+- **getServerSnapshot** (optional) allows us to return a snapshot when rendering on the server, which can be helpful in certain cases where the external store or subscription source can't run on the server or needs specific handling to run on the server.
+
+Leveraging useSyncExternalStore, we can build a minimalist store tailored to our requirements.
+
+## Why not just use React Context?
+[React Context](https://react.dev/learn/passing-data-deeply-with-context) is a feature in react that allows a component to pass down props to the entire component tree below it, which means that it can be used as a store and is a viable option.
+
+React context requires some boilerplate:
+```tsx
+const context = createContext();
+
+const CountProvider = ({ children }) => {
+  const [count, setCount] = useState(0);
+  return <context.Provider value={{ count, setCount }}>{children}</context.Provider>;
+};
+
+export function App() {
+  return (
+    <CountProvider>
+      <Outer />
+      <Other />
+    </CountProvider>
+  );
+}
+```
+Using Context a lot can lead to "Context Hell", where a lot of context providers are nested in the App component:
+```tsx
+export function App() {
+  return (
+    <CountProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <CacheProvider>
+            <IntlProvider>
+              <TooltipProvider>
+                <UserSettingsProvider>
+                  <NotificationProvider>
+                    <AnalyticsProvider>
+                      <Content />
+                    </UserSettingsProvider>
+                  </NotificationProvider>
+                </AnalyticsProvider>
+              </TooltipProvider>
+            </IntlProvider>
+          </CacheProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </CountProvider>
+  );
+}
+```
+Moreover, using context can inadvertently trigger re-renders across the entire component tree, as demonstrated below:
+```tsx
+export function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <context.Provider value={{ count, setCount }}>
+      <Outer />
+      <Other />
+    </context.Provider>
+  );
+}
+```
+Using setCount from a consumer of the context will cause a re-render of the entire app (both Outer and Other will be re-rendered) because the state is set on the App component, and when it re-renders, all of it's child components are also re-rendered.
+
+Also, using an external store can allow us to more easily sync react with external systems like http requests, with context you'll resort to using useEffect, while with an external store you can just update the store directly and the change will take effect in the subscribing components.
+
+## Building our store
+Let's delve into the implementation of our store. We'll start with a basic structure and gradually enhance it based on our requirements.
+```tsx
+import { useSyncExternalStore } from 'react';
+
+export type Listener = () => void;
+
+function createStore<T>({ initialState }: { initialState: T }) {
+  let subscribers: Listener[] = [];
+  let state = initialState;
+
+  const notifyStateChanged = () => {
+    subscribers.forEach((fn) => fn());
+  };
+
+  return {
+    subscribe(fn: Listener) {
+      subscribers.push(fn);
+      return () => {
+        subscribers = subscribers.filter((listener) => listener !== fn);
+      };
+    },
+    getSnapshot() {
+      return state;
+    },
+    setState(newState: T) {
+      state = newState;
+      notifyStateChanged();
+    },
+  };
+}
+```
+**Subscribers** is an array of listeners that our store will notify on every change of the store's state.
+**State** is the store's state which we'll update when setState is called and then notify all of the store's subscribers of the update.
+
+To use the store in react we'll create createUseStore which is a helper that wraps createStore and useSyncExternalStore in a convenient way:
+```ts
+export function createUseStore<T>(initialState: T) {
+  const store = createStore({ initialState });
+  return () => [useSyncExternalStore(store.subscribe, store.getSnapshot), store.setState] as const;
+}
+```
+## Using the store
+With our store in place, let's start by building a Counter component:
+```tsx
+import React, { useState } from "react";
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+
+  const increment = () => {
+    setCount(count + 1);
+  };
+
+  const decrement = () => {
+    setCount(count - 1);
+  };
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+    </div>
+  );
+}
+```
+and render it three times in our app:
+```tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Counter } from './Counter.tsx';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <Counter />
+    <Counter />
+    <Counter />
+  </React.StrictMode>,
+);
+```
+We now see three counters in our page, clicking on Increment only increments one of the counters:
+![Counters starting point](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/5ark89f633vqifdh41d2.png)
+Let's make these 3 counters use the same state using our store, first we'll create useCountStore using the createUseStore helper that we've created before:
+```ts
+export const useCountStore = createUseStore(0);
+```
+now let's use our useCountStore hook in our counter:
+```tsx
+import { useCountStore } from "./countStore";
+
+function Counter() {
+  const [count, setCount] = useCountStore();
+
+  const increment = () => {
+    setCount(count + 1);
+  };
+
+  const decrement = () => {
+    setCount(count - 1);
+  };
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+    </div>
+  );
+}
+```
+Now our 3 counters are synced up and all of them increment together:
+![The 3 counters now share the same state](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/j33b0ns2ep2g02obopjg.png)
+Thanks to the use of generics, typescript knows that count is a number and setCount is a callback that accepts a number:
+![Typescript support for the state](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/dk0yplo7zsc2ukdgbzf6.png)
+![Typescript support for setState](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/b2l2mb8htqc16glwzczb.png)
+## Next steps
+Some ideas on how our simple store can be improved and built upon:
+
+**Reducing state**
+Setting state is pretty direct in our store, which is convenient but we sometimes might need to handle complex logic when determening our state, that's where a reducer might help us, we can add a new dispatch function to our store:
+```ts
+dispatch(action) {
+  state = reducer(action);
+  notifyStateChanged();
+},
+```
+**Handling deeply nested state**
+Setting new state requires destructuring the existing state, which can be annoying if we have a deeply nested state, to solve that we can use immer or a similar library:
+```ts
+// without immer
+setState({
+    ...state,
+    nested: {
+        ...state.nested,
+        sub: {
+            ...state.nested.sub,
+            new: true,
+        }
+    }
+});
+
+// with immer
+import { produce } from "immer";
+
+const nextState = produce(state, s => {
+    s.nested.sub.new = true;
+});
+setState(nextState);
+```
+We can even add immer to our store internally, and accept a callback in setState like so:
+```ts
+setState((state) => {
+    state.nested.sub.new = true;
+    return state;
+});
+```
+## Conclusion
+In this tutorial, we went through the steps of building a simple React state management library with TypeScript support.
+By leveraging React's `useSyncExternalStore` hook, we built a simple yet powerful store that seamlessly integrates with React components.
+Now that you've got the hang of it, you're all set to build your own tailor made state management library.
+
+---
+Read more about [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore) in the react docs.
+
+To see the implementation of the concepts discussed in this article in action, check out **tinystate-react** [here](https://github.com/paripsky/tinystate). This library is built using the approach described in this tutorial, allowing you to dive deeper into the code and examples.

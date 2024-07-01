@@ -14,5 +14,3 @@ projects and skills in web development.
   faster websites with modern JavaScript.
 - [Tailwind CSS](https://tailwindcss.com/): A highly customizable CSS framework
   that speeds up the design and development process.
-- [daisyUI](https://daisyui.com/): A UI library for Tailwind CSS that provides a
-  set of beautiful and accessible components.

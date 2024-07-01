@@ -1,0 +1,79 @@
+---
+import type { MarkdownLayoutProps } from "astro";
+import { ViewTransitions } from "astro:transitions";
+import { Icon } from "astro-icon/components";
+
+type Props = MarkdownLayoutProps<{
+  title: string;
+  description: string;
+  author: string;
+  date: string;
+  devToUrl: string;
+}>;
+
+const { frontmatter, url } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content={frontmatter.title} />
+    <meta property="og:description" content={frontmatter.description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={frontmatter.title} />
+    <meta name="twitter:description" content={frontmatter.description} />
+
+    <meta name="description" content={frontmatter.description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{frontmatter.title}</title>
+    <ViewTransitions />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1YD1ZSVP59"
+    ></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-1YD1ZSVP59");
+    </script>
+  </head>
+  <body class="bg-slate-900 text-gray-200">
+    <a href="/" class="flex gap-1 underline items-center p-4"
+      ><Icon name="mdi:arrow-back" class="size-4" /> Back</a
+    >
+    <main class="max-w-xl my-4 mx-auto px-4">
+      <h1 class="text-4xl">{frontmatter.title}</h1>
+      <h5 class="py-4 flex justify-between flex-wrap">
+        <span>
+          {
+            new Intl.DateTimeFormat(undefined, {
+              dateStyle: "full",
+            }).format(new Date(frontmatter.date))
+          } by @{frontmatter.author}
+        </span>
+        <a class="flex gap-1 underline" href={frontmatter.devToUrl}
+          >Read on <Icon name="mdi:dev-to" class="size-6" /></a
+        >
+      </h5>
+      <div
+        class="prose dark:prose-invert
+  prose-h1:font-bold prose-h1:text-2xl
+  prose-a:text-blue-300 prose-p:text-justify prose-img:rounded-xl
+  prose-headings:mt-0"
+      >
+        <slot />
+      </div>
+    </main>
+  </body>
+</html>
