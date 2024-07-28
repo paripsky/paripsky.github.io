@@ -40,7 +40,11 @@ const posts = postsGlob.map((p) => ({
           <li>
             📧 Explore my <a href="#timeline" class="text-gray-50"
               >work history</a
-            > or <a href="#contact" class="text-gray-50">contact me</a> here
+            > or <a
+              href="mailto:paripsky@gmail.com"
+              class="text-gray-50"
+              target="_blank">contact me</a
+            > here
           </li>
           <hr class="border-slate-800" />
           <li>
@@ -119,9 +123,6 @@ const posts = postsGlob.map((p) => ({
         </li>
       </ul>
       <Timeline />
-    </Section>
-    <Section id="contact" title="Contact" colors="from-pink-200 to-pink-400">
-      <ContactForm />
     </Section>
   </main>
   <DesktopDestroyer />
