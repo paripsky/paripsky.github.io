@@ -1,0 +1,184 @@
+---
+layout: ../../layouts/BlogLayout.astro
+title: Building a Meta Tags Scraping API in Under 40 Lines of Code
+author: paripsky
+description: A guide on how to built a meta tags scraping API in Deno in under 40 lines of code
+devToUrl: https://dev.to/paripsky/building-a-meta-tags-scraping-api-in-under-40-lines-of-code-1f57
+date: 2024-10-21
+---
+Have you ever wondered how messaging apps like Whatsapp or Telegram let you see a preview of a link that you send?
+
+![Whatsapp url preview](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hhwkooy6quz7z5pkn7b2.png)
+
+<img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xydaba3mn5uvbbcxnz9j.png" /> 
+<figure><figcaption>Whatsapp and Telegram url previews</figcaption></figure>
+
+In this post, we'll be building a scraping API with [Deno](https://deno.com/) that accepts a URL and retrieves the meta tags for it, so we can get fields like the title, description, image and more from almost any website.
+
+For example:
+```bash
+curl https://metatags.deno.dev/api/meta?url=https://dev.to
+```
+will give this result
+```json
+{
+  "last-updated": "2024-10-15 15:10:02 UTC",
+  "user-signed-in": "false",
+  "head-cached-at": "1719685934",
+  "environment": "production",
+  "description": "A constructive and inclusive social network for software developers. With you every step of your journey.",
+  "keywords": "software development, engineering, rails, javascript, ruby",
+  "og:type": "website",
+  "og:url": "https://dev.to/",
+  "og:title": "DEV Community",
+  "og:image": "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8lvvnvil0m75nw7yi6iz.jpg",
+  "og:description": "A constructive and inclusive social network for software developers. With you every step of your journey.",
+  "og:site_name": "DEV Community",
+  "twitter:site": "@thepracticaldev",
+  "twitter:title": "DEV Community",
+  "twitter:description": "A constructive and inclusive social network for software developers. With you every step of your journey.",
+  "twitter:image:src": "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8lvvnvil0m75nw7yi6iz.jpg",
+  "twitter:card": "summary_large_image",
+  "viewport": "width=device-width, initial-scale=1.0, viewport-fit=cover",
+  "apple-mobile-web-app-title": "dev.to",
+  "application-name": "dev.to",
+  "theme-color": "#000000",
+  "forem:name": "DEV Community",
+  "forem:logo": "https://media.dev.to/cdn-cgi/image/width=512,height=,fit=scale-down,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8j7kvp660rqzt99zui8e.png",
+  "forem:domain": "dev.to",
+  "title": "DEV Community"
+}
+```
+pretty cool, isn't it?
+## Meta tags and why do we need them
+Meta tags are HTML elements that are used to provide additional information about a page to search engines and other clients.
+These tags typically include a name or property attribute that defines the type of information, and a content attribute that contains the value of that information. Here’s an example of two meta tags:
+```html
+<meta name="description" content="The <meta> HTML element represents metadata that cannot be represented by other HTML meta-related elements, like <base>, <link>, <script>, <style> or <title>.">
+<meta property="og:image" content="https://developer.mozilla.org/mdn-social-share.cd6c4a5a.png">
+```
+The first tag provides a description of the page, while the second is an Open Graph tag that defines an image to display when the page is shared on social media.
+
+One practical application of meta tags is building a bookmark manager. Instead of manually adding the title, description, and image for each bookmark, you can automatically scrape this information from the bookmarked URL using meta tags.
+
+## Open Graph
+Open Graph is an internet protocol that was originally created by Facebook to standardize the use of metadata within a webpage to represent the content of a page, it helps social networks generate rich link previews.
+Read more about it [here](https://ogp.me/).
+
+## Why Deno?
+1. Deno has secure defaults, meaning it requires explicit permission for file, network, and environment access, reducing the risk of security vulnerabilities.
+2. Deno is built on web standards, uses ES Modules, and aims to use Web Platform APIs (like fetch) over proprietary APIs, making Deno code very similar to the code you'll write in the browser - but still has some [spec deviation](https://docs.deno.com/runtime/reference/web_platform_apis/#spec-deviations) from the browser.
+3. Deno has built-in TypeScript support, allowing you to write TypeScript code without a build step.
+4. Deno comes with a standard library that includes modules for common tasks like HTTP servers, file system operations, and more.
+5. Deno provides a Linter, Formatter and Test runner, allowing you to use the platform instead of relying on third party packages or tools, making it an all-in-one tool for Javascript development.
+6. Deno provides Deno Deploy which is a scalable platform for serverless JavaScript/Typescript applications that are globally distributed, ensuring minimal latency and maximum uptime.
+
+The API that we're building will consist of two parts, a function for fetching and parsing the meta tags, and an API server which will respond to HTTP requests.
+
+## Getting the meta tags
+Let's start by going to [Deno Deploy](https://deno.com/deploy) and signing in.
+After signing in click on "New Playground"
+![New Playground Button](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/z13815h0siqyupl2o7n2.png)
+This we'll give us a `hello world` starting point.
+Now we'll add function that is called `getMetaTags` that accepts a url and uses the Fetch API to get the HTML of the requested URL and passes it on to a package for HTML parsing (deno-dom).
+To add `deno-dom` to our project we can use the [jsr](https://jsr.io/) package manager:
+```ts
+import { DOMParser, Element } from "jsr:@b-fuze/deno-dom";
+```
+Now we'll use the Fetch API to get the HTML as text:
+```ts
+  const headers = new Headers();
+  headers.set("accept", "text/html,application/xhtml+xml,application/xml");
+  const res = await fetch(url, { headers });
+  const html = await res.text();
+```
+After getting the HTML, we can use `deno-dom` to parse it and then use standard DOM functions like `querySelectorAll` to get all the `meta` HTML elements, iterate on them and use `getAttribute` to get the name, property and content of each one of those tags:
+```ts
+const document = new DOMParser().parseFromString(html, "text/html");
+const metaTags = document.querySelectorAll("meta");
+const documentMeta = (Array.from(metaTags) as Element[])
+    .reduce((acc, meta) => {
+      const property = meta.getAttribute("property");
+     ...
+```
+Finally, we'll also query the `<title>` element of the page to add it as a field in our API:
+```ts
+documentMeta.title ??= document.querySelector("title").textContent;
+```
+It isn't exactly a meta tag, but I think that it is a useful field, so it's going to be part of our API anyway. :)
+
+Our final `getMetaTags` function should look like this:
+```ts
+import { DOMParser, Element } from "jsr:@b-fuze/deno-dom";
+
+const getMetaTags = async (url: string) => {
+  const headers = new Headers();
+  headers.set("accept", "text/html,application/xhtml+xml,application/xml");
+  const res = await fetch(url, { headers });
+  const html = await res.text();
+  const document = new DOMParser().parseFromString(html, "text/html");
+  const metaTags = document.querySelectorAll("meta");
+  const documentMeta = (Array.from(metaTags) as Element[])
+    .reduce((acc, meta) => {
+      const property = meta.getAttribute("property");
+      const name = meta.getAttribute("name");
+      const content = meta.getAttribute("content");
+
+      if (!content) return acc;
+      if (property) acc[property] = content;
+      if (name) acc[name] = content;
+
+      return acc;
+    }, {} as Record<string, string>);
+  documentMeta.title ??= document.querySelector("title").textContent;
+
+  return documentMeta;
+};
+```
+## The server
+For simplicity, I've decided to use Deno's built in http server which is just a simple `Deno.serve()` call.
+Thanks to the fact that deno is built on web standards, we can use the built in [Response object in the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Response/Response) to respond to requests.
+```ts
+Deno.serve({ port: 8000 }, async (request: Request): Promise<Response> => {
+  const url = new URL(request.url);
+
+  if (request.method === "GET" && url.pathname === "/api/meta") {
+    const metaTags = await getMetaTags(url.searchParams.get("url"));
+    const headers = new Headers();
+    headers.set("Content-Type", "application/json");
+    headers.set("Access-Control-Allow-Origin", "*");
+    return new Response(JSON.stringify(metaTags), { status: 200, headers });
+  }
+
+  return new Response("not found", { status: 404 });
+});
+```
+Our server parses the request url, checks if we received a `GET` request to the `/api/meta` path, and calls the `getMetaTags` function we created and then returns the meta tags as the response body.
+
+We also add two headers, the first is `Content-Type` that is needed for the client to know the kind of data they're getting in the response, which in our case is a JSON response.
+
+The second header is `Access-Control-Allow-Origin` that allows our API to accept requests from specific origins, in our case I chose `"*"` to accept any origin, but you might want to change it to only accept request from your frontend's origin.
+Note that the CORS headers will only affect requests made by the browser, meaning the browser will block the request according to the origin that is specified in the header, but directly calling the API from a server will still be possible. Read more about CORS [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
+
+You can now click on "Save & Deploy"
+![Save & Deploy Button](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/1ifufq6qc5qrlxo6j1vx.png)
+Then wait for deno deploy to deploy your code to the playground:
+![Deployment URL](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/35ctvcicseifx3kzb52e.png)
+The url on the top right is your playground's url, copy it and add `/api/meta?url=https://dev.to` to see it in action, the url should look something like `https://metatags.deno.dev/api/meta?url=https://dev.to`
+You should now see the API responding with `dev.to`'s meta tags!
+![API response](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/nd65xc2ugkrtxldecxcy.png)
+
+## Deployment
+Using Deno deploy's playground means your code is technically already deployed, it is public and can be accessed by anyone.
+For a simple API like the one we're building, a single file playground can be enough, but in many cases we'd like to scale our project further, for that you can use Deno deploy's Github export to make a proper code repository for you API, with support for automatic building on new code pushes:
+![Github button](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/co6m4kclieha3czfg38z.png)
+or from the playground's settings:
+![Github button from settings](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2yjjagqofxt205fv0e5h.png)
+
+## Caveats
+The scraping method presented in this post only works on websites that have meta tags in the html file that’s returned from the server, meaning server rendered or prerendered sites are more likely to return proper results, single page apps can also work as long as the meta tags are set in build time and not in runtime.
+
+## Conclusion
+We've demonstrated how quick and simple it is to build and deploy an API with Deno, we've gone over Meta tags, and how we can use the Fetch API, a DOM parser and Deno's built in server to build a Meta tags scraping API in under 40 lines of code.
+
+To see the project built in this post you can check out the [Deno deploy playground](https://dash.deno.com/playground/metatags) (You'll need to add `/api/meta?url=https://dev.to` to the url bar on the right to see an example response) or [this github repository](https://github.com/paripsky/og-scrapi).
