@@ -1,7 +1,8 @@
 ---
 import type { MarkdownLayoutProps } from "astro";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import { Icon } from "astro-icon/components";
+import { formatDate } from "../utils/date";
 
 type Props = MarkdownLayoutProps<{
   title: string;
@@ -34,7 +35,7 @@ const { frontmatter, url } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{frontmatter.title}</title>
-    <ViewTransitions />
+    <ClientRouter />
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1YD1ZSVP59"
     ></script>
@@ -48,7 +49,7 @@ const { frontmatter, url } = Astro.props;
       gtag("config", "G-1YD1ZSVP59");
     </script>
   </head>
-  <body class="bg-slate-900 text-gray-200">
+  <body class="bg-slate-950 text-white" style="color-scheme: dark;">
     <a href="/" class="flex gap-1 underline items-center p-4"
       ><Icon name="mdi:arrow-back" class="size-4" /> Back</a
     >
@@ -56,11 +57,7 @@ const { frontmatter, url } = Astro.props;
       <h1 class="text-4xl text-white text-pretty">{frontmatter.title}</h1>
       <h5 class="py-4 flex justify-between flex-wrap">
         <span>
-          {
-            new Intl.DateTimeFormat(undefined, {
-              dateStyle: "full",
-            }).format(new Date(frontmatter.date))
-          } by @{frontmatter.author}
+          {formatDate(frontmatter.date)} by @{frontmatter.author}
         </span>
         <a class="flex gap-1 underline" href={frontmatter.devToUrl}
           >Read on <Icon name="mdi:dev-to" class="size-6" /></a

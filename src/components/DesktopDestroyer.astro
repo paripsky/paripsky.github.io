@@ -34,14 +34,14 @@ const tools = [
   id="container"
   class="fixed bottom-4 left-2 -translate-x-[150%] transition-transform"
 >
-  <ul id="toolsList" class="menu bg-base-300 rounded-box">
+  <ul id="toolsList" class="flex flex-col gap-2">
     {
       tools.map((tool) => (
         <li>
           <button
             id={tool.id}
-            class="tooltip tooltip-right"
-            data-tip={tool.description}
+            class="border border-zinc-600 hover:border-sky-400 p-2 rounded-xl"
+            title={tool.description}
           >
             <Icon name={tool.icon} class="h-5 w-5" />
           </button>
@@ -90,7 +90,7 @@ const tools = [
         if (activeTool === "close") {
           stop();
         }
-      })
+      }),
   );
 
   const clickHandlers = {

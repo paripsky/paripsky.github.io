@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 
 const colors = [
   "hover:border-sky-400 hover:shadow-sky-800",
@@ -21,21 +22,13 @@ const colors = [
 
 const projects = [
   {
-    title: "React state management in under 40 lines of code",
-    description:
-      "A guide on how to built a custom state management solution for react in under 40 lines of code with typescript support",
-    siteUrl:
-      "https://dev.to/paripsky/build-your-own-react-state-management-library-in-under-40-lines-of-code-with-typescript-support-hji",
-    tags: ["React", "Typescript"],
-  },
-  {
     title: "Devedash",
     description:
       "Devedash is a dashboard building app, built with Next.js, Mantine UI and Supabase.",
     githubUrl: "https://github.com/paripsky/devedash",
     siteUrl: "https://devedash.vercel.app/",
     image: "https://devedash.vercel.app/favicon.ico",
-    tags: ["Next.js", "Supabase"],
+    tags: ["Next", "Supabase"],
   },
   {
     title: "FreshLinks",
@@ -44,7 +37,7 @@ const projects = [
     githubUrl: "https://github.com/paripsky/FreshLinks",
     siteUrl: "https://freshlinks.deno.dev",
     image: "https://freshlinks.deno.dev/favicon.ico",
-    tags: ["Deno", "Fresh", "Deno KV"],
+    tags: ["Deno", "Fresh"],
   },
   {
     title: "OG Scrapi",
@@ -54,7 +47,7 @@ const projects = [
     siteUrl:
       "https://og-scrapi.deno.dev/api/meta?url=https://develist.vercel.app/",
     image: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Deno_2021.svg",
-    tags: ["Deno", "Open Graph", "Scrape"],
+    tags: ["Deno", "TS"],
   },
   {
     title: "Develist",
@@ -72,7 +65,7 @@ const projects = [
     githubUrl: "https://github.com/paripsky/node-context-storage",
     siteUrl: "https://www.npmjs.com/package/node-context-storage",
     image: "https://nodejs.org/static/images/logo.svg",
-    tags: ["NodeJS", "Express", "Typescript"],
+    tags: ["Node", "Express"],
   },
   {
     title: "QTerminal",
@@ -81,72 +74,61 @@ const projects = [
     siteUrl: "https://paripsky.github.io/qterminal",
     image:
       "https://upload.wikimedia.org/wikipedia/commons/5/51/Windows_Terminal_logo.svg",
-    tags: ["Typescript", "CSS Theming"],
-  },
-  {
-    title: "HTML, CSS, JS - The Basics",
-    description: `An introduction lecture into the basics of HTML, CSS & JS`,
-    siteUrl: "/lectures/html-css-js-basics.html",
-    tags: ["HTML", "CSS", "JS"],
-  },
-  {
-    title: "Into to Vue 2",
-    description: `An interactive presentation that teaches the basics of Vue 2, Options API, core functionality and more`,
-    siteUrl: "/lectures/intro-to-vue.html",
-    tags: ["Vue"],
-  },
-  {
-    title: "Into to NodeJS",
-    description: `A presentation that teaches the basics of NodeJS, how to create a simple server with express & more`,
-    siteUrl:
-      "https://docs.google.com/presentation/d/1d0NwWU7ZvB0TwMsalfm8mBjEdqGUHWEO7SGMG_gzMyM",
-    tags: ["NodeJS", "Express", "JS"],
-  },
-  {
-    title: "Semantic Tokens in Chakra UI",
-    description: "A guide on how to use semantic tokens in ChakraUI",
-    siteUrl: "https://dev.to/paripsky/semantic-tokens-in-chakra-ui-4k1b",
-    tags: ["React", "ChakraUI"],
+    tags: ["Typescript", "CSS"],
   },
 ];
 ---
 
-<ul
-  class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 grid-rows gap-4 w-full"
->
+<ul class="grid grid-cols-1 lg:grid-cols-2 grid-rows gap-4 w-full">
   {
     projects.map((project, i) => (
       <li class="h-full">
         <div
-          class={`rounded-lg p-4 bg-base-100/50 h-full relative border border-gray-600 shadow-lg transition-all duration-300 ${colors[i]}`}
+          class={`p-4 h-full relative border shadow-lg transition-all duration-300 rounded-xl border-zinc-600 ${colors[i]}`}
         >
           {project.image && (
-            <img
-              class="absolute right-2 top-2 w-10 h-10"
+            <Image
+              class="absolute right-2 top-2"
+              width={40}
+              height={40}
               src={project.image}
               alt={project.title}
             />
           )}
           <div class="flex flex-col gap-4 h-full">
-            <a href={project.siteUrl} class="card-title font-bold">
+            <h1 class="text-lg leading-tight font-medium tracking-tight">
               {project.title}
-            </a>
-            <p class="whitespace-pre-wrap flex-1">{project.description}</p>
-            <div class="card-actions justify-between items-center mt-2">
-              <div class="flex gap-2">
-                {project.githubUrl && (
-                  <a href={project.githubUrl} target="_blank">
-                    <Icon name="mdi:github" class="size-6" />
-                  </a>
-                )}
-                {project.siteUrl && (
-                  <a href={project.siteUrl} target="_blank">
-                    <Icon name="mdi:link" class="size-6" />
-                  </a>
-                )}
-                <div class="ml-auto flex gap-1">
+            </h1>
+            <p class="text-md font-light text-pretty leading-relaxed text-neutral-300 max-sm:text-sm max-w-xl">
+              {project.description}
+            </p>
+            <div class="card-actions justify-between items-center mt-auto">
+              <div class="flex flex-wrap justify-between gap-2">
+                <div class="flex gap-2">
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      class="hover:underline flex gap-1 items-center text-md font-medium leading-relaxed text-neutral-300"
+                    >
+                      <Icon name="mdi:github" class="size-5 float-left" />
+                      Github
+                    </a>
+                  )}
+                  {project.siteUrl && (
+                    <a
+                      href={project.siteUrl}
+                      target="_blank"
+                      class="hover:underline flex gap-1 items-center text-md font-medium leading-relaxed text-neutral-300"
+                    >
+                      <Icon name="mdi:link" class="size-6 text-neutral-300" />
+                      Website
+                    </a>
+                  )}
+                </div>
+                <div class="flex gap-1">
                   {project.tags.map((tag) => (
-                    <div class="inline-block bg-slate-700 text-gray-200 rounded-full px-3 py-1 text-sm font-semibold">
+                    <div class="bg-slate-900 px-2 py-1 text-neutral-300 rounded">
                       {tag}
                     </div>
                   ))}

@@ -1,0 +1,55 @@
+---
+import { Icon } from "astro-icon/components";
+
+const presentations = [
+  {
+    title: "HTML, CSS, JS - The Basics",
+    description: `An introduction lecture into the basics of HTML, CSS & JS`,
+    siteUrl: "/presentations/html-css-js-basics.html",
+    tags: ["HTML", "CSS", "JS"],
+  },
+  {
+    title: "Into to Vue 2",
+    description: `An interactive presentation that teaches the basics of Vue 2, Options API, core functionality and more`,
+    siteUrl: "/presentations/intro-to-vue.html",
+    tags: ["Vue"],
+  },
+  {
+    title: "Into to NodeJS",
+    description: `A presentation that teaches the basics of NodeJS, how to create a simple server with express & more`,
+    siteUrl:
+      "https://docs.google.com/presentation/d/1d0NwWU7ZvB0TwMsalfm8mBjEdqGUHWEO7SGMG_gzMyM",
+    tags: ["NodeJS", "Express", "JS"],
+  },
+];
+---
+
+<div class="flex flex-wrap gap-y-2 gap-x-8">
+  {
+    presentations.map((presentation) => (
+      <li class="flex flex-col gap-2 md:flex-1 w-full">
+        <h2 class="text-lg leading-tight font-medium tracking-tight">
+          {presentation.title}
+        </h2>
+        <h3 class="text-md font-light text-pretty leading-relaxed text-neutral-300 max-sm:text-sm max-w-xl">
+          {presentation.description}
+        </h3>
+        <div class="mt-auto flex flex-wrap gap-2 justify-between py-4">
+          <a
+            href={presentation.siteUrl}
+            class="text-sky-300 flex items-center gap-1"
+          >
+            Read more <Icon name="mdi:arrow-right" class="size-4" />
+          </a>
+          <ul class="flex gap-2">
+            {presentation.tags.map((tag) => (
+              <li class="bg-slate-900 px-2 py-1 text-neutral-300 rounded">
+                {tag}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </li>
+    ))
+  }
+</div>

@@ -7,122 +7,106 @@ import DesktopDestroyer from "../components/DesktopDestroyer.astro";
 import Tilt from "../components/Tilt.astro";
 import Section from "../components/Section.astro";
 import GIthubContributions from "../components/GIthubContributions.astro";
+import Pill from "../components/Pill.astro";
+import { Icon } from "astro-icon/components";
+import Post from "../components/Post.astro";
+import Presentations from "../components/Presentations.astro";
 
-const postsGlob = await Astro.glob("./blog/*");
-const posts = postsGlob.map((p) => ({
-  url: p.url,
-  title: p.frontmatter.title,
-}));
+const postsGlob = await import.meta.glob("./blog/*", { eager: true });
+const posts = Object.values(postsGlob).map(
+  (p: {
+    url: string;
+    frontmatter: {
+      title: string;
+      description: string;
+      date: string;
+      tags: string[];
+    };
+  }) => ({
+    url: p.url,
+    title: p.frontmatter.title,
+    description: p.frontmatter.description,
+    date: p.frontmatter.date,
+    tags: p.frontmatter.tags,
+  }),
+);
 ---
 
 <Layout title="@paripsky's Portfolio">
-  <main class="max-w-[1640px] m-auto p-4 sm:p-0 text-gray-200">
+  <div class="-z-10 absolute inset-0 overflow-hidden h-full">
     <div
-      class="pt-[8vh] sm:pt-0 sm:justify-center h-screen flex flex-col items-center gap-20"
+      class="relative h-screen w-full bg-slate-950 [&>div]:absolute [&>div]:bottom-0 [&>div]:right-[-20%] [&>div]:top-[-10%] [&>div]:h-[500px] [&>div]:w-[500px] [&>div]:rounded-full [&>div]:bg-[radial-gradient(circle_farthest-side,rgba(0,229,225,.15),rgba(255,255,255,0))]"
     >
-      <article class="prose w-full block">
-        <h1
-          class="inline-block mb-4 text-4xl md:text-6xl !leading-normal font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400"
-        >
-          Hey, I'm Yonatan
-        </h1>
-        <ul class="list-none m-0 p-0 text-gray-200">
-          <li>🚀 Full Stack Engineer with 8+ years of experience</li>
-          <li>
-            🔧 Proficient in Node.js, React, Vue.js, Tailwind CSS, and more
-          </li>
-          <li>💡 Passionate about exploring new libraries and frameworks</li>
-          <li>
-            💻 Check out <a href="#my-work" class="text-gray-50">projects</a> I've
-            worked on
-          </li>
-          <li>
-            📧 Explore my <a href="#timeline" class="text-gray-50"
-              >work history</a
-            > or <a
-              href="mailto:paripsky@gmail.com"
-              class="text-gray-50"
-              target="_blank">contact me</a
-            > here
-          </li>
-          <hr class="border-slate-800" />
-          <li>
-            📮 Read my recent posts:
-            <ul class="pl-8">
-              {
-                posts.map((post) => (
-                  <li>
-                    <a
-                      class="text-gray-200 text-sm text-pretty w-1/2"
-                      href={post.url}
-                    >
-                      {post.title}
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </li>
-        </ul>
-      </article>
-      <Tilt>
-        <div class="flex gap-4">
-          <Logos />
-        </div>
-      </Tilt>
+      <div></div>
     </div>
-    <Section id="my-work" title="My work" colors="from-sky-300 to-sky-400">
+  </div>
+  <main
+    class="w-full max-w-[1200px] px-12 tracking-wide transition-all max-sm:px-4"
+  >
+    <section
+      class="flex min-h-screen flex-col gap-8 pb-32 pt-64 sm:justify-center"
+    >
+      <h1
+        class="text-[clamp(2rem,7vw,3rem)] leading-tight font-medium tracking-tight motion-preset-slide-up motion-preset-fade-lg"
+      >
+        Hi, I'm Yonatan. <br /> A Full Stack Engineer.
+      </h1>
+      <h2
+        class="text-xl font-light text-pretty leading-relaxed text-neutral-300 max-sm:text-sm motion-preset-slide-up motion-preset-fade-lg motion-delay-300"
+      >
+        JavaScript Enthusiast, Software Engineer, and Occasional Post Writer. <br
+        />
+        Read my latest post <a
+          class="underline text-neutral-200"
+          href={posts.at(0).url}
+          title={posts.at(0).title}>here</a
+        >.
+      </h2>
+      <div
+        class="flex motion-preset-slide-up motion-preset-fade-lg motion-delay-500"
+      >
+        <Tilt>
+          <div class="flex gap-4">
+            <Logos />
+          </div>
+        </Tilt>
+      </div>
+      <span
+        class="text-md font-light text-pretty leading-relaxed text-neutral-400 max-sm:text-sm motion-preset-slide-up motion-preset-fade-lg motion-delay-700"
+        >Follow me on <a
+          class="underline"
+          href="https://github.com/paripsky"
+          target="_blank">Github</a
+        > & <a
+          class="underline"
+          href="https://www.linkedin.com/in/paripsky"
+          target="_blank">Linkedin</a
+        >.</span
+      >
+    </section>
+    <section id="projects" class="flex flex-col gap-4 py-16">
+      <Pill
+        ><Icon name="mdi:language-javascript" class="size-4" /> Projects</Pill
+      >
       <MyWork />
-    </Section>
-    <Section id="timeline" title="Timeline" colors="from-teal-200 to-teal-400">
-      <GIthubContributions slot="after-title" />
-      <ul class="flex gap-2">
-        <li class="flex">
-          <a
-            class="link"
-            href="https://www.linkedin.com/in/paripsky"
-            target="_blank"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24"
-              viewBox="0 0 72 72"
-              width="24"
-              ><g fill="none" fill-rule="evenodd"
-                ><path
-                  d="M8,72 L64,72 C68.418278,72 72,68.418278 72,64 L72,8 C72,3.581722 68.418278,-8.11624501e-16 64,0 L8,0 C3.581722,8.11624501e-16 -5.41083001e-16,3.581722 0,8 L0,64 C5.41083001e-16,68.418278 3.581722,72 8,72 Z"
-                  fill="#007EBB"></path><path
-                  d="M62,62 L51.315625,62 L51.315625,43.8021149 C51.315625,38.8127542 49.4197917,36.0245323 45.4707031,36.0245323 C41.1746094,36.0245323 38.9300781,38.9261103 38.9300781,43.8021149 L38.9300781,62 L28.6333333,62 L28.6333333,27.3333333 L38.9300781,27.3333333 L38.9300781,32.0029283 C38.9300781,32.0029283 42.0260417,26.2742151 49.3825521,26.2742151 C56.7356771,26.2742151 62,30.7644705 62,40.051212 L62,62 Z M16.349349,22.7940133 C12.8420573,22.7940133 10,19.9296567 10,16.3970067 C10,12.8643566 12.8420573,10 16.349349,10 C19.8566406,10 22.6970052,12.8643566 22.6970052,16.3970067 C22.6970052,19.9296567 19.8566406,22.7940133 16.349349,22.7940133 Z M11.0325521,62 L21.769401,62 L21.769401,27.3333333 L11.0325521,27.3333333 L11.0325521,62 Z"
-                  fill="#FFF"></path></g
-              ></svg
-            ></a
-          >
-        </li>
-        <li class="flex">
-          <a class="link" href="https://github.com/paripsky" target="_blank">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              version="1.0"
-              width="24"
-              height="24"
-              viewBox="0 0 240.000000 240.000000"
-              preserveAspectRatio="xMidYMid meet"
-            >
-              <g
-                transform="translate(0.000000,240.000000) scale(0.100000,-0.100000)"
-                fill="white"
-                stroke="none"
-              >
-                <path
-                  d="M970 2301 c-305 -68 -555 -237 -727 -493 -301 -451 -241 -1056 143 -1442 115 -116 290 -228 422 -271 49 -16 55 -16 77 -1 24 16 25 20 25 135 l0 118 -88 -5 c-103 -5 -183 13 -231 54 -17 14 -50 62 -73 106 -38 74 -66 108 -144 177 -26 23 -27 24 -9 37 43 32 130 1 185 -65 96 -117 133 -148 188 -160 49 -10 94 -6 162 14 9 3 21 24 27 48 6 23 22 58 35 77 l24 35 -81 16 c-170 35 -275 96 -344 200 -64 96 -85 179 -86 334 0 146 16 206 79 288 28 36 31 47 23 68 -15 36 -11 188 5 234 13 34 20 40 47 43 45 5 129 -24 214 -72 l73 -42 64 15 c91 21 364 20 446 0 l62 -16 58 35 c77 46 175 82 224 82 39 0 39 -1 55 -52 17 -59 20 -166 5 -217 -8 -30 -6 -39 16 -68 109 -144 121 -383 29 -579 -62 -129 -193 -219 -369 -252 l-84 -16 31 -55 32 -56 3 -223 4 -223 25 -16 c23 -15 28 -15 76 2 80 27 217 101 292 158 446 334 590 933 343 1431 -145 293 -419 518 -733 602 -137 36 -395 44 -525 15z"
-                ></path>
-              </g>
-            </svg></a
-          >
-        </li>
+      <div class="border p-1 rounded-xl border-zinc-600">
+        <GIthubContributions slot="after-title" />
+      </div>
+    </section>
+    <section id="posts" class="flex flex-col gap-8">
+      <Pill><Icon name="mdi:post" class="size-4" /> Posts</Pill>
+      <ul class="flex flex-col gap-4">
+        {posts.map((post) => <Post post={post} />)}
       </ul>
+    </section>
+    <section id="presentations" class="flex flex-col gap-8 py-16">
+      <Pill><Icon name="mdi:presentation" class="size-4" /> Presentations</Pill>
+      <Presentations />
+    </section>
+    <section id="timeline" class="flex flex-col gap-8 py-16">
+      <Pill><Icon name="mdi:work" class="size-4" /> Work</Pill>
       <Timeline />
-    </Section>
+    </section>
   </main>
   <DesktopDestroyer />
 </Layout>

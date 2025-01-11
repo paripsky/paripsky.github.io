@@ -39,11 +39,11 @@ const entries = [
   <div class="container w-full h-full">
     <div class="relative wrap overflow-hidden h-full">
       <div
-        class="hidden lg:block border-r-2 border-accent right-1/2 absolute h-full border"
+        class="hidden lg:block border-r-2 border-sky-900 right-1/2 absolute h-full border"
       >
       </div>
       <div
-        class="hidden lg:block border-l-2 border-accent left-1/2 absolute h-full border"
+        class="hidden lg:block border-l-2 border-sky-900 left-1/2 absolute h-full border"
       >
       </div>
       {
@@ -55,15 +55,19 @@ const entries = [
           >
             <div class="hidden lg:block order-1 w-5/12" />
             <div class="order-1 lg:w-5/12 px-1 py-4 text-left">
-              <p class="mb-3 text-base text-accent">{entry.date}</p>
-              <h4 class="mb-3 font-bold text-lg md:text-2xl">
+              <p class="text-sm text-neutral-300 leading-relaxed">
+                {entry.date}
+              </p>
+              <h4 class="text-xl font-medium leading-loose">
                 <span>{entry.title}</span>
                 <span class="ml-1">@</span>
                 <a href={entry.url} target="_blank" class="underline">
                   {entry.name}
                 </a>
               </h4>
-              <p>{entry.description}</p>
+              <p class="text-md font-light text-pretty leading-relaxed text-neutral-300">
+                {entry.description}
+              </p>
             </div>
           </div>
         ))
