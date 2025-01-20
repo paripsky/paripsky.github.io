@@ -2,6 +2,11 @@
 import { Icon } from "astro-icon/components";
 import { formatDate } from "../utils/date";
 
+type Mention = {
+  title: string;
+  url: string;
+};
+
 interface Props {
   post: {
     title: string;
@@ -9,6 +14,7 @@ interface Props {
     url: string;
     date: string;
     tags: string[];
+    mentions: Mention[];
   };
 }
 
@@ -16,7 +22,9 @@ const { post } = Astro.props;
 ---
 
 <li class="flex flex-col gap-2 flex-1">
-  <span class="text-sm text-neutral-300">{formatDate(post.date)}</span>
+  <span class="text-sm text-neutral-300 flex flex-wrap justify-between"
+    >{formatDate(post.date)}
+  </span>
   <h2 class="text-lg leading-tight font-medium tracking-tight">
     {post.title}
   </h2>
@@ -25,8 +33,25 @@ const { post } = Astro.props;
   >
     {post.description}
   </h3>
+  {
+    post.mentions.length ? (
+      <span class="flex flex-wrap gap-1 text-sky-50">
+        Featured in
+        {post.mentions.map((mention, i) => (
+          <>
+            {i !== 0 && <span> and </span>}
+            <a href={mention.url} class="underline" target="_blank">
+              {mention.title}
+            </a>
+          </>
+        ))}
+      </span>
+    ) : null
+  }
   <div class="mt-auto flex flex-wrap gap-2 justify-between py-4">
-    <a href={post.url} class="text-sky-300 flex items-center gap-1"
+    <a
+      href={post.url}
+      class="text-sky-300 flex items-center gap-1 hover:underline"
       >Read more <Icon name="mdi:arrow-right" class="size-4" /></a
     >
     <ul class="flex gap-2">

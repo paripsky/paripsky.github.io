@@ -12,6 +12,11 @@ import { Icon } from "astro-icon/components";
 import Post from "../components/Post.astro";
 import Presentations from "../components/Presentations.astro";
 
+type Mention = {
+  title: string;
+  url: string;
+};
+
 const postsGlob = await import.meta.glob("./blog/*", { eager: true });
 const posts = Object.values(postsGlob).map(
   (p: {
@@ -21,6 +26,7 @@ const posts = Object.values(postsGlob).map(
       description: string;
       date: string;
       tags: string[];
+      mentions: Mention[];
     };
   }) => ({
     url: p.url,
@@ -28,6 +34,7 @@ const posts = Object.values(postsGlob).map(
     description: p.frontmatter.description,
     date: p.frontmatter.date,
     tags: p.frontmatter.tags,
+    mentions: p.frontmatter.mentions ?? [],
   }),
 );
 ---
