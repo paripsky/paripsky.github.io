@@ -58,13 +58,13 @@ const tools = [
 
   const start = () => {
     window.addEventListener("click", onWindowClick, { capture: true });
-    container.style.transform = "none";
+    container.style.translate = "none";
     isOn = true;
   };
 
   const stop = () => {
     window.removeEventListener("click", onWindowClick, { capture: true });
-    container.style.transform = "";
+    container.style.translate = "";
     activeTool = null;
     document.body.style.cursor = "";
     isOn = false;
