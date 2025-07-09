@@ -3,6 +3,14 @@ import { Icon } from "astro-icon/components";
 
 const presentations = [
   {
+    title: "Using effects effectively: A Deep Dive Into The useEffect Hook",
+    description:
+      "A deep dive into the useEffect hook, how it works, how to use it effectively and common pitfalls",
+    siteUrl:
+      "https://docs.google.com/presentation/d/1MK3Hrkw-rDUd1p5TRHI7okgMPMzz5kxrRjx0MIa1srA",
+    tags: ["React"],
+  },
+  {
     title: "HTML, CSS, JS - The Basics",
     description: `An introduction lecture into the basics of HTML, CSS & JS`,
     siteUrl: "/presentations/html-css-js-basics.html",
@@ -24,7 +32,7 @@ const presentations = [
 ];
 ---
 
-<div class="flex flex-wrap gap-y-2 gap-x-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-8">
   {
     presentations.map((presentation) => (
       <li class="flex flex-col gap-2 md:flex-1 w-full">
