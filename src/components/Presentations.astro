@@ -8,6 +8,7 @@ const presentations = [
       "A deep dive into the useEffect hook, how it works, how to use it effectively and common pitfalls",
     siteUrl:
       "https://docs.google.com/presentation/d/1MK3Hrkw-rDUd1p5TRHI7okgMPMzz5kxrRjx0MIa1srA",
+    youtubeUrl: "https://youtu.be/EvrJbFoBy_w",
     tags: ["React"],
   },
   {
@@ -43,12 +44,25 @@ const presentations = [
           {presentation.description}
         </h3>
         <div class="mt-auto flex flex-wrap gap-2 justify-between py-4">
-          <a
-            href={presentation.siteUrl}
-            class="text-sky-300 flex items-center gap-1 hover:underline"
-          >
-            Read more <Icon name="mdi:arrow-right" class="size-4" />
-          </a>
+          <div class="flex gap-4">
+            <a
+              href={presentation.siteUrl}
+              class="text-sky-300 flex items-center gap-1 hover:underline"
+              target="_blank"
+            >
+              Check out <Icon name="mdi:arrow-right" class="size-4" />
+            </a>
+            {presentation.youtubeUrl && (
+              <a
+                href={presentation.youtubeUrl}
+                class="text-sky-300 flex items-center gap-1 hover:underline"
+                target="_blank"
+              >
+                Watch on YouTube
+                <Icon name="mdi:youtube" class="size-4" />
+              </a>
+            )}
+          </div>
           <ul class="flex gap-2">
             {presentation.tags.map((tag) => (
               <li class="bg-slate-900 px-2 py-1 text-neutral-300 rounded">
