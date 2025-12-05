@@ -112,7 +112,7 @@ const podcasts = [
                         )}
 
                         {podcast.episodes.length > 0 && (
-                            <div class="flex gap-3">
+                            <div class="flex gap-3 flex-wrap">
                                 {podcast.episodes.map((ep, i) => (
                                     <a
                                         href={ep.url}
