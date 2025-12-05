@@ -16,25 +16,27 @@ type Mention = {
 };
 
 const postsGlob = await import.meta.glob("./blog/*", { eager: true });
-const posts = Object.values(postsGlob).map(
-  (p: {
-    url: string;
-    frontmatter: {
-      title: string;
-      description: string;
-      date: string;
-      tags: string[];
-      mentions: Mention[];
-    };
-  }) => ({
-    url: p.url,
-    title: p.frontmatter.title,
-    description: p.frontmatter.description,
-    date: p.frontmatter.date,
-    tags: p.frontmatter.tags,
-    mentions: p.frontmatter.mentions ?? [],
-  })).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-);
+const posts = Object.values(postsGlob)
+  .map(
+    (p: {
+      url: string;
+      frontmatter: {
+        title: string;
+        description: string;
+        date: string;
+        tags: string[];
+        mentions: Mention[];
+      };
+    }) => ({
+      url: p.url,
+      title: p.frontmatter.title,
+      description: p.frontmatter.description,
+      date: p.frontmatter.date,
+      tags: p.frontmatter.tags,
+      mentions: p.frontmatter.mentions ?? [],
+    }),
+  )
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 ---
 
 <Layout title="@paripsky's Portfolio">

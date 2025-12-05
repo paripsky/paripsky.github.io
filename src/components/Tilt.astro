@@ -34,25 +34,27 @@ const id = crypto.randomUUID();
   }
 </style>
 
-<script type="module">
-  const tiltElements = document.querySelectorAll(".tilt");
+<script type="module" is:inline>
+  document.addEventListener("astro:page-load", () => {
+    const tiltElements = document.querySelectorAll(".tilt");
 
-  tiltElements.forEach((el) => {
-    document.addEventListener("mousemove", (e) => {
-      rotateElement(e, el);
+    tiltElements.forEach((el) => {
+      document.addEventListener("mousemove", (e) => {
+        rotateElement(e, el);
+      });
     });
+
+    function rotateElement(event, element) {
+      const x = event.clientX;
+      const y = event.clientY;
+
+      const middleX = window.innerWidth / 2;
+      const middleY = window.innerHeight / 2;
+      const offsetX = ((x - middleX) / middleX) * 15;
+      const offsetY = ((y - middleY) / middleY) * 15;
+
+      element.style.setProperty("--rotateX", offsetX + "deg");
+      element.style.setProperty("--rotateY", -1 * offsetY + "deg");
+    }
   });
-
-  function rotateElement(event, element) {
-    const x = event.clientX;
-    const y = event.clientY;
-
-    const middleX = window.innerWidth / 2;
-    const middleY = window.innerHeight / 2;
-    const offsetX = ((x - middleX) / middleX) * 15;
-    const offsetY = ((y - middleY) / middleY) * 15;
-
-    element.style.setProperty("--rotateX", offsetX + "deg");
-    element.style.setProperty("--rotateY", -1 * offsetY + "deg");
-  }
 </script>
