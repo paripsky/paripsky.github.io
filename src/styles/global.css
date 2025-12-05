@@ -2,7 +2,9 @@
 @plugin "@tailwindcss/typography";
 @plugin "tailwindcss-motion";
 
-html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 3rem;
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 3rem;
+    }
 }
