@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><!-- Open Graph Meta Tags --><meta property="og:title" content="You Might Not Need Next.js"><meta property="og:description" content="In times when the official React documentation recommends starting with a framework, is Next.js really a sensible default for everyone?"><meta property="og:url" content="/blog/you-might-not-need-nextjs"><meta property="og:type" content="website"><!-- Twitter Card Meta Tags --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="You Might Not Need Next.js"><meta name="twitter:description" content="In times when the official React documentation recommends starting with a framework, is Next.js really a sensible default for everyone?"><meta name="description" content="In times when the official React documentation recommends starting with a framework, is Next.js really a sensible default for everyone?"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.16.4"><title>You Might Not Need Next.js</title><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.QW52Ox2j.js"></script><!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-1YD1ZSVP59"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-1YD1ZSVP59");
+    </script><link rel="stylesheet" href="/_astro/build-your-own-meta-tags-scraping-api.CqV1QexU.css"></head> <body class="bg-slate-950 text-white" style="color-scheme: dark;"> <a href="/" class="flex gap-1 underline items-center p-4"><svg width="1em" height="1em" class="size-4" data-icon="mdi:arrow-back">   <symbol id="ai:mdi:arrow-back" viewBox="0 0 24 24"><path fill="currentColor" d="M20 11v2H8l5.5 5.5l-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5L8 11z"/></symbol><use href="#ai:mdi:arrow-back"></use>  </svg> Back</a> <main class="max-w-2xl my-4 mx-auto px-4"> <h1 class="text-4xl text-white text-pretty">You Might Not Need Next.js</h1> <h5 class="py-4 flex justify-between flex-wrap"> <span> Aug 5, 2025 by @paripsky </span> <a class="flex gap-1 underline" href="https://dev.to/paripsky/you-might-not-need-nextjs-4ejg">Read on <svg width="1em" height="1em" class="size-6" data-icon="mdi:dev-to">   <symbol id="ai:mdi:dev-to" viewBox="0 0 24 24"><path fill="currentColor" d="M7.73 11.93c0 1.72-.02 1.83-.23 2.07c-.19.17-.38.23-.76.23l-.51.01l-.03-2.27l-.02-2.27h.52c.35 0 .6.07.77.21c.24.21.26.25.26 2.02M22 7.5v9c0 1.11-.89 2-2 2H4c-1.11 0-2-.89-2-2v-9c0-1.11.89-2 2-2h16c1.11 0 2 .89 2 2M8.93 11.73c-.03-1.84-.05-1.99-.29-2.39c-.4-.68-.85-.84-2.36-.84H5v7h1.21c1.33 0 1.89-.17 2.29-.71c.41-.53.5-.98.43-3.06m4.19-3.23h-1.48c-1.49 0-1.5 0-1.71.28S9.7 9.21 9.7 12v2.96l.27.27c.25.27.31.27 1.71.27h1.44v-1.19l-1.09-.04l-1.1-.03V12.6l.68-.03l.66-.04v-1.19h-1.39V9.7h2.24zm5.88.06c0-.06-.3-.06-.66-.06l-.68.06l-.59 2.35c-.38 1.48-.62 2.27-.67 2.13c-.08-.27-1.14-4.44-1.14-4.49s-.31-.05-.68-.05h-.69l.41 1.55c.2.87.59 2.28.81 3.15c.34 1.35.46 1.65.75 1.94c.2.22.45.36.61.36c.33 0 .76-.34.9-.73C17.5 14.5 19 8.69 19 8.56"/></symbol><use href="#ai:mdi:dev-to"></use>  </svg></a> </h5> <div class="prose max-w-2xl dark:prose-invert
+  prose-h1:font-bold prose-h1:text-2xl
+  prose-a:text-blue-300 prose-img:rounded-xl
+  prose-headings:mt-0 prose-headings:text-white prose-p:text-slate-200 prose-li:text-slate-200 prose-strong:text-white prose-code:text-white prose-code:prose-strong:text-white"> <p>In times when the <a href="https://react.dev/learn/creating-a-react-app">official React documentation</a> says:</p>
+<blockquote>
+<p>If you want to build a new app or website with React, we recommend starting with a framework.</p>
+</blockquote>
+<p>It’s pretty understandable that any developer new to React will choose Next.js by default (It’s also the first suggestion on the page).
+But is Next.js really a sensible default?</p>
+<h1 id="react-on-the-server">React on the server</h1>
+<p>“Full-stack frameworks do not require a server.”, that is what the React docs say, and it is true, Next.js and other full stack frameworks do have static exports, and React’s docs do point to a page in Next.js’s docs that explains this.
+However, the project initialization command (also the first terminal command in the docs page) is this:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">npx</span><span style="color:#9ECBFF"> create-next-app@latest</span></span></code></pre>
+<p>This command creates a regular Next.js app with a server, so unless developers specifically research static exports, many will end up with a server even though they never wanted or needed one.</p>
+<h1 id="the-old-way">The Old Way</h1>
+<p>In a time, not that long ago, the default way to use React was <code>create-react-app</code>, a CLI tool that created and managed react project which were all Single Page Apps by default.
+As time went on, the project stopped being maintained, became outdated, and was eventually abandoned and archived.
+This leaves <code>create-react-app</code> projects looking for a migration path, and many developers are choosing Next.js, even when they haven’t used a server before in their <code>create-react-app</code> projects.
+Personally, I still believe SPA is the most reasonable default for new React projects.</p>
+<h1 id="nextjs-spa">Next.js SPA</h1>
+<p>To create a SPA with Next.js you need to edit your <code>next.config.ts</code> file like so:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#F97583"> type</span><span style="color:#E1E4E8"> { NextConfig } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;next&#39;</span></span>
+<span class="line"><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> nextConfig</span><span style="color:#F97583">:</span><span style="color:#B392F0"> NextConfig</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">  output: </span><span style="color:#9ECBFF">&#39;export&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8"> nextConfig</span></span></code></pre>
+<p>This will generate an <code>out</code> folder with all of the static assets of your app (HTML, CSS, JS) that can be hosted without a server.</p>
+<p>Next.js’s docs state that there are benefits to using the SPA mode:</p>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/bu4snf0hsx7u77fhtsa7.png" alt="Image description"/></p>
+<p>However, a quick look at the list of unsupported features makes it clear that SPAs aren’t the primary use case for Next.js:</p>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/mouu2qswr9pam9gi5s2y.png" alt="Image description"/></p>
+<p>While you can build SPAs with Next.js, it’s not designed for it and in many cases, a simpler tool is more than enough.</p>
+<h1 id="vite-based-spa">Vite based SPA</h1>
+<p>Vite is a build tool for modern dev projects, and has plugins for React, Vue and more.
+Vite can be used to build a Single Page App with React and is a closer alternative to <code>create-react-app</code> than other frameworks/tools as it is SPA by default and supports many things that <code>create-react-app</code> supported out of the box.
+Vite is mentioned in the React docs in a page called <a href="https://react.dev/learn/build-a-react-app-from-scratch">“Build a React app from Scratch”</a> but it’s clear that the React developers believe frameworks and the server to be the way forward for React.</p>
+<h1 id="you-might-not-need-a-server">You Might Not Need A Server</h1>
+<p>A developer on twitter built <a href="https://patterncraft.fun">a cool website called PatternCraft</a> that allows users to browse and copy background patterns.
+Like most new React developers, they used Next.js.</p>
+<p>As the site gained popularity, they encountered this issue:</p>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/zqbf64fqtzmovq87jpco.png" alt="Image description"/></p>
+<p>They’ve reached the free plan limits for server function calls, but, why are function calls needed for a website of this kind?
+Looking through it, all of the content is static, there’s no auth, and in fact, the entire list of patterns is stored in a <a href="https://github.com/megh-bari/pattern-craft/blob/d5e8fa7183a10421872e3b2bf3c35308d67dd269/src/app/utils/patterns.ts">single typescript file</a>.
+Seems like there isn’t a valid reason to use a server, using Next.js was the default way and they just went with it.
+Had they used Vite or Next.js’s static export, they could’ve hosted their website for free in a static hosting site like Github Pages or Cloudflare Pages.</p>
+<h1 id="the-outcome">The Outcome</h1>
+<p>Fortunately, PatternCraft’s story ends on a high note:</p>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/w4xf09hx6x1z4ey3hl8m.png" alt="Image description"/></p>
+<p>Which is pretty cool, they got sponsored and can continue on, but not every developer is going to get that lucky.
+This case shows the importance of understanding React and the ecosystem in order to make the right choices when starting a new project.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>You may already know the excellent React documentation section titled “You Might Not Need an Effect.”</p>
+<p>I propose another: “You Might Not Need a Server.”</p>
+<p>It could start like this:</p>
+<p>Do you need a server? if the answer is “Yes” then use Next.js.
+if the answer is “No”, you should use Vite and consider <a href="https://pages.github.com/">Github Pages</a> or <a href="https://pages.cloudflare.com/">Cloudflare Pages</a> to host your Single Page Application.</p>
+<p>Have you encountered uses of Next.js where a simple Vite SPA would suffice? Share your stories in the comments!</p> </div> </main> </body></html>

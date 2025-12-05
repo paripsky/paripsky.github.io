@@ -1,0 +1,317 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><!-- Open Graph Meta Tags --><meta property="og:title" content="Using Effects Effectively in React: Stop Misusing useEffect Once and For All"><meta property="og:description" content="Effects specifically are still hard to understand and are the most common pain point we hear from developers. Learn how to use them correctly."><meta property="og:url" content="/blog/using-effects-effectively-in-react"><meta property="og:type" content="website"><!-- Twitter Card Meta Tags --><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Using Effects Effectively in React: Stop Misusing useEffect Once and For All"><meta name="twitter:description" content="Effects specifically are still hard to understand and are the most common pain point we hear from developers. Learn how to use them correctly."><meta name="description" content="Effects specifically are still hard to understand and are the most common pain point we hear from developers. Learn how to use them correctly."><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.16.4"><title>Using Effects Effectively in React: Stop Misusing useEffect Once and For All</title><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.QW52Ox2j.js"></script><!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-1YD1ZSVP59"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-1YD1ZSVP59");
+    </script><link rel="stylesheet" href="/_astro/build-your-own-meta-tags-scraping-api.CqV1QexU.css"></head> <body class="bg-slate-950 text-white" style="color-scheme: dark;"> <a href="/" class="flex gap-1 underline items-center p-4"><svg width="1em" height="1em" class="size-4" data-icon="mdi:arrow-back">   <symbol id="ai:mdi:arrow-back" viewBox="0 0 24 24"><path fill="currentColor" d="M20 11v2H8l5.5 5.5l-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5L8 11z"/></symbol><use href="#ai:mdi:arrow-back"></use>  </svg> Back</a> <main class="max-w-2xl my-4 mx-auto px-4"> <h1 class="text-4xl text-white text-pretty">Using Effects Effectively in React: Stop Misusing useEffect Once and For All</h1> <h5 class="py-4 flex justify-between flex-wrap"> <span> Sep 18, 2025 by @paripsky </span> <a class="flex gap-1 underline" href="https://dev.to/paripsky/using-effects-effectively-in-react-stop-misusing-useeffect-once-and-for-all-5fpm">Read on <svg width="1em" height="1em" class="size-6" data-icon="mdi:dev-to">   <symbol id="ai:mdi:dev-to" viewBox="0 0 24 24"><path fill="currentColor" d="M7.73 11.93c0 1.72-.02 1.83-.23 2.07c-.19.17-.38.23-.76.23l-.51.01l-.03-2.27l-.02-2.27h.52c.35 0 .6.07.77.21c.24.21.26.25.26 2.02M22 7.5v9c0 1.11-.89 2-2 2H4c-1.11 0-2-.89-2-2v-9c0-1.11.89-2 2-2h16c1.11 0 2 .89 2 2M8.93 11.73c-.03-1.84-.05-1.99-.29-2.39c-.4-.68-.85-.84-2.36-.84H5v7h1.21c1.33 0 1.89-.17 2.29-.71c.41-.53.5-.98.43-3.06m4.19-3.23h-1.48c-1.49 0-1.5 0-1.71.28S9.7 9.21 9.7 12v2.96l.27.27c.25.27.31.27 1.71.27h1.44v-1.19l-1.09-.04l-1.1-.03V12.6l.68-.03l.66-.04v-1.19h-1.39V9.7h2.24zm5.88.06c0-.06-.3-.06-.66-.06l-.68.06l-.59 2.35c-.38 1.48-.62 2.27-.67 2.13c-.08-.27-1.14-4.44-1.14-4.49s-.31-.05-.68-.05h-.69l.41 1.55c.2.87.59 2.28.81 3.15c.34 1.35.46 1.65.75 1.94c.2.22.45.36.61.36c.33 0 .76-.34.9-.73C17.5 14.5 19 8.69 19 8.56"/></symbol><use href="#ai:mdi:dev-to"></use>  </svg></a> </h5> <div class="prose max-w-2xl dark:prose-invert
+  prose-h1:font-bold prose-h1:text-2xl
+  prose-a:text-blue-300 prose-img:rounded-xl
+  prose-headings:mt-0 prose-headings:text-white prose-p:text-slate-200 prose-li:text-slate-200 prose-strong:text-white prose-code:text-white prose-code:prose-strong:text-white"> <blockquote>
+<p>Effects specifically are still hard to understand and are the most common pain point we hear from developers.</p>
+</blockquote>
+<p>Quoted from the last blog post in the React documentation site.</p>
+<p>To this day, one of the most difficult concepts to wrap your head around as a React developer is using useEffect properly.
+It got so bad that even AI uses useEffect incorrectly, leading to even more misuse.
+In this post I’ll talk about how we got to this point, and how, hopefully we can get to a point where every React dev knows how to use useEffect in the way that it’s meant to be used.</p>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/88ucbsa7vgb00pgomu58.png" alt="useEffect is a headache"/></p>
+<h2 id="component-lifecycle-hooks">Component Lifecycle Hooks</h2>
+<p>Before React had hooks, components were written as classes that had a <code>render</code> function, a constructor to initialize state and several functions to manage the component’s lifecycle, for example a componentDidMount function to run code when the component mounts to the DOM and a componentDidUpdate function to handle component state and prop updates.
+This way of writing components had several drawbacks, the main one being that many times, logic had to be split across separate lifecycle hooks, for example when componentDidMount code needed to run a cleanup on unmount.</p>
+<h2 id="react-hooks">React Hooks</h2>
+<p>React 16.8 brought with it a list of hooks that created a new paradigm, instead of thinking about lifecycle hooks, developers were expected to think in terms of effects.
+But what are effects in React? Effects refer to operations that occur outside a component’s rendering process, they are escape hatches from React itself and allow you to synchronize React with external systems.
+The way to write these effects in code is by using the useEffect hook, that accepts an effect function that returns a cleanup function and a dependency array of variables that are used in the effect.</p>
+<p>useEffect should be used for things like:</p>
+<ul>
+<li>fetch/axios/WebSockets</li>
+<li>Timers (setTimeout, setInterval)</li>
+<li>Browser APIs (navigator, localStorage)</li>
+</ul>
+<p>The golden rule for effects in React is: “If no external system is involved, you should generally not need an Effect.”</p>
+<h2 id="why-is-useeffect-so-difficult">Why Is useEffect So Difficult?</h2>
+<p>This is the original explanation for useEffect in React’s legacy docs:
+<img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xj6te7kcgk7sqhng38d0.png" alt="React's legacy docs"/>
+Basically saying:
+<img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/4xyizdi5xztg51n5siqt.png" alt="lifecycle hooks is the same as hooks"/>
+Which was more confusing than helpful, many developers started using useEffect for running code on mount, syncing state between components, thinking it’s proper usage because that’s the way that lifecycle hooks worked in React class components.
+Later came the new React documentation that explained useEffect properly once and for all in the “You Might Not Need An Effect” article.
+But, was that enough?
+<img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xhxy9do7l54ydf9zgvur.png" alt="Devs can't read"/>
+In my opinion, not really.
+The new docs were helpful but it was too little too late, many devs figured that they already know useEffect and skipped the new docs and even new devs might have missed these docs as they’re a part of a section called “Escape Hatches”, which is the last section in the docs.</p>
+<h2 id="thinking-in-effects">Thinking In Effects</h2>
+<p>The latest React blog post says that one of the biggest reasons for confusion around useEffect is that developers tend to think of Effects from the component’s perspective (like a lifecycle), instead of the Effects point of view.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#B392F0">useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> connection</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> createConnection</span><span style="color:#E1E4E8">(serverUrl, roomId);</span></span>
+<span class="line"><span style="color:#E1E4E8">  connection.</span><span style="color:#B392F0">connect</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    connection.</span><span style="color:#B392F0">disconnect</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E1E4E8">}, [roomId]);</span></span></code></pre>
+<p>Many React developers read this example as “on mount and on the change of the roomId variable, connect to the chat room, and on unmount and before connecting to a different roomId, disconnect from the previous chat room” when instead you should think about this code as “I want to connect to a chat room from my component, and disconnect from the chat room when the effect is cleaned up. I connect to a chat room by its room Id so I’ll provide it as a dependency in the dependency array of useEffect”.
+This different way of thinking about effects helps you understand how useEffect should be used properly.</p>
+<h2 id="ai-doesnt-get-useeffect">AI Doesn’t Get useEffect</h2>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xcu9jvgbwr47bstpsvmh.png" alt="https://www.reddit.com/r/webdev/comments/1llwbwr/so_many_react_devs_overuse_effects_that_now_the/"/>
+So many React developers use useEffect improperly that we’ve gotten to a point where AI tools like Copilot and Cursor also misuse useEffect.
+And without a review from an experienced dev that knows how to use useEffect properly, this code will end up in a git repository, which LLMs might train on, thus just making this problem worse and worse.</p>
+<h2 id="the-dos-examples-of-what-useeffect-should-be-used-for">The Do’s: Examples of what useEffect should be used for</h2>
+<p>Fetch data using useEffect:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#B392F0">useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">  fetch</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;/api/user&#39;</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">  .</span><span style="color:#B392F0">then</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">res</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> res.</span><span style="color:#B392F0">json</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">  .</span><span style="color:#B392F0">then</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">data</span><span style="color:#F97583"> =&gt;</span><span style="color:#B392F0"> setUser</span><span style="color:#E1E4E8">(data));</span></span>
+<span class="line"><span style="color:#E1E4E8">}, []);</span></span></code></pre>
+<p>This is a very simplified example, a proper fetch request should handle errors, have an abort controller for canceling the request on unmount and more.</p>
+<p>Sync a state variable to localStorage:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#B392F0">useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">  localStorage.</span><span style="color:#B392F0">setItem</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;theme&#39;</span><span style="color:#E1E4E8">, theme);</span></span>
+<span class="line"><span style="color:#E1E4E8">}, [theme]);</span></span></code></pre>
+<p>Listen to DOM events:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#B392F0">useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#B392F0"> handleScroll</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#B392F0"> setScrollY</span><span style="color:#E1E4E8">(window.scrollY);</span></span>
+<span class="line"><span style="color:#E1E4E8">  window.</span><span style="color:#B392F0">addEventListener</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;scroll&#39;</span><span style="color:#E1E4E8">, handleScroll);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> window.</span><span style="color:#B392F0">removeEventListener</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;scroll&#39;</span><span style="color:#E1E4E8">, handleScroll);</span></span>
+<span class="line"><span style="color:#E1E4E8">}, []);</span></span></code></pre>
+<h3 id="when-you-do-need-effects">When You Do Need Effects</h3>
+<ol>
+<li>Fetching data (with important caveats).</li>
+<li>Syncing state with external systems.</li>
+<li>Subscribing to external data stores and browser APIs (though -useSyncExternalStore is preferred)</li>
+</ol>
+<h2 id="the-donts-examples-of-improper-useeffect-usage">The Don’ts: Examples of improper useEffect usage</h2>
+<h3 id="avoid-transforming-data-for-rendering">Avoid: Transforming Data for Rendering</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> Form</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">firstName</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setFirstName</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;Morty&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">lastName</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setLastName</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;Smith&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">fullName</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setFullName</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#B392F0">  useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    setFullName</span><span style="color:#E1E4E8">(firstName </span><span style="color:#F97583">+</span><span style="color:#9ECBFF"> &#39; &#39;</span><span style="color:#F97583"> +</span><span style="color:#E1E4E8"> lastName);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }, [firstName, lastName]);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> &lt;</span><span style="color:#85E89D">span</span><span style="color:#E1E4E8">&gt;{fullName}&lt;/</span><span style="color:#85E89D">span</span><span style="color:#E1E4E8">&gt;;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Updating a state variable based on another variables isn’t an effect, instead calculate the fullName while rendering:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> Form</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">firstName</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setFirstName</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;Morty&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">lastName</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setLastName</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;Smith&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> fullName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> firstName </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> lastName;</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> &lt;</span><span style="color:#85E89D">span</span><span style="color:#E1E4E8">&gt;{fullName}&lt;/</span><span style="color:#85E89D">span</span><span style="color:#E1E4E8">&gt;;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="avoid-caching-expensive-calculations">Avoid: Caching Expensive Calculations</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> TodoList</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">todos</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">searchTerm</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setSearchTerm</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">matchingTodos</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setMatchingTodos</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(todos);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#B392F0">  useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    setMatchingTodos</span><span style="color:#E1E4E8">(todos.</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">todo</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> todo.title.</span><span style="color:#B392F0">includes</span><span style="color:#E1E4E8">(searchTerm)));</span></span>
+<span class="line"><span style="color:#E1E4E8">  }, [searchTerm]);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#6A737D">  // render</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Instead calculate matchingTodos as part of the render and use the useMemo hook if it’s a heavy calculation, to memoize the result:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> TodoList</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">todos</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">searchTerm</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setSearchTerm</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> matchingTodos</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> useMemo</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> todos.</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">todo</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> todo.title.</span><span style="color:#B392F0">includes</span><span style="color:#E1E4E8">(searchTerm)), [todos, searchTerm]);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#6A737D">  // render</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="avoid-resetting-state-on-prop-change">Avoid: Resetting State on Prop Change</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> TodoList</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">todos</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">searchTerm</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setSearchTerm</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#B392F0">  useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    setSearchTerm</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }, [todos]);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#6A737D">  // render</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Instead you should use the <a href="https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key">built in <code>key</code> prop</a> to let React know that the provided todos are new todos:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> App</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">todos</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setTodos</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(todos);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> todosKey</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> useMemo</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> todos.</span><span style="color:#B392F0">map</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">todo</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> todo.id).</span><span style="color:#B392F0">join</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;,&#39;</span><span style="color:#E1E4E8">), [todos]);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> &lt;</span><span style="color:#79B8FF">TodoList</span><span style="color:#B392F0"> todos</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{todos} </span><span style="color:#B392F0">key</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{todosKey} /&gt;;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> TodoList</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">todos</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">searchTerm</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setSearchTerm</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#6A737D">  // render</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>If using a <code>key</code> isn’t possible you can save a local copy of the todos and check if the prop changed in the render:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> TodoList</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">todos</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">localTodos</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setLocalTodos</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(todos);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">searchTerm</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setSearchTerm</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (todos </span><span style="color:#F97583">!==</span><span style="color:#E1E4E8"> localTodos) {</span></span>
+<span class="line"><span style="color:#B392F0">    setLocalTodos</span><span style="color:#E1E4E8">(todos);</span></span>
+<span class="line"><span style="color:#B392F0">    setSearchTerm</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#6A737D">  // render</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Calling a setState function as part of the render tells react to perform another render immediately, skipping effects, making this a viable option when using a <code>key</code> just isn’t possible.</p>
+<h3 id="avoid-handling-user-events-in-effects">Avoid: Handling User Events in Effects</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> Todo</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">title</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">isSelected</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">onSelect</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#B392F0">  useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">isSelected) </span><span style="color:#F97583">return</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    toast.</span><span style="color:#B392F0">success</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`Todo &quot;${</span><span style="color:#E1E4E8">title</span><span style="color:#9ECBFF">}&quot; is now selected`</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }, [isSelected]);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#85E89D">label</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">      &lt;</span><span style="color:#85E89D">input</span><span style="color:#B392F0"> type</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">&quot;checkbox&quot;</span><span style="color:#B392F0"> value</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{isSelected} </span><span style="color:#B392F0">onChange</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{onSelect} /&gt; {title}</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;/</span><span style="color:#85E89D">label</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Instead handle the selection event in an event handler:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> Todo</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">title</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">isSelected</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">onSelect</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#B392F0"> handleSelect</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">selected</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    onSelect</span><span style="color:#E1E4E8">(selected);</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">selected) </span><span style="color:#F97583">return</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    toast.</span><span style="color:#B392F0">success</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`Todo &quot;${</span><span style="color:#E1E4E8">title</span><span style="color:#9ECBFF">}&quot; is now selected`</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#85E89D">label</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">      &lt;</span><span style="color:#85E89D">input</span><span style="color:#B392F0"> type</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">&quot;checkbox&quot;</span><span style="color:#B392F0"> value</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{isSelected} </span><span style="color:#B392F0">onChange</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{onSelect} /&gt; {title}</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;/</span><span style="color:#85E89D">label</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="avoid-syncing-state-between-parent--child-components">Avoid: Syncing State Between Parent &amp; Child Components</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> TodoList</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">todos</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">selectedTodos</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setSelectedTodos</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">([]);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> todos.</span><span style="color:#B392F0">map</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">todo</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#79B8FF">Todo</span></span>
+<span class="line"><span style="color:#B392F0">      key</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{todo.id}</span></span>
+<span class="line"><span style="color:#B392F0">      title</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{todo.title}</span></span>
+<span class="line"><span style="color:#B392F0">      isSelected</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{selectedTodos.</span><span style="color:#B392F0">includes</span><span style="color:#E1E4E8">(todo.id)}</span></span>
+<span class="line"><span style="color:#B392F0">      onSelect</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{(</span><span style="color:#FFAB70">isSelected</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">        setSelectedTodos</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">          isSelected</span></span>
+<span class="line"><span style="color:#F97583">            ?</span><span style="color:#E1E4E8"> [</span><span style="color:#F97583">...</span><span style="color:#E1E4E8">selectedTodos, todo.id]</span></span>
+<span class="line"><span style="color:#F97583">            :</span><span style="color:#E1E4E8"> selectedTodos.</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">id</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> id </span><span style="color:#F97583">!==</span><span style="color:#E1E4E8"> todo.id),</span></span>
+<span class="line"><span style="color:#E1E4E8">        );</span></span>
+<span class="line"><span style="color:#E1E4E8">      }}</span></span>
+<span class="line"><span style="color:#E1E4E8">    /&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  ));</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> Todo</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">title</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">onSelectChange</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">isSelected</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setIsSelected</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    onSelectChange</span><span style="color:#E1E4E8">(isSelected);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }, [isSelected, onSelectChange]);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#85E89D">label</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">      &lt;</span><span style="color:#85E89D">input</span><span style="color:#B392F0"> type</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">&quot;checkbox&quot;</span><span style="color:#B392F0"> value</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{isSelected} </span><span style="color:#B392F0">onChange</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{setIsSelected} /&gt;{</span><span style="color:#9ECBFF">&#39; &#39;</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">      {title}</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;/</span><span style="color:#85E89D">label</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>The selection state is duplicated both in the child and in the parent component, so there’s no single source of truth for the selection state. Instead, move the state up to the parent:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> TodoList</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">todos</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">selectedTodos</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setSelectedTodos</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">([]);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> todos.</span><span style="color:#B392F0">map</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">todo</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#79B8FF">Todo</span></span>
+<span class="line"><span style="color:#B392F0">      key</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{todo.id}</span></span>
+<span class="line"><span style="color:#B392F0">      title</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{todo.title}</span></span>
+<span class="line"><span style="color:#B392F0">      isSelected</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{selectedTodos.</span><span style="color:#B392F0">includes</span><span style="color:#E1E4E8">(todo.id)}</span></span>
+<span class="line"><span style="color:#B392F0">      onSelect</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{(</span><span style="color:#FFAB70">isSelected</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">        setSelectedTodos</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">          isSelected</span></span>
+<span class="line"><span style="color:#F97583">            ?</span><span style="color:#E1E4E8"> [</span><span style="color:#F97583">...</span><span style="color:#E1E4E8">selectedTodos, todo.id]</span></span>
+<span class="line"><span style="color:#F97583">            :</span><span style="color:#E1E4E8"> selectedTodos.</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">id</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> id </span><span style="color:#F97583">!==</span><span style="color:#E1E4E8"> todo.id),</span></span>
+<span class="line"><span style="color:#E1E4E8">        );</span></span>
+<span class="line"><span style="color:#E1E4E8">      }}</span></span>
+<span class="line"><span style="color:#E1E4E8">    /&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  ));</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> Todo</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">title</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">isSelected</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">onSelectChange</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#85E89D">label</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">      &lt;</span><span style="color:#85E89D">input</span><span style="color:#B392F0"> type</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">&quot;checkbox&quot;</span><span style="color:#B392F0"> value</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{isSelected} </span><span style="color:#B392F0">onChange</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{onSelectChange} /&gt;{</span><span style="color:#9ECBFF">&#39; &#39;</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">      {title}</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;/</span><span style="color:#85E89D">label</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="when-you-dont-need-effects">When You Don’t Need Effects</h3>
+<ol>
+<li>Transforming Data for Rendering</li>
+<li>Caching Expensive Calculations</li>
+<li>Adjusting/Resetting State on Prop Change</li>
+<li>Handling User Events</li>
+<li>Syncing State Between Parent &amp; Child Components</li>
+</ol>
+<h2 id="useeffect-alternative-usesyncexternalstore">useEffect Alternative: useSyncExternalStore</h2>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/y5gw85aeh63gyizhlk2i.png" alt="useSyncExternalStore"/>
+If you have a custom hook that syncs to an external store where you can get the current state and listen to state changes you’ll be able to use useSyncExternalStore instead of useEffect.
+Let’s create a useOnline hook for example:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> useOnlineStatus</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">isOnline</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">setIsOnline</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(navigator.onLine);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    function</span><span style="color:#B392F0"> updateStatus</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#B392F0">      setIsOnline</span><span style="color:#E1E4E8">(navigator.onLine);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    window.</span><span style="color:#B392F0">addEventListener</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;online&#39;</span><span style="color:#E1E4E8">, updateStatus);</span></span>
+<span class="line"><span style="color:#E1E4E8">    window.</span><span style="color:#B392F0">addEventListener</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;offline&#39;</span><span style="color:#E1E4E8">, updateStatus);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Cleanup function</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">      window.</span><span style="color:#B392F0">removeEventListener</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;online&#39;</span><span style="color:#E1E4E8">, updateStatus);</span></span>
+<span class="line"><span style="color:#E1E4E8">      window.</span><span style="color:#B392F0">removeEventListener</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;offline&#39;</span><span style="color:#E1E4E8">, updateStatus);</span></span>
+<span class="line"><span style="color:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#E1E4E8">  }, []);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> isOnline;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>using useSyncExternalStore, we can simplify this to:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> useOnlineStatus</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> isOnline</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> useSyncExternalStore</span><span style="color:#E1E4E8">(subscribe, getSnapshot);</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> isOnline;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> getSnapshot</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> navigator.onLine;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> subscribe</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">callback</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">  window.</span><span style="color:#B392F0">addEventListener</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;online&#39;</span><span style="color:#E1E4E8">, callback);</span></span>
+<span class="line"><span style="color:#E1E4E8">  window.</span><span style="color:#B392F0">addEventListener</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;offline&#39;</span><span style="color:#E1E4E8">, callback);</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    window.</span><span style="color:#B392F0">removeEventListener</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;online&#39;</span><span style="color:#E1E4E8">, callback);</span></span>
+<span class="line"><span style="color:#E1E4E8">    window.</span><span style="color:#B392F0">removeEventListener</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;offline&#39;</span><span style="color:#E1E4E8">, callback);</span></span>
+<span class="line"><span style="color:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>We don’t need useState and useEffect anymore, we just use useSyncExternalStore and give it a function to subscribe to changes and a way to get the current state.</p>
+<h2 id="the-future-of-useeffect">The Future Of useEffect</h2>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8z9w2yd6w0d0jy7o2w06.png" alt="Slapping react compiler on the issue"/>
+The team behind React are considering using the new React Compiler as a possible solution, instead of manually providing dependencies to useEffect, the compiler will auto detect dependencies for you, similar to Vue, Solid and others.
+This shift will make developers think about the code written in useEffect as an actual side effect instead of thinking “if this dependency changes, run this function”.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="jsx"><code><span class="line"><span style="color:#B392F0">useEffect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> connection</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> createConnection</span><span style="color:#E1E4E8">(serverUrl, roomId);</span></span>
+<span class="line"><span style="color:#E1E4E8">  connection.</span><span style="color:#B392F0">connect</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    connection.</span><span style="color:#B392F0">disconnect</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E1E4E8">}); </span><span style="color:#6A737D">// React Compiler will add these deps automatically</span></span></code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>Removing unnecessary Effects makes code simpler to follow, easier to debug, faster to run, and less error-prone.
+Also, if we use useEffect correctly, AI will use it properly as well and hopefully after reading this post you know when you should, and mostly <em>shouldn’t</em> use useEffect.</p>
+<p>Read more about useSyncExternalStore in my blogpost: <a href="https://dev.to/paripsky/build-your-own-react-state-management-library-in-under-40-lines-of-code-with-typescript-support-hji">https://dev.to/paripsky/build-your-own-react-state-management-library-in-under-40-lines-of-code-with-typescript-support-hji</a></p>
+<p>Read “You Might Not Need An Effect” in React’s docs for more in depth explanations and examples: <a href="https://react.dev/learn/you-might-not-need-an-effect">https://react.dev/learn/you-might-not-need-an-effect</a></p> </div> </main> </body></html>
