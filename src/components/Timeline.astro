@@ -34,43 +34,22 @@ const entries = [
 ];
 ---
 
-<div class="sticky">
-  <div class="container w-full h-full">
-    <div class="relative wrap overflow-hidden h-full">
-      <div
-        class="hidden lg:block border-r-2 border-sky-900 right-1/2 absolute h-full border"
-      >
-      </div>
-      <div
-        class="hidden lg:block border-l-2 border-sky-900 left-1/2 absolute h-full border"
-      >
-      </div>
-      {
-        entries.map((entry, index) => (
-          <div
-            class={`lg:mb-8 flex justify-between items-center w-full ${
-              index % 2 === 0 ? "flex-row-reverse" : ""
-            }`}
-          >
-            <div class="hidden lg:block order-1 w-5/12" />
-            <div class="order-1 lg:w-5/12 px-1 py-4 text-left">
-              <p class="text-sm text-neutral-300 leading-relaxed">
-                {entry.date}
-              </p>
-              <h4 class="text-xl font-medium leading-loose">
-                <span>{entry.title}</span>
-                <span class="ml-1">@</span>
-                <a href={entry.url} target="_blank" class="underline">
-                  {entry.name}
-                </a>
-              </h4>
-              <p class="text-md font-light text-pretty leading-relaxed text-neutral-300">
+<div class="flex flex-col gap-8 pl-2 border-l border-zinc-700 ml-2">
+  {
+    entries.map((entry) => (
+      <div class="relative pl-6">
+        <div class="absolute -left-[13px] top-7.5 h-2.5 w-2.5 rounded-full bg-zinc-600 ring-4 ring-slate-950" />
+        
+        <div class="flex flex-col gap-1">
+            <span class="text-xs text-neutral-500 font-mono mb-0.5">{entry.date}</span>
+            <h4 class="text-base font-medium text-white">
+                {entry.title} <span class="text-neutral-500">@</span> <a href={entry.url} target="_blank" class="hover:text-sky-300 transition-colors">{entry.name}</a>
+            </h4>
+            <p class="text-sm text-neutral-400 leading-relaxed max-w-lg">
                 {entry.description}
-              </p>
-            </div>
-          </div>
-        ))
-      }
-    </div>
-  </div>
+            </p>
+        </div>
+      </div>
+    ))
+  }
 </div>

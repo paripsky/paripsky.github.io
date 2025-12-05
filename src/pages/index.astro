@@ -5,8 +5,6 @@ import Timeline from "../components/Timeline.astro";
 import MyWork from "../components/MyWork.astro";
 import DesktopDestroyer from "../components/DesktopDestroyer.astro";
 import Tilt from "../components/Tilt.astro";
-import Section from "../components/Section.astro";
-import GIthubContributions from "../components/GIthubContributions.astro";
 import Pill from "../components/Pill.astro";
 import { Icon } from "astro-icon/components";
 import Post from "../components/Post.astro";
@@ -48,72 +46,97 @@ const posts = Object.values(postsGlob).map(
     </div>
   </div>
   <main
-    class="w-full max-w-[1200px] px-12 tracking-wide transition-all max-sm:px-4"
+    class="w-full max-w-6xl mx-auto px-6 tracking-wide transition-all grid grid-cols-1 md:grid-cols-2 gap-12"
   >
-    <section
-      class="flex min-h-screen flex-col gap-4 pb-32 pt-64 sm:justify-center"
+    <div
+      class="md:sticky md:top-0 md:h-screen flex flex-col justify-center py-12"
     >
-      <h1
-        class="text-[clamp(2rem,7vw,3rem)] leading-tight font-medium tracking-tight motion-preset-slide-up motion-preset-fade-lg"
-      >
-        Hi, I'm Yonatan.
-      </h1>
-      <h2
-        class="text-xl font-light text-pretty leading-relaxed text-neutral-300 max-sm:text-sm motion-preset-slide-up motion-preset-fade-lg motion-delay-300"
-      >
-        JavaScript Enthusiast, Software Engineer, and Occasional Post Writer. <br
-        />
-        Read my latest post <a
-          class="underline text-neutral-200"
-          href={posts.at(0).url}
-          title={posts.at(0).title}>here</a
-        >.
-      </h2>
-      <div
-        class="flex motion-preset-slide-up motion-preset-fade-lg motion-delay-500"
-      >
-        <Tilt>
-          <div class="flex gap-4">
-            <Logos />
-          </div>
-        </Tilt>
-      </div>
-      <span
-        class="text-md font-light text-pretty leading-relaxed text-neutral-400 max-sm:text-sm motion-preset-slide-up motion-preset-fade-lg motion-delay-700"
-        >Follow me on <a
-          class="underline"
-          href="https://github.com/paripsky"
-          target="_blank">Github</a
-        > & <a
-          class="underline"
-          href="https://www.linkedin.com/in/paripsky"
-          target="_blank">Linkedin</a
-        >.</span
-      >
-    </section>
-    <section id="projects" class="flex flex-col gap-4 py-16">
-      <Pill
-        ><Icon name="mdi:language-javascript" class="size-4" /> Projects</Pill
-      >
-      <MyWork />
-      <div class="border p-1 rounded-xl border-zinc-600">
-        <GIthubContributions slot="after-title" />
-      </div>
-    </section>
-    <section id="posts" class="flex flex-col gap-8">
-      <Pill><Icon name="mdi:post" class="size-4" /> Posts</Pill>
-      <ul class="flex flex-col gap-4">
-        {posts.map((post) => <Post post={post} />)}
-      </ul>
-    </section>
-    <section id="presentations" class="flex flex-col gap-8 py-16">
-      <Pill><Icon name="mdi:presentation" class="size-4" /> Presentations</Pill>
-      <Presentations />
-    </section>
-    <section id="timeline" class="flex flex-col gap-8 py-16">
-      <Pill><Icon name="mdi:work" class="size-4" /> Work</Pill>
-      <Timeline />
-    </section>
+      <section class="flex flex-col gap-6">
+        <h1
+          class="text-[clamp(2.5rem,5vw,4rem)] leading-tight font-medium tracking-tight motion-preset-slide-up motion-preset-fade-lg"
+        >
+          Hi, I'm Yonatan.
+        </h1>
+        <h2
+          class="text-lg font-light text-pretty leading-relaxed text-neutral-300 motion-preset-slide-up motion-preset-fade-lg motion-delay-300"
+        >
+          JavaScript Enthusiast, Software Engineer, and Occasional Post Writer. <br
+          />
+          Read my latest post <a
+            class="underline text-neutral-200"
+            href={posts.at(0).url}
+            title={posts.at(0).title}>here</a
+          >.
+        </h2>
+        <div
+          class="flex motion-preset-slide-up motion-preset-fade-lg motion-delay-500"
+        >
+          <Tilt>
+            <div class="flex gap-4">
+              <Logos />
+            </div>
+          </Tilt>
+        </div>
+        <span
+          class="text-sm font-light text-pretty leading-relaxed text-neutral-400 motion-preset-slide-up motion-preset-fade-lg motion-delay-700"
+          >Follow me on <a
+            class="underline hover:text-white transition-colors"
+            href="https://github.com/paripsky"
+            target="_blank">Github</a
+          > & <a
+            class="underline hover:text-white transition-colors"
+            href="https://www.linkedin.com/in/paripsky"
+            target="_blank">Linkedin</a
+          >.</span
+        >
+
+        <nav
+          class="hidden md:flex flex-col gap-2 mt-12 text-sm text-neutral-400"
+        >
+          <a href="#posts" class="hover:text-white transition-colors w-fit"
+            >Posts</a
+          >
+          <a
+            href="#presentations"
+            class="hover:text-white transition-colors w-fit">Presentations</a
+          >
+          <a href="#projects" class="hover:text-white transition-colors w-fit"
+            >Projects</a
+          >
+          <a href="#timeline" class="hover:text-white transition-colors w-fit"
+            >Experience</a
+          >
+        </nav>
+      </section>
+    </div>
+
+    <div class="flex flex-col gap-20 py-12">
+      <section id="posts" class="flex flex-col gap-6">
+        <Pill><Icon name="mdi:post" class="size-4" /> Posts</Pill>
+        <ul class="flex flex-col gap-4">
+          {posts.map((post) => <Post post={post} />)}
+        </ul>
+      </section>
+
+      <section id="presentations" class="flex flex-col gap-6">
+        <Pill
+          ><Icon name="mdi:presentation" class="size-4" /> Presentations</Pill
+        >
+        <Presentations />
+      </section>
+
+      <section id="projects" class="flex flex-col gap-6">
+        <Pill
+          ><Icon name="mdi:language-javascript" class="size-4" /> Projects</Pill
+        >
+        <MyWork />
+      </section>
+
+      <section id="timeline" class="flex flex-col gap-6">
+        <Pill><Icon name="mdi:work" class="size-4" /> Work</Pill>
+        <Timeline />
+      </section>
+    </div>
   </main>
   <DesktopDestroyer />
 </Layout>

@@ -1,3 +1,8 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @plugin "tailwindcss-motion";
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 3rem;
+}

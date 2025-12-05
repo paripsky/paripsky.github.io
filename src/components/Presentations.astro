@@ -33,45 +33,48 @@ const presentations = [
 ];
 ---
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-8">
+<ul class="flex flex-col gap-8">
   {
     presentations.map((presentation) => (
-      <li class="flex flex-col gap-2 md:flex-1 w-full">
-        <h2 class="text-lg leading-tight font-medium tracking-tight">
-          {presentation.title}
-        </h2>
-        <h3 class="text-md font-light text-pretty leading-relaxed text-neutral-300 max-sm:text-sm max-w-xl">
-          {presentation.description}
-        </h3>
-        <div class="mt-auto flex flex-wrap gap-2 justify-between py-4">
-          <div class="flex gap-4">
+      <li class="group flex flex-col gap-2 border-l-2 border-transparent hover:border-zinc-500 pl-4 transition-all py-1">
+        <div class="flex flex-col gap-1">
+          <h2 class="text-base font-medium tracking-tight text-neutral-100 group-hover:text-white transition-colors">
+            {presentation.title}
+          </h2>
+          <p class="text-sm font-light text-pretty leading-relaxed text-neutral-400 max-w-xl group-hover:text-neutral-300 transition-colors">
+            {presentation.description}
+          </p>
+        </div>
+
+        <div class="flex flex-wrap justify-between items-center gap-4 mt-2">
+          <div class="flex gap-4 text-xs font-medium">
             <a
               href={presentation.siteUrl}
-              class="text-sky-300 flex items-center gap-1 hover:underline"
+              class="text-sky-300 hover:text-sky-200 flex items-center gap-1 transition-colors"
               target="_blank"
             >
-              Check out <Icon name="mdi:arrow-right" class="size-4" />
+              Slides <Icon name="mdi:presentation" class="size-3.5" />
             </a>
             {presentation.youtubeUrl && (
               <a
                 href={presentation.youtubeUrl}
-                class="text-sky-300 flex items-center gap-1 hover:underline"
+                class="text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors"
                 target="_blank"
               >
-                Watch on YouTube
-                <Icon name="mdi:youtube" class="size-4" />
+                Watch <Icon name="mdi:youtube" class="size-4" />
               </a>
             )}
           </div>
-          <ul class="flex gap-2">
+
+          <div class="flex gap-2">
             {presentation.tags.map((tag) => (
-              <li class="bg-slate-900 px-2 py-1 text-neutral-300 rounded">
+              <span class="bg-slate-800/50 px-1.5 py-0.5 text-xs text-neutral-400 rounded border border-slate-700">
                 {tag}
-              </li>
+              </span>
             ))}
-          </ul>
+          </div>
         </div>
       </li>
     ))
   }
-</div>
+</ul>

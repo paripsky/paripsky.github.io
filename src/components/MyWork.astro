@@ -79,39 +79,39 @@ const projects = [
 ];
 ---
 
-<ul class="grid grid-cols-1 lg:grid-cols-2 grid-rows gap-4 w-full">
+<ul class="grid grid-cols-1 xl:grid-cols-2 gap-4 w-full">
   {
     projects.map((project, i) => (
       <li class="h-full">
         <div
-          class={`p-4 h-full relative border shadow-lg transition-all duration-300 rounded-xl border-zinc-600 ${colors[i]}`}
+          class={`p-4 h-full relative border hover:border-zinc-500 transition-all duration-300 rounded-xl border-zinc-700 bg-slate-900/20 backdrop-blur-sm`}
         >
           {project.image && (
             <Image
-              class="absolute right-2 top-2"
-              width={40}
-              height={40}
+              class="absolute right-3 top-3 rounded-full"
+              width={32}
+              height={32}
               src={project.image}
               alt={project.title}
             />
           )}
-          <div class="flex flex-col gap-4 h-full">
-            <h1 class="text-lg leading-tight font-medium tracking-tight">
+          <div class="flex flex-col gap-3 h-full">
+            <h1 class="text-base leading-tight font-medium tracking-tight pr-10">
               {project.title}
             </h1>
-            <p class="text-md font-light text-pretty leading-relaxed text-neutral-300 max-sm:text-sm max-w-xl">
+            <p class="text-sm font-light text-pretty leading-relaxed text-neutral-400">
               {project.description}
             </p>
-            <div class="card-actions justify-between items-center mt-auto">
-              <div class="flex flex-wrap justify-between gap-2">
-                <div class="flex gap-2">
+            <div class="card-actions justify-between items-center mt-auto pt-2">
+              <div class="flex flex-wrap justify-between gap-2 w-full">
+                <div class="flex gap-3">
                   {project.githubUrl && (
                     <a
                       href={project.githubUrl}
                       target="_blank"
-                      class="hover:underline flex gap-1 items-center text-md font-medium leading-relaxed text-neutral-300"
+                      class="hover:text-white flex gap-1 items-center text-xs font-medium leading-relaxed text-neutral-400 transition-colors"
                     >
-                      <Icon name="mdi:github" class="size-5 float-left" />
+                      <Icon name="mdi:github" class="size-4" />
                       Github
                     </a>
                   )}
@@ -119,16 +119,16 @@ const projects = [
                     <a
                       href={project.siteUrl}
                       target="_blank"
-                      class="hover:underline flex gap-1 items-center text-md font-medium leading-relaxed text-neutral-300"
+                      class="hover:text-white flex gap-1 items-center text-xs font-medium leading-relaxed text-neutral-400 transition-colors"
                     >
-                      <Icon name="mdi:link" class="size-6 text-neutral-300" />
+                      <Icon name="mdi:link" class="size-4" />
                       Website
                     </a>
                   )}
                 </div>
-                <div class="flex gap-1">
+                <div class="flex gap-1 flex-wrap">
                   {project.tags.map((tag) => (
-                    <div class="bg-slate-900 px-2 py-1 text-neutral-300 rounded">
+                    <div class="bg-slate-800/50 px-1.5 py-0.5 text-xs text-neutral-400 rounded border border-slate-700">
                       {tag}
                     </div>
                   ))}
