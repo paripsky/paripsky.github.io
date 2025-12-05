@@ -1,0 +1,138 @@
+---
+import { Icon } from "astro-icon/components";
+
+const podcasts = [
+    {
+        title: "Frontalk",
+        description:
+            "My own podcast, where Itay Ben Ami and I talk about web development, frontend, and a wide range of general engineering topics.",
+        role: "Host",
+        siteUrl: "https://www.frontalk.com/",
+        links: [
+            {
+                label: "Spotify",
+                url: "https://open.spotify.com/show/1LzfIgDxPKVfhyKxLyfkXy",
+                icon: "mdi:spotify",
+                color: "text-green-400 hover:text-green-300",
+            },
+            {
+                label: "Apple Podcasts",
+                url: "https://podcasts.apple.com/us/podcast/frontalk/id1829256349",
+                icon: "mdi:podcast",
+                color: "text-purple-400 hover:text-purple-300",
+            },
+            {
+                label: "YouTube",
+                url: "https://www.youtube.com/playlist?list=PL_qp7zj7X25kQy4dcxN_DpKNZenQgbEEz",
+                icon: "mdi:youtube",
+                color: "text-red-400 hover:text-red-300",
+            },
+        ],
+        episodes: [],
+    },
+    {
+        title: "FrontCast",
+        description:
+            "Participated in episode 37 (2 parts) talking about shadcn/ui and modern frontend architecture.",
+        role: "Guest",
+        episodes: [
+            {
+                title: "Part I: What is shadcn?",
+                url: "https://open.spotify.com/episode/2axTjQdVjM64HMKd96chN2",
+            },
+            {
+                title: "Part II: Pros & Cons of shadcn",
+                url: "https://open.spotify.com/episode/4Akrsnn0iaS1sTPquRl0MK",
+            },
+        ],
+    },
+    {
+        title: "Osim Tochna",
+        description:
+            "Episode 167: Talking about state management in web applications (starts at 21:00).",
+        role: "Guest",
+        episodes: [
+            {
+                title: "Ep 167: להפסיק לכתוב קוד מאפס (starts at 21:00)",
+                url: "https://www.osimhistoria.com/software/ep167-maps",
+            },
+        ],
+    },
+];
+---
+
+<ul class="flex flex-col gap-8">
+    {
+        podcasts.map((podcast) => (
+            <li class="group flex flex-col gap-2 border-l-2 border-transparent hover:border-zinc-500 pl-4 transition-all py-1">
+                <div class="flex flex-col gap-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-base font-medium tracking-tight text-neutral-100 group-hover:text-white transition-colors">
+                            {podcast.title}
+                        </h2>
+                        <span class="text-xs font-mono text-sky-300 border border-sky-900/50 bg-sky-950/30 px-1.5 py-0.5 rounded">
+                            {podcast.role}
+                        </span>
+                    </div>
+                    <p class="text-sm font-light text-pretty leading-relaxed text-neutral-400 max-w-xl group-hover:text-neutral-300 transition-colors">
+                        {podcast.description}
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap justify-between items-center gap-4 mt-2">
+                    <div class="flex gap-4 text-xs font-medium">
+                        {podcast.siteUrl && (
+                            <a
+                                href={podcast.siteUrl}
+                                class="text-sky-300 hover:text-sky-200 flex items-center gap-1 transition-colors"
+                                target="_blank"
+                            >
+                                Website <Icon name="mdi:web" class="size-3.5" />
+                            </a>
+                        )}
+
+                        {podcast.links && (
+                            <div class="flex gap-3 border-l border-zinc-700 pl-3">
+                                {podcast.links.map((link) => (
+                                    <a
+                                        href={link.url}
+                                        target="_blank"
+                                        class={`${link.color || "text-neutral-400 hover:text-white"} flex items-center gap-1 transition-colors`}
+                                    >
+                                        <Icon
+                                            name={link.icon}
+                                            class="size-3.5"
+                                        />
+                                        <span class="hidden sm:inline">
+                                            {link.label}
+                                        </span>
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+
+                        {podcast.episodes.length > 0 && (
+                            <div class="flex gap-3">
+                                {podcast.episodes.map((ep, i) => (
+                                    <a
+                                        href={ep.url}
+                                        target="_blank"
+                                        class="text-neutral-400 hover:text-white flex items-center gap-1 transition-colors"
+                                    >
+                                        <Icon
+                                            name="mdi:headphones"
+                                            class="size-3.5"
+                                        />
+                                        {podcast.episodes.length > 1
+                                            ? ep.title
+                                            : "Listen"}
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </li>
+        ))
+    }
+</ul>

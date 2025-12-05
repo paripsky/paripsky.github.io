@@ -9,6 +9,7 @@ import Pill from "../components/Pill.astro";
 import { Icon } from "astro-icon/components";
 import Post from "../components/Post.astro";
 import Presentations from "../components/Presentations.astro";
+import Podcasts from "../components/Podcasts.astro";
 
 type Mention = {
   title: string;
@@ -92,6 +93,9 @@ const posts = Object.values(postsGlob)
           <a href="#posts" class="hover:text-white transition-colors w-fit"
             >Posts</a
           >
+          <a href="#podcasts" class="hover:text-white transition-colors w-fit"
+            >Podcasts</a
+          >
           <a
             href="#presentations"
             class="hover:text-white transition-colors w-fit">Presentations</a
@@ -106,14 +110,17 @@ const posts = Object.values(postsGlob)
       </section>
     </div>
 
-    <div
-      class="flex flex-col gap-20 py-12"
-    >
+    <div class="flex flex-col gap-20 py-12">
       <section id="posts" class="flex flex-col gap-6">
         <Pill><Icon name="mdi:post" class="size-4" /> Posts</Pill>
         <ul class="flex flex-col gap-4">
           {posts.map((post) => <Post post={post} />)}
         </ul>
+      </section>
+
+      <section id="podcasts" class="flex flex-col gap-6">
+        <Pill><Icon name="mdi:microphone" class="size-4" /> Podcasts</Pill>
+        <Podcasts />
       </section>
 
       <section id="presentations" class="flex flex-col gap-6">
