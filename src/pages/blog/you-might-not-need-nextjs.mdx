@@ -1,0 +1,91 @@
+---
+layout: ../../layouts/BlogLayout.astro
+title: "You Might Not Need Next.js"
+author: paripsky
+description: "In times when the official React documentation recommends starting with a framework, is Next.js really a sensible default for everyone?"
+devToUrl: https://dev.to/paripsky/you-might-not-need-nextjs-4ejg
+date: 2025-08-05
+tags: [ "react", "nextjs" ]
+---
+
+In times when the [official React documentation](https://react.dev/learn/creating-a-react-app) says:
+> If you want to build a new app or website with React, we recommend starting with a framework.
+
+It's pretty understandable that any developer new to React will choose Next.js by default (It's also the first suggestion on the page).
+But is Next.js really a sensible default?
+
+# React on the server
+"Full-stack frameworks do not require a server.", that is what the React docs say, and it is true, Next.js and other full stack frameworks do have static exports, and React's docs do point to a page in Next.js's docs that explains this.
+However, the project initialization command (also the first terminal command in the docs page) is this:
+```bash
+npx create-next-app@latest
+```
+This command creates a regular Next.js app with a server, so unless developers specifically research static exports, many will end up with a server even though they never wanted or needed one.
+
+# The Old Way
+In a time, not that long ago, the default way to use React was `create-react-app`, a CLI tool that created and managed react project which were all Single Page Apps by default.
+As time went on, the project stopped being maintained, became outdated, and was eventually abandoned and archived.
+This leaves `create-react-app` projects looking for a migration path, and many developers are choosing Next.js, even when they haven't used a server before in their `create-react-app` projects.
+Personally, I still believe SPA is the most reasonable default for new React projects.
+
+# Next.js SPA
+To create a SPA with Next.js you need to edit your `next.config.ts` file like so:
+```ts
+import type { NextConfig } from 'next'
+ 
+const nextConfig: NextConfig = {
+  output: 'export',
+}
+ 
+export default nextConfig
+```
+This will generate an `out` folder with all of the static assets of your app (HTML, CSS, JS) that can be hosted without a server.
+
+Next.js's docs state that there are benefits to using the SPA mode:
+
+![Image description](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/bu4snf0hsx7u77fhtsa7.png)
+
+However, a quick look at the list of unsupported features makes it clear that SPAs aren't the primary use case for Next.js:
+
+![Image description](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/mouu2qswr9pam9gi5s2y.png)
+
+While you can build SPAs with Next.js, it’s not designed for it and in many cases, a simpler tool is more than enough.
+
+# Vite based SPA
+Vite is a build tool for modern dev projects, and has plugins for React, Vue and more.
+Vite can be used to build a Single Page App with React and is a closer alternative to `create-react-app` than other frameworks/tools as it is SPA by default and supports many things that `create-react-app` supported out of the box.
+Vite is mentioned in the React docs in a page called ["Build a React app from Scratch"](https://react.dev/learn/build-a-react-app-from-scratch) but it's clear that the React developers believe frameworks and the server to be the way forward for React.
+
+# You Might Not Need A Server
+
+A developer on twitter built [a cool website called PatternCraft](https://patterncraft.fun) that allows users to browse and copy background patterns.
+Like most new React developers, they used Next.js.
+
+As the site gained popularity, they encountered this issue:
+
+![Image description](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/zqbf64fqtzmovq87jpco.png)
+
+They've reached the free plan limits for server function calls, but, why are function calls needed for a website of this kind?
+Looking through it, all of the content is static, there's no auth, and in fact, the entire list of patterns is stored in a [single typescript file](https://github.com/megh-bari/pattern-craft/blob/d5e8fa7183a10421872e3b2bf3c35308d67dd269/src/app/utils/patterns.ts).
+Seems like there isn't a valid reason to use a server, using Next.js was the default way and they just went with it.
+Had they used Vite or Next.js's static export, they could've hosted their website for free in a static hosting site like Github Pages or Cloudflare Pages.
+
+# The Outcome
+Fortunately, PatternCraft's story ends on a high note:
+
+![Image description](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/w4xf09hx6x1z4ey3hl8m.png)
+
+Which is pretty cool, they got sponsored and can continue on, but not every developer is going to get that lucky.
+This case shows the importance of understanding React and the ecosystem in order to make the right choices when starting a new project.
+
+# Conclusion
+You may already know the excellent React documentation section titled “You Might Not Need an Effect.”
+
+I propose another: “You Might Not Need a Server.”
+
+It could start like this:
+
+Do you need a server? if the answer is "Yes" then use Next.js.
+if the answer is "No", you should use Vite and consider [Github Pages](https://pages.github.com/) or [Cloudflare Pages](https://pages.cloudflare.com/) to host your Single Page Application.
+
+Have you encountered uses of Next.js where a simple Vite SPA would suffice? Share your stories in the comments!

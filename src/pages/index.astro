@@ -33,7 +33,7 @@ const posts = Object.values(postsGlob).map(
     date: p.frontmatter.date,
     tags: p.frontmatter.tags,
     mentions: p.frontmatter.mentions ?? [],
-  }),
+  })).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
 );
 ---
 
