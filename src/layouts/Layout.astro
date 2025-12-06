@@ -64,7 +64,7 @@ const { title } = Astro.props;
 
         const cards = document.querySelectorAll("[data-spotlight]");
 
-        document.addEventListener("mousemove", (e) => {
+        function handleCardsSpotlightPosition(e) {
           cards.forEach((card) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -73,7 +73,10 @@ const { title } = Astro.props;
             card.style.setProperty("--x", `${x}px`);
             card.style.setProperty("--y", `${y}px`);
           });
-        });
+        }
+
+        document.addEventListener("mousemove", handleCardsSpotlightPosition);
+        document.addEventListener("wheel", handleCardsSpotlightPosition);
       });
     </script>
   </body>
