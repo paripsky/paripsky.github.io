@@ -22,8 +22,14 @@ const { post } = Astro.props;
 ---
 
 <li
-  class="group flex flex-col gap-2 border-l-2 border-transparent hover:border-zinc-500 pl-4 transition-all py-1"
+  class="group relative flex flex-col gap-2 border-l-2 border-transparent pl-4 transition-all py-1"
+  data-spotlight
 >
+  <div
+    class="absolute left-[-2px] top-0 bottom-0 w-[2px] bg-zinc-500 transition-opacity duration-300 pointer-events-none"
+    style="mask-image: radial-gradient(200px circle at var(--x) var(--y), black, transparent);"
+  >
+  </div>
   <a href={post.url} class="block h-full">
     <div class="flex flex-col justify-between gap-1 items-baseline">
       <h2
@@ -49,10 +55,9 @@ const { post } = Astro.props;
           {post.mentions.length > 0 && (
             <span class="flex flex-wrap gap-1 text-neutral-400">
               Featured in
-              <div>
+              <div class="flex gap-1 flex-wrap">
                 {post.mentions.map((mention, i) => (
-                  <>
-                    {i !== 0 && <span>, </span>}
+                  <div class="flex">
                     <a
                       href={mention.url}
                       target="_blank"
@@ -60,7 +65,8 @@ const { post } = Astro.props;
                     >
                       {mention.title}
                     </a>
-                  </>
+                    {i < post.mentions.length - 1 && <span>, </span>}
+                  </div>
                 ))}
               </div>
             </span>
