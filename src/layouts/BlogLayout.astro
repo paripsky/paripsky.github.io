@@ -2,43 +2,70 @@
 import type { MarkdownLayoutProps } from "astro";
 import { ClientRouter } from "astro:transitions";
 import { Icon } from "astro-icon/components";
+import SeoHead from "../components/SeoHead.astro";
 import { formatDate } from "../utils/date";
 
 import "../styles/global.css";
 
 type Props = MarkdownLayoutProps<{
   title: string;
+  seoTitle?: string;
   description: string;
   author: string;
   date: string;
   devToUrl: string;
+  image: string;
+  imageAlt: string;
+  tags: string[];
 }>;
 
-const { frontmatter, url } = Astro.props;
+const { frontmatter } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const imageUrl = new URL(frontmatter.image, Astro.site);
+const publishedTime = new Date(frontmatter.date).toISOString();
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: frontmatter.title,
+  description: frontmatter.description,
+  image: imageUrl.href,
+  datePublished: publishedTime,
+  dateModified: publishedTime,
+  mainEntityOfPage: canonicalUrl.href,
+  author: {
+    "@type": "Person",
+    name: "Yonatan Paripsky",
+    url: new URL("/", Astro.site).href,
+  },
+  publisher: {
+    "@type": "Person",
+    name: "Yonatan Paripsky",
+    url: new URL("/", Astro.site).href,
+  },
+  keywords: frontmatter.tags,
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content={frontmatter.title} />
-    <meta property="og:description" content={frontmatter.description} />
-    <meta property="og:url" content={url} />
-    <meta property="og:type" content="website" />
-
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content={frontmatter.title} />
-    <meta name="twitter:description" content={frontmatter.description} />
-
-    <meta name="description" content={frontmatter.description} />
+    <SeoHead
+      title={frontmatter.title}
+      pageTitle={frontmatter.seoTitle ?? frontmatter.title}
+      description={frontmatter.description}
+      image={frontmatter.image}
+      imageAlt={frontmatter.imageAlt}
+      type="article"
+      publishedTime={publishedTime}
+      tags={frontmatter.tags}
+    />
     <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#020617" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{frontmatter.title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
     <ClientRouter />
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1YD1ZSVP59"
     ></script>
     <script is:inline>

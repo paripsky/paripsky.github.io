@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import SeoHead from "../components/SeoHead.astro";
 
 import "../styles/global.css";
 
@@ -8,39 +9,44 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const description =
+  "Yonatan Paripsky is a Senior Software Engineer focused on JavaScript, React, Node.js, cloud platforms, and building thoughtful software products.";
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Yonatan Paripsky",
+  url: new URL("/", Astro.site).href,
+  jobTitle: "Senior Software Engineer",
+  sameAs: [
+    "https://github.com/paripsky",
+    "https://www.linkedin.com/in/paripsky",
+  ],
+  knowsAbout: [
+    "JavaScript",
+    "React",
+    "Node.js",
+    "Cloud platforms",
+    "Software engineering",
+  ],
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="@paripsky's Portfolio" />
-    <meta
-      property="og:description"
-      content="Explore the portfolio of Paripsky, a full stack engineer specializing in JavaScript, React, and Node.js."
-    />
-    <meta property="og:url" content="https://paripsky.github.io/" />
-    <meta property="og:type" content="website" />
-
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Paripsky's Portfolio" />
-    <meta
-      name="twitter:description"
-      content="Explore the portfolio of Paripsky, a full stack engineer specializing in JavaScript, React, and Node.js."
-    />
-
-    <meta
-      name="description"
-      content="Explore the portfolio of Paripsky, a full stack engineer specializing in JavaScript, React, and Node.js."
+    <SeoHead
+      title={title}
+      description={description}
+      image="/images/seo/home.jpg"
+      imageAlt="Yonatan Paripsky, Senior Software Engineer"
     />
     <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#020617" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
     <ClientRouter />
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1YD1ZSVP59"
     ></script>
     <script is:inline>

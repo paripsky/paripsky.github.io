@@ -1,11 +1,12 @@
 import { defineConfig } from 'astro/config';
 import icon from "astro-icon";
 import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
-// https://astro.build/config
 export default defineConfig({
-  integrations: [icon(), mdx()],
+  site: "https://paripsky.github.io",
+  integrations: [icon(), mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()]
   }
