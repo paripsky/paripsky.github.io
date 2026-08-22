@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
+import freshLogo from "../assets/fresh-logo.svg";
 
 const colors = [
   "hover:border-sky-400 hover:shadow-sky-800",
@@ -35,24 +36,21 @@ const projects = [
     description:
       "A short link generator with built in analytics, built with Fresh and Deno KV.",
     githubUrl: "https://github.com/paripsky/FreshLinks",
-    siteUrl: "https://freshlinks.deno.dev",
-    image: "https://freshlinks.deno.dev/favicon.ico",
+    image: freshLogo,
     tags: ["Deno", "Fresh"],
   },
   {
     title: "OG Scrapi",
     description:
-      "An API that retrieves Open Graph (OG) meta tags and other metadata from a given URL, providing a convenient way to access and utilize website metadata.",
+      "An API for fetching Open Graph tags and other metadata from any URL.",
     githubUrl: "https://github.com/paripsky/og-scrapi",
-    siteUrl:
-      "https://og-scrapi.deno.dev/api/meta?url=https://develist.vercel.app/",
     image: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Deno_2021.svg",
     tags: ["Deno", "TS"],
   },
   {
     title: "Develist",
     description:
-      "Develist is a web application built using Nuxt 3 and Supabase, designed to help developers manage and organize their development tools and resources.",
+      "An app for organizing development tools and resources, built with Nuxt 3 and Supabase.",
     githubUrl: "https://github.com/paripsky/develist",
     siteUrl:
       "https://develist.vercel.app/?link=b07aab82-0905-41fd-93b8-6f19ce2bdfb5",
@@ -108,7 +106,7 @@ const projects = [
               {project.description}
             </p>
             <div class="card-actions justify-between items-center mt-auto pt-2">
-              <div class="flex flex-wrap justify-between gap-2 w-full">
+              <div class="flex flex-col items-start gap-2 w-full">
                 <div class="flex gap-3">
                   {project.githubUrl && (
                     <a
