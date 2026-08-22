@@ -10,6 +10,8 @@ import { Icon } from "astro-icon/components";
 import Post from "../components/Post.astro";
 import Presentations from "../components/Presentations.astro";
 import Podcasts from "../components/Podcasts.astro";
+import Setup from "../components/Setup.astro";
+import Software from "../components/Software.astro";
 
 type Mention = {
   title: string;
@@ -106,6 +108,12 @@ const posts = Object.values(postsGlob)
           <a href="#timeline" class="hover:text-white transition-colors w-fit"
             >Experience</a
           >
+          <a href="#setup" class="hover:text-white transition-colors w-fit"
+            >Setup</a
+          >
+          <a href="#software" class="hover:text-white transition-colors w-fit"
+            >Software</a
+          >
         </nav>
       </section>
     </div>
@@ -140,6 +148,16 @@ const posts = Object.values(postsGlob)
       <section id="timeline" class="flex flex-col gap-6">
         <Pill><Icon name="mdi:work" class="size-4" /> Work</Pill>
         <Timeline />
+      </section>
+
+      <section id="setup" class="flex flex-col gap-6">
+        <Pill><Icon name="mdi:keyboard-outline" class="size-4" /> Setup</Pill>
+        <Setup />
+      </section>
+
+      <section id="software" class="flex flex-col gap-6">
+        <Pill><Icon name="mdi:apps" class="size-4" /> Software</Pill>
+        <Software />
       </section>
     </div>
   </main>

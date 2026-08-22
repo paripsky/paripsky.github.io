@@ -11,10 +11,10 @@ const id = crypto.randomUUID();
     transform-style: preserve-3d;
   }
 
-  @media (pointer: fine) {
+  @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .tilt {
-      transform: perspective(300px) rotateY(var(--rotateX))
-        rotateX(var(--rotateY));
+      transform: perspective(600px) rotateX(0deg) rotateY(0deg);
+      will-change: transform;
     }
 
     .tilt::before,
@@ -36,25 +36,92 @@ const id = crypto.randomUUID();
 
 <script type="module" is:inline>
   document.addEventListener("astro:page-load", () => {
+    if (
+      !window.matchMedia("(pointer: fine)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
+
     const tiltElements = document.querySelectorAll(".tilt");
 
-    tiltElements.forEach((el) => {
-      document.addEventListener("mousemove", (e) => {
-        rotateElement(e, el);
-      });
+    tiltElements.forEach((element) => {
+      if (!(element instanceof HTMLElement) || element.dataset.tiltReady) return;
+      element.dataset.tiltReady = "true";
+
+      let currentX = 0;
+      let currentY = 0;
+      let targetX = 0;
+      let targetY = 0;
+      let velocityX = 0;
+      let velocityY = 0;
+      let frame = 0;
+      const controller = new AbortController();
+
+      const animate = () => {
+        velocityX = (velocityX + (targetX - currentX) * 0.06) * 0.78;
+        velocityY = (velocityY + (targetY - currentY) * 0.06) * 0.78;
+        currentX += velocityX;
+        currentY += velocityY;
+        element.style.transform = `perspective(600px) rotateX(${currentX}deg) rotateY(${currentY}deg)`;
+
+        if (
+          Math.abs(targetX - currentX) > 0.01 ||
+          Math.abs(targetY - currentY) > 0.01 ||
+          Math.abs(velocityX) > 0.01 ||
+          Math.abs(velocityY) > 0.01
+        ) {
+          frame = requestAnimationFrame(animate);
+        } else {
+          frame = 0;
+        }
+      };
+
+      const startAnimation = () => {
+        if (!frame) frame = requestAnimationFrame(animate);
+      };
+
+      document.addEventListener(
+        "pointermove",
+        (event) => {
+          const rect = element.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const horizontalRange = Math.max(window.innerWidth / 2, rect.width);
+          const verticalRange = Math.max(window.innerHeight / 2, rect.height);
+          const horizontal = Math.max(
+            -1,
+            Math.min(1, (event.clientX - centerX) / horizontalRange),
+          );
+          const vertical = Math.max(
+            -1,
+            Math.min(1, (event.clientY - centerY) / verticalRange),
+          );
+
+          targetX = vertical * -10;
+          targetY = horizontal * 10;
+          startAnimation();
+        },
+        { signal: controller.signal },
+      );
+
+      document.addEventListener(
+        "pointerleave",
+        () => {
+          targetX = 0;
+          targetY = 0;
+          startAnimation();
+        },
+        { signal: controller.signal },
+      );
+
+      document.addEventListener(
+        "astro:before-swap",
+        () => {
+          controller.abort();
+          cancelAnimationFrame(frame);
+        },
+        { once: true },
+      );
     });
-
-    function rotateElement(event, element) {
-      const x = event.clientX;
-      const y = event.clientY;
-
-      const middleX = window.innerWidth / 2;
-      const middleY = window.innerHeight / 2;
-      const offsetX = ((x - middleX) / middleX) * 15;
-      const offsetY = ((y - middleY) / middleY) * 15;
-
-      element.style.setProperty("--rotateX", offsetX + "deg");
-      element.style.setProperty("--rotateY", -1 * offsetY + "deg");
-    }
   });
 </script>
