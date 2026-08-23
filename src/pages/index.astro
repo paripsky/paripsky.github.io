@@ -12,6 +12,8 @@ import Presentations from "../components/Presentations.astro";
 import Podcasts from "../components/Podcasts.astro";
 import Setup from "../components/Setup.astro";
 import Software from "../components/Software.astro";
+import Consoles from "../components/Consoles.astro";
+import ProductPreview from "../components/ProductPreview.astro";
 
 type Mention = {
   title: string;
@@ -111,8 +113,11 @@ const posts = Object.values(postsGlob)
           <a href="#setup" class="hover:text-white transition-colors w-fit"
             >Setup</a
           >
+          <a href="#consoles" class="hover:text-white transition-colors w-fit"
+            >Consoles</a
+          >
           <a href="#software" class="hover:text-white transition-colors w-fit"
-            >Software</a
+            >On My Mac</a
           >
         </nav>
       </section>
@@ -155,11 +160,17 @@ const posts = Object.values(postsGlob)
         <Setup />
       </section>
 
+      <section id="consoles" class="flex flex-col gap-6">
+        <Pill><Icon name="mdi:gamepad-variant-outline" class="size-4" /> Consoles</Pill>
+        <Consoles />
+      </section>
+
       <section id="software" class="flex flex-col gap-6">
-        <Pill><Icon name="mdi:apps" class="size-4" /> Software</Pill>
+        <Pill><Icon name="mdi:apps" class="size-4" /> On My Mac</Pill>
         <Software />
       </section>
     </div>
   </main>
+  <ProductPreview />
   <DesktopDestroyer />
 </Layout>

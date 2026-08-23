@@ -1,0 +1,81 @@
+---
+import type { ImageMetadata } from "astro";
+import ProductRow from "./ProductRow.astro";
+import ps5SpiderMan from "../assets/consoles/ps5-spiderman.png";
+import steamDeck from "../assets/consoles/steam-deck.png";
+import nintendoSwitch from "../assets/consoles/nintendo-switch.png";
+import anbernicRgDs from "../assets/consoles/anbernic-rg-ds.png";
+import anbernicRgRotate from "../assets/consoles/anbernic-rg-rotate.png";
+import miyooMini from "../assets/consoles/miyoo-mini.png";
+
+type Console = {
+  name: string;
+  href: string;
+  image: ImageMetadata;
+  alt: string;
+  note: string;
+  attributes: string[];
+  previewWidths: number[];
+};
+
+const consoles: Console[] = [
+  {
+    name: "PlayStation 5 Marvel's Spider-Man 2 Limited Edition",
+    href: "https://www.playstation.com/en-gb/games/marvels-spider-man-2/limited-editions/",
+    image: ps5SpiderMan,
+    alt: "PlayStation 5 Marvel's Spider-Man 2 Limited Edition console with matching DualSense controller",
+    note: "The Spider-Man 2 Limited Edition PS5, with its red-and-black symbiote cover and matching DualSense controller.",
+    attributes: ["Limited edition", "Disc console", "DualSense"],
+    previewWidths: [160, 240, 320, 720, 1200, 1400],
+  },
+  {
+    name: "Steam Deck",
+    href: "https://www.steamdeck.com/",
+    image: steamDeck,
+    alt: "Black Steam Deck handheld gaming PC",
+    note: "My Steam library in a handheld, with quick suspend and resume when a longer session gets interrupted.",
+    attributes: ["Handheld PC", "SteamOS", "Suspend / resume"],
+    previewWidths: [160, 240, 320, 720, 1200, 1600],
+  },
+  {
+    name: "Nintendo Switch",
+    href: "https://www.nintendo.com/us/gaming-systems/switch/",
+    image: nintendoSwitch,
+    alt: "Nintendo Switch with neon blue and neon red Joy-Con controllers",
+    note: "Nintendo's hybrid console, equally at home in the dock or with the Joy-Con attached.",
+    attributes: ["Hybrid", "Joy-Con", "Dockable"],
+    previewWidths: [160, 240, 320, 720, 1200, 1600],
+  },
+  {
+    name: "Anbernic RG DS",
+    href: "https://anbernic.com/products/rgds",
+    image: anbernicRgDs,
+    alt: "Black and crimson Anbernic RG DS dual-screen handheld",
+    note: "A clamshell handheld built around two 4-inch screens, with Android and Linux support.",
+    attributes: ["Dual screen", "Clamshell", "Android / Linux"],
+    previewWidths: [160, 240, 320, 720, 1200, 1600],
+  },
+  {
+    name: "Anbernic RG Rotate",
+    href: "https://anbernic.com/products/rg-rotate",
+    image: anbernicRgRotate,
+    alt: "Silver Anbernic RG Rotate handheld with its screen rotated open",
+    note: "The odd one: a square-screen handheld whose display rotates to reveal the controls underneath.",
+    attributes: ["Rotating screen", "3.5-inch", "Android"],
+    previewWidths: [160, 240, 320, 720, 1200, 1600],
+  },
+  {
+    name: "Miyoo Mini",
+    href: "https://www.keepretro.com/products/onion-os-miyoo-mini-v4",
+    image: miyooMini,
+    alt: "Gray Miyoo Mini vertical retro handheld",
+    note: "The smallest console here, a pocket-sized Linux handheld for older games and short sessions.",
+    attributes: ["Pocket-size", "2.8-inch", "Linux"],
+    previewWidths: [160, 240, 320, 720, 1200, 1600],
+  },
+];
+---
+
+<ul class="divide-y divide-zinc-800 border-y border-zinc-800">
+  {consoles.map((console) => <ProductRow product={console} />)}
+</ul>
