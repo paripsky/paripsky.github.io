@@ -72,51 +72,53 @@ const tools: Tool[] = [
 ];
 ---
 
-<ul class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-  {
-    tools.map((tool) => (
-      <li>
-        <a
-          href={tool.href}
-          target="_blank"
-          rel="noreferrer"
-          data-spotlight
-          style={`--tool-rgb: ${tool.color}`}
-          class="software-card group relative flex min-h-36 items-center gap-4 overflow-hidden rounded-xl border border-zinc-800 bg-slate-900/30 p-4 transition hover:border-zinc-700"
-        >
-          <div class="software-glow pointer-events-none absolute inset-0" />
-          <div class="software-logo relative z-10 flex size-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/70 p-1.5">
-            <Image
-              src={tool.logo}
-              alt={tool.logoAlt}
-              widths={[64, 128]}
-              sizes="64px"
-              format="webp"
-              loading="lazy"
-              decoding="async"
-              class:list={[
-                "size-full object-contain",
-                tool.rounded && "rounded-[30%]",
-              ]}
+<div class="@container">
+  <ul class="grid grid-cols-1 gap-3 @md:grid-cols-2">
+    {
+      tools.map((tool) => (
+        <li>
+          <a
+            href={tool.href}
+            target="_blank"
+            rel="noreferrer"
+            data-spotlight
+            style={`--tool-rgb: ${tool.color}`}
+            class="software-card group relative flex min-h-36 items-center gap-4 overflow-hidden rounded-xl border border-zinc-800 bg-slate-900/30 p-4 transition hover:border-zinc-700"
+          >
+            <div class="software-glow pointer-events-none absolute inset-0" />
+            <div class="software-logo relative z-10 flex size-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/70 p-1.5">
+              <Image
+                src={tool.logo}
+                alt={tool.logoAlt}
+                widths={[64, 128]}
+                sizes="64px"
+                format="webp"
+                loading="lazy"
+                decoding="async"
+                class:list={[
+                  "size-full object-contain",
+                  tool.rounded && "rounded-[30%]",
+                ]}
+              />
+            </div>
+            <div class="relative z-10 flex min-w-0 flex-1 flex-col gap-1.5">
+              <span class="text-base font-medium tracking-tight text-neutral-200">
+                {tool.name}
+              </span>
+              <span class="text-xs font-light leading-relaxed text-neutral-500">
+                {tool.purpose}
+              </span>
+            </div>
+            <Icon
+              name="mdi:arrow-top-right"
+              class="relative z-10 size-3.5 shrink-0 self-start text-neutral-600 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-sky-300"
             />
-          </div>
-          <div class="relative z-10 flex min-w-0 flex-1 flex-col gap-1.5">
-            <span class="text-base font-medium tracking-tight text-neutral-200">
-              {tool.name}
-            </span>
-            <span class="text-xs font-light leading-relaxed text-neutral-500">
-              {tool.purpose}
-            </span>
-          </div>
-          <Icon
-            name="mdi:arrow-top-right"
-            class="relative z-10 size-3.5 shrink-0 self-start text-neutral-600 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-sky-300"
-          />
-        </a>
-      </li>
-    ))
-  }
-</ul>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
 
 <style>
   .software-card {
