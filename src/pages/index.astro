@@ -42,6 +42,17 @@ const posts = Object.values(postsGlob)
     }),
   )
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+const navigationItems = [
+  { href: "#posts", label: "Posts" },
+  { href: "#podcasts", label: "Podcasts" },
+  { href: "#presentations", label: "Presentations" },
+  { href: "#projects", label: "Projects" },
+  { href: "#timeline", label: "Experience" },
+  { href: "#setup", label: "Setup" },
+  { href: "#consoles", label: "Consoles" },
+  { href: "#software", label: "On My Mac" },
+];
 ---
 
 <Layout title="Yonatan Paripsky | Senior Software Engineer">
@@ -92,33 +103,22 @@ const posts = Object.values(postsGlob)
         >
 
         <nav
+          data-section-navigation
+          aria-label="Page sections"
           class="hidden md:flex flex-col gap-2 mt-12 text-sm text-neutral-400"
         >
-          <a href="#posts" class="hover:text-white transition-colors w-fit"
-            >Posts</a
-          >
-          <a href="#podcasts" class="hover:text-white transition-colors w-fit"
-            >Podcasts</a
-          >
-          <a
-            href="#presentations"
-            class="hover:text-white transition-colors w-fit">Presentations</a
-          >
-          <a href="#projects" class="hover:text-white transition-colors w-fit"
-            >Projects</a
-          >
-          <a href="#timeline" class="hover:text-white transition-colors w-fit"
-            >Experience</a
-          >
-          <a href="#setup" class="hover:text-white transition-colors w-fit"
-            >Setup</a
-          >
-          <a href="#consoles" class="hover:text-white transition-colors w-fit"
-            >Consoles</a
-          >
-          <a href="#software" class="hover:text-white transition-colors w-fit"
-            >On My Mac</a
-          >
+          {
+            navigationItems.map((item) => (
+              <a
+                href={item.href}
+                data-section-link
+                data-label={item.label}
+                class="section-link w-fit focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-300"
+              >
+                {item.label}
+              </a>
+            ))
+          }
         </nav>
       </section>
     </div>
@@ -174,3 +174,135 @@ const posts = Object.values(postsGlob)
   <ProductPreview />
   <DesktopDestroyer />
 </Layout>
+
+<style>
+  .section-link {
+    --section-visibility: 0;
+    position: relative;
+    color: rgb(163 163 163);
+    isolation: isolate;
+  }
+
+  .section-link::before {
+    position: absolute;
+    inset: 0;
+    color: rgb(186 230 253);
+    content: attr(data-label);
+    opacity: var(--section-visibility);
+    pointer-events: none;
+    transition: opacity 100ms linear;
+  }
+
+  .section-link::after {
+    position: absolute;
+    top: 50%;
+    left: -0.75rem;
+    width: 2px;
+    height: 1em;
+    border-radius: 999px;
+    background: rgb(125 211 252);
+    content: "";
+    opacity: var(--section-visibility);
+    pointer-events: none;
+    transform: translateY(-50%) scaleY(calc(0.7 + var(--section-visibility) * 0.3));
+    transform-origin: center;
+    transition:
+      opacity 100ms linear,
+      transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .section-link:focus-visible::before {
+    color: white;
+    opacity: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .section-link:hover::before {
+      color: white;
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section-link::before,
+    .section-link::after {
+      transition: opacity 100ms linear;
+    }
+
+    .section-link::after {
+      transform: translateY(-50%);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const sectionWindow = window as Window & {
+      sectionNavigationController?: AbortController;
+    };
+    sectionWindow.sectionNavigationController?.abort();
+
+    const navigation = document.querySelector<HTMLElement>("[data-section-navigation]");
+    if (!navigation) return;
+
+    const controller = new AbortController();
+    sectionWindow.sectionNavigationController = controller;
+    const items: Array<{
+      link: HTMLAnchorElement;
+      section: HTMLElement;
+      visibility: number;
+    }> = [];
+
+    navigation.querySelectorAll<HTMLAnchorElement>("[data-section-link]").forEach((link) => {
+      const section = document.getElementById(decodeURIComponent(link.hash.slice(1)));
+      if (section) items.push({ link, section, visibility: -1 });
+    });
+
+    let frame = 0;
+
+    const updateNavigation = () => {
+      frame = 0;
+      const viewportHeight = window.innerHeight;
+      let currentItem = items[0];
+
+      items.forEach((item) => {
+        const rect = item.section.getBoundingClientRect();
+        const visibleStart = Math.max(rect.top, 0);
+        const visibleEnd = Math.min(rect.bottom, viewportHeight);
+        const visiblePixels = Math.max(0, visibleEnd - visibleStart);
+        const referenceHeight = Math.min(rect.height, viewportHeight);
+        const visibility = referenceHeight > 0
+          ? Math.min(1, visiblePixels / referenceHeight)
+          : 0;
+
+        if (Math.abs(visibility - item.visibility) > 0.001) {
+          item.visibility = visibility;
+          item.link.style.setProperty("--section-visibility", visibility.toFixed(3));
+        }
+
+        if (!currentItem || visibility > currentItem.visibility) currentItem = item;
+      });
+
+      items.forEach((item) => {
+        if (item === currentItem && item.visibility > 0) {
+          item.link.setAttribute("aria-current", "location");
+        } else {
+          item.link.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    const scheduleUpdate = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(updateNavigation);
+    };
+
+    window.addEventListener("scroll", scheduleUpdate, {
+      passive: true,
+      signal: controller.signal,
+    });
+    window.addEventListener("resize", scheduleUpdate, { signal: controller.signal });
+    controller.signal.addEventListener("abort", () => cancelAnimationFrame(frame));
+    updateNavigation();
+  });
+</script>
