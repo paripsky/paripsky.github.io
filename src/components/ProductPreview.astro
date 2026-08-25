@@ -39,25 +39,43 @@ import { Icon } from "astro-icon/components";
     height: min(88vh, 820px);
     max-width: none;
     max-height: none;
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
     transform-origin: center;
+    transition:
+      opacity 160ms var(--ease-out),
+      transform 200ms var(--ease-out);
   }
 
   .product-dialog[open] {
     opacity: 1;
     transform: translateY(0) scale(1);
-    transition:
-      opacity 180ms var(--ease-out),
-      transform 220ms var(--ease-out);
   }
 
   .product-dialog::backdrop {
     background: rgb(2 6 23 / 0.88);
     backdrop-filter: blur(12px);
+    opacity: 0;
+    transition: opacity 160ms var(--ease-out);
   }
 
   .product-dialog[open]::backdrop {
     opacity: 1;
-    transition: opacity 180ms var(--ease-out);
+  }
+
+  .product-dialog[open].is-opening,
+  .product-dialog[open].is-closing {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+
+  .product-dialog[open].is-opening::backdrop,
+  .product-dialog[open].is-closing::backdrop {
+    opacity: 0;
+  }
+
+  .product-dialog.is-closing {
+    pointer-events: none;
   }
 
   .preview-panel {
@@ -74,32 +92,20 @@ import { Icon } from "astro-icon/components";
     transform: scale(0.97);
   }
 
-  @starting-style {
-    .product-dialog[open] {
-      opacity: 0;
-      transform: translateY(12px) scale(0.965);
-    }
-
-    .product-dialog[open]::backdrop {
-      opacity: 0;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
+    .product-dialog,
     .product-dialog[open] {
       transform: none;
       transition: opacity 140ms ease-out;
     }
 
-    .product-dialog[open]::backdrop {
+    .product-dialog::backdrop {
       transition: opacity 140ms ease-out;
     }
 
-    @starting-style {
-      .product-dialog[open] {
-        opacity: 0;
-        transform: none;
-      }
+    .product-dialog[open].is-opening,
+    .product-dialog[open].is-closing {
+      transform: none;
     }
   }
 </style>
@@ -143,20 +149,41 @@ import { Icon } from "astro-icon/components";
       let previewRequest = 0;
       let transitionRun = 0;
       let activeSource: HTMLImageElement | null = null;
+      let closing = false;
 
       const transitionDocument = document as Document & {
         startViewTransition?: (update: () => void) => { finished: Promise<void> };
       };
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const precisePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+      const compactViewport = window.matchMedia("(max-width: 767px)");
+
+      const canUseSharedTransition = () =>
+        Boolean(
+          transitionDocument.startViewTransition &&
+            precisePointer.matches &&
+            !compactViewport.matches &&
+            !reduceMotion.matches,
+        );
+
+      const finishDialogClose = () => {
+        dialog.classList.remove("is-opening", "is-closing");
+        dialog.close();
+        activeSource = null;
+        closing = false;
+      };
 
       const closePreview = () => {
-        if (!dialog.open) return;
+        if (!dialog.open || closing) return;
 
+        closing = true;
+        previewRequest++;
         const source = activeSource;
-        if (!source?.isConnected || !transitionDocument.startViewTransition || reduceMotion.matches) {
+        if (!source?.isConnected || !canUseSharedTransition()) {
           transitionRun++;
-          dialog.close();
-          activeSource = null;
+          dialog.classList.remove("is-opening");
+          dialog.classList.add("is-closing");
+          window.setTimeout(finishDialogClose, reduceMotion.matches ? 140 : 200);
           return;
         }
 
@@ -165,7 +192,7 @@ import { Icon } from "astro-icon/components";
         const transition = transitionDocument.startViewTransition(() => {
           previewImage.style.viewTransitionName = "";
           source.style.viewTransitionName = "product-preview-image";
-          dialog.close();
+          finishDialogClose();
         });
         const clearTransitionNames = () => {
           if (run !== transitionRun) return;
@@ -182,51 +209,63 @@ import { Icon } from "astro-icon/components";
           const source = button.querySelector<HTMLImageElement>("img");
           if (!source) return;
 
+          const immediateSource = source.currentSrc || source.src;
           const sources = source.srcset
             .split(",")
             .map((candidate) => candidate.trim().split(/\s+/)[0])
             .filter(Boolean);
 
-          const nextSource = sources.at(-1) ?? source.currentSrc ?? source.src;
+          const nextSource = sources.at(-1) ?? immediateSource;
           const request = ++previewRequest;
-          const nextImage = new Image();
-          nextImage.src = nextSource;
-
-          try {
-            await nextImage.decode();
-          } catch {
-            if (!nextImage.complete) return;
-          }
-
-          if (request !== previewRequest) return;
+          closing = false;
           activeSource = source;
 
           const openPreview = () => {
-            previewImage.src = nextSource;
+            previewImage.src = immediateSource;
             previewImage.alt = source.alt;
             previewTitle.textContent = source.alt;
             dialog.showModal();
           };
 
-          if (!transitionDocument.startViewTransition || reduceMotion.matches) {
+          let transitionFinished = Promise.resolve();
+
+          if (!canUseSharedTransition()) {
+            dialog.classList.add("is-opening");
             openPreview();
-            return;
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => dialog.classList.remove("is-opening"));
+            });
+          } else {
+            const run = ++transitionRun;
+            source.style.viewTransitionName = "product-preview-image";
+            const transition = transitionDocument.startViewTransition(() => {
+              source.style.viewTransitionName = "";
+              previewImage.style.viewTransitionName = "product-preview-image";
+              openPreview();
+            });
+            const clearTransitionNames = () => {
+              if (run !== transitionRun) return;
+              source.style.viewTransitionName = "";
+              previewImage.style.viewTransitionName = "";
+            };
+
+            transitionFinished = transition.finished.then(clearTransitionNames, clearTransitionNames);
           }
 
-          const run = ++transitionRun;
-          source.style.viewTransitionName = "product-preview-image";
-          const transition = transitionDocument.startViewTransition(() => {
-            source.style.viewTransitionName = "";
-            previewImage.style.viewTransitionName = "product-preview-image";
-            openPreview();
-          });
-          const clearTransitionNames = () => {
-            if (run !== transitionRun) return;
-            source.style.viewTransitionName = "";
-            previewImage.style.viewTransitionName = "";
-          };
+          if (nextSource === immediateSource) return;
 
-          transition.finished.then(clearTransitionNames, clearTransitionNames);
+          const nextImage = new Image();
+          nextImage.src = nextSource;
+
+          try {
+            await Promise.all([nextImage.decode(), transitionFinished]);
+          } catch {
+            if (!nextImage.complete) return;
+            await transitionFinished;
+          }
+
+          if (request !== previewRequest || !dialog.open || activeSource !== source) return;
+          previewImage.src = nextSource;
         });
       });
 
