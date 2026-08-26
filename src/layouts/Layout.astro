@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import ProductPreviewHistoryGuard from "../components/ProductPreviewHistoryGuard.astro";
 import SeoHead from "../components/SeoHead.astro";
 
 import "../styles/global.css";
@@ -46,6 +47,7 @@ const personSchema = {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    <ProductPreviewHistoryGuard />
     <ClientRouter />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1YD1ZSVP59"
     ></script>

@@ -1,0 +1,19 @@
+<script is:inline>
+  if (!window.__productPreviewHistoryGuard) {
+    window.__productPreviewHistoryGuard = true;
+    window.addEventListener(
+      "popstate",
+      (event) => {
+        const previewOpen = document.documentElement.dataset.productPreviewOpen === "true";
+        const previewIndex = event.state?.productPreviewIndex;
+        if (!previewOpen && typeof previewIndex !== "number") return;
+
+        event.stopImmediatePropagation();
+        window.dispatchEvent(
+          new CustomEvent("product-preview-history", { detail: event.state }),
+        );
+      },
+      { capture: true },
+    );
+  }
+</script>
