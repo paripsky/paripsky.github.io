@@ -11,7 +11,6 @@ export type Product = {
   note: string;
   attributes: string[];
   previewWidths: number[];
-  currentLabel?: string;
 };
 
 type Props = {
@@ -32,13 +31,6 @@ const { product, featured = false } = Astro.props;
     ]}
   >
     <div class="flex min-w-0 flex-col gap-3">
-      {
-        product.currentLabel && (
-          <span class="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-sky-300">
-            {product.currentLabel}
-          </span>
-        )
-      }
       <a
         href={product.href}
         target="_blank"
@@ -46,7 +38,7 @@ const { product, featured = false } = Astro.props;
         class="group/link flex w-fit items-start gap-2"
       >
         <h4
-          class="text-base font-medium tracking-tight text-neutral-200 transition-colors group-hover/link:text-white"
+          class="text-base font-medium tracking-tight text-neutral-100 transition-colors group-hover/link:text-white"
         >
           {product.name}
         </h4>
@@ -55,13 +47,13 @@ const { product, featured = false } = Astro.props;
           class="mt-0.5 size-3.5 shrink-0 text-neutral-600 transition group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 group-hover/link:text-sky-300"
         />
       </a>
-      <p class="text-xs font-light leading-relaxed text-neutral-500 sm:text-sm">
+      <p class="text-sm font-light leading-relaxed text-neutral-400">
         {product.note}
       </p>
-      <ul class="hidden flex-wrap gap-x-3 gap-y-1 sm:flex">
+      <ul class="hidden flex-wrap gap-1.5 sm:flex">
         {
           product.attributes.map((attribute) => (
-            <li class="text-[0.68rem] uppercase tracking-wider text-neutral-600">
+            <li class="rounded border border-slate-700 bg-slate-800/50 px-1.5 py-0.5 text-xs text-neutral-400">
               {attribute}
             </li>
           ))
@@ -100,6 +92,15 @@ const { product, featured = false } = Astro.props;
 </li>
 
 <style>
+  .product-image {
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    transition: transform 140ms var(--ease-out);
+  }
+
+  .product-image:active {
+    transform: scale(0.97);
+  }
+
   [data-product-tilt] {
     --tilt-x: 0deg;
     --tilt-y: 0deg;
@@ -118,11 +119,6 @@ const { product, featured = false } = Astro.props;
       transform 180ms ease-out;
   }
 
-  .product-image:hover [data-product-image] {
-    transform: translate3d(0, 0, 28px) scale(1.04);
-    filter: drop-shadow(0 22px 22px rgb(0 0 0 / 0.38));
-  }
-
   .product-shadow {
     background: rgb(0 0 0 / 0.5);
     filter: blur(16px);
@@ -130,7 +126,15 @@ const { product, featured = false } = Astro.props;
     transition: transform 180ms ease-out;
   }
 
+  @media (hover: hover) and (pointer: fine) {
+    .product-image:hover [data-product-image] {
+      transform: translate3d(0, 0, 28px) scale(1.04);
+      filter: drop-shadow(0 22px 22px rgb(0 0 0 / 0.38));
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    .product-image,
     [data-product-tilt],
     [data-product-image],
     .product-shadow {

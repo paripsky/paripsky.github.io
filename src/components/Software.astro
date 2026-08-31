@@ -83,7 +83,7 @@ const tools: Tool[] = [
             rel="noreferrer"
             data-spotlight
             style={`--tool-rgb: ${tool.color}`}
-            class="software-card group relative flex min-h-36 items-center gap-4 overflow-hidden rounded-xl border border-zinc-800 bg-slate-900/30 p-4 transition hover:border-zinc-700"
+            class="software-card group relative flex min-h-36 items-center gap-4 overflow-hidden rounded-xl border border-zinc-700 bg-slate-900/20 p-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-300"
           >
             <div class="software-glow pointer-events-none absolute inset-0" />
             <div class="software-logo relative z-10 flex size-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/70 p-1.5">
@@ -102,10 +102,10 @@ const tools: Tool[] = [
               />
             </div>
             <div class="relative z-10 flex min-w-0 flex-1 flex-col gap-1.5">
-              <span class="text-base font-medium tracking-tight text-neutral-200">
+              <span class="text-base font-medium tracking-tight text-neutral-100">
                 {tool.name}
               </span>
-              <span class="text-xs font-light leading-relaxed text-neutral-500">
+              <span class="text-sm font-light leading-relaxed text-neutral-400">
                 {tool.purpose}
               </span>
             </div>
@@ -123,12 +123,16 @@ const tools: Tool[] = [
 <style>
   .software-card {
     --tool-rgb: 125 211 252;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     transform: translateY(0);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.025);
+    transition:
+      border-color 180ms ease,
+      transform 140ms var(--ease-out);
   }
 
-  .software-card:hover {
-    transform: translateY(-2px);
+  .software-card:active {
+    transform: scale(0.98);
   }
 
   .software-glow {
@@ -139,7 +143,7 @@ const tools: Tool[] = [
         transparent 65%
       ),
       linear-gradient(135deg, rgb(var(--tool-rgb) / 0.07), transparent 50%);
-    opacity: 0.7;
+    opacity: 0.55;
     transition: opacity 180ms ease-out;
   }
 
@@ -150,8 +154,19 @@ const tools: Tool[] = [
     transition: transform 180ms ease-out;
   }
 
-  .software-card:hover .software-logo {
-    transform: scale(1.04);
+  @media (hover: hover) and (pointer: fine) {
+    .software-card:hover {
+      transform: translateY(-2px);
+      border-color: rgb(82 82 91);
+    }
+
+    .software-card:hover:active {
+      transform: translateY(-2px) scale(0.98);
+    }
+
+    .software-card:hover .software-logo {
+      transform: scale(1.04);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
