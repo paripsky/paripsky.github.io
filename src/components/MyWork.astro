@@ -3,27 +3,11 @@ import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import freshLogo from "../assets/fresh-logo.svg";
 
-const colors = [
-  "hover:border-sky-400 hover:shadow-sky-800",
-  "hover:border-blue-400 hover:shadow-blue-800",
-  "hover:border-yellow-400 hover:shadow-yellow-800",
-  "hover:border-lime-400 hover:shadow-lime-800",
-  "hover:border-cyan-400 hover:shadow-cyan-800",
-  "hover:border-green-400 hover:shadow-green-800",
-  "hover:border-emerald-400 hover:shadow-emerald-800",
-  "hover:border-teal-400 hover:shadow-teal-800",
-  "hover:border-indigo-400 hover:shadow-indigo-800",
-  "hover:border-violet-400 hover:shadow-violet-800",
-  "hover:border-purple-400 hover:shadow-purple-800",
-  "hover:border-fuchsia-400 hover:shadow-fuchsia-800",
-  "hover:border-red-400 hover:shadow-red-800",
-  "hover:border-orange-400 hover:shadow-orange-800",
-  "hover:border-amber-400 hover:shadow-amber-800",
-];
-
 const projects = [
   {
     title: "Devedash",
+    color: "59 130 246",
+    background: "#0c1e38",
     description:
       "Devedash is a dashboard building app, built with Next.js, Mantine UI and Supabase.",
     githubUrl: "https://github.com/paripsky/devedash",
@@ -33,6 +17,8 @@ const projects = [
   },
   {
     title: "FreshLinks",
+    color: "250 204 21",
+    background: "#2b2412",
     description:
       "A short link generator with built in analytics, built with Fresh and Deno KV.",
     githubUrl: "https://github.com/paripsky/FreshLinks",
@@ -41,6 +27,8 @@ const projects = [
   },
   {
     title: "OG Scrapi",
+    color: "203 213 225",
+    background: "#20242c",
     description:
       "An API for fetching Open Graph tags and other metadata from any URL.",
     githubUrl: "https://github.com/paripsky/og-scrapi",
@@ -49,6 +37,8 @@ const projects = [
   },
   {
     title: "Develist",
+    color: "168 85 247",
+    background: "#23172f",
     description:
       "An app for organizing development tools and resources, built with Nuxt 3 and Supabase.",
     githubUrl: "https://github.com/paripsky/develist",
@@ -59,6 +49,8 @@ const projects = [
   },
   {
     title: "node-context-storage",
+    color: "74 222 128",
+    background: "#122a20",
     description: `A simple utility for managing a context across asynchronous boundaries in NodeJS.`,
     githubUrl: "https://github.com/paripsky/node-context-storage",
     siteUrl: "https://www.npmjs.com/package/node-context-storage",
@@ -67,6 +59,8 @@ const projects = [
   },
   {
     title: "QTerminal",
+    color: "251 146 60",
+    background: "#302019",
     description: "A Quake-style console for your website.",
     githubUrl: "https://github.com/paripsky/qterminal",
     siteUrl: "https://paripsky.github.io/qterminal",
@@ -79,26 +73,27 @@ const projects = [
 
 <ul class="grid grid-cols-1 xl:grid-cols-2 gap-4 w-full">
   {
-    projects.map((project, i) => (
+    projects.map((project) => (
       <li class="h-full">
         <div
-          class={`p-4 h-full relative border border-zinc-700 bg-slate-900/20 backdrop-blur-sm rounded-xl overflow-hidden group`}
+          class="project-card p-4 h-full relative border border-zinc-700 backdrop-blur-sm rounded-xl overflow-hidden group"
           data-spotlight
+          style={`--project-rgb: ${project.color}; --project-background: ${project.background}`}
         >
           <div
-            class="absolute inset-0 -z-10 rounded-xl border border-zinc-500 transition-opacity duration-300 pointer-events-none"
-            style="mask-image: radial-gradient(200px circle at var(--x) var(--y), black, transparent);"
+            class="project-glow pointer-events-none absolute inset-0"
+            aria-hidden="true"
           />
           {project.image && (
             <Image
-              class="absolute right-3 top-3 rounded-full"
+              class="project-logo absolute right-3 top-3 z-10 rounded-full"
               width={32}
               height={32}
               src={project.image}
               alt={project.title}
             />
           )}
-          <div class="flex flex-col gap-3 h-full">
+          <div class="relative z-10 flex flex-col gap-3 h-full">
             <h1 class="text-base leading-tight font-medium tracking-tight pr-10">
               {project.title}
             </h1>
@@ -144,3 +139,52 @@ const projects = [
     ))
   }
 </ul>
+
+<style>
+  .project-card {
+    background-color: var(--project-background);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.025);
+    transition: border-color 180ms ease;
+  }
+
+  .project-glow {
+    background:
+      radial-gradient(
+        220px circle at var(--x, 50%) var(--y, 50%),
+        rgb(var(--project-rgb) / 0.15),
+        transparent 65%
+      );
+    opacity: 0.55;
+    transition: opacity 180ms ease-out;
+  }
+
+  .project-logo {
+    box-shadow:
+      0 12px 32px rgb(0 0 0 / 0.25),
+      0 0 28px rgb(var(--project-rgb) / 0.08);
+    transition: transform 180ms ease-out;
+  }
+
+  .project-card:focus-within {
+    border-color: rgb(82 82 91);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-card:hover {
+      border-color: rgb(82 82 91);
+    }
+
+    .project-card:hover .project-logo {
+      transform: scale(1.04);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .project-logo,
+    .project-glow {
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
