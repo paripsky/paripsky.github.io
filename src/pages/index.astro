@@ -10,9 +10,8 @@ import { Icon } from "astro-icon/components";
 import Post from "../components/Post.astro";
 import Presentations from "../components/Presentations.astro";
 import Podcasts from "../components/Podcasts.astro";
-import Setup from "../components/Setup.astro";
+import GearGallery from "../components/GearGallery.astro";
 import Software from "../components/Software.astro";
-import Consoles from "../components/Consoles.astro";
 import ProductPreview from "../components/ProductPreview.astro";
 
 type Mention = {
@@ -49,8 +48,7 @@ const navigationItems = [
   { href: "#presentations", label: "Presentations" },
   { href: "#projects", label: "Projects" },
   { href: "#timeline", label: "Experience" },
-  { href: "#setup", label: "Setup" },
-  { href: "#consoles", label: "Consoles" },
+  { href: "#setup", label: "Gear" },
   { href: "#software", label: "On My Mac" },
 ];
 ---
@@ -155,14 +153,10 @@ const navigationItems = [
         <Timeline />
       </section>
 
-      <section id="setup" class="flex flex-col gap-6">
-        <Pill><Icon name="mdi:keyboard-outline" class="size-4" /> Setup</Pill>
-        <Setup />
-      </section>
-
-      <section id="consoles" class="flex flex-col gap-6">
-        <Pill><Icon name="mdi:gamepad-variant-outline" class="size-4" /> Consoles</Pill>
-        <Consoles />
+      <section id="setup" class="relative flex flex-col gap-6">
+        <span id="consoles" aria-hidden="true" class="absolute top-0"></span>
+        <Pill><Icon name="mdi:keyboard-outline" class="size-4" /> Gear</Pill>
+        <GearGallery />
       </section>
 
       <section id="software" class="flex flex-col gap-6">

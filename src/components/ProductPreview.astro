@@ -26,7 +26,7 @@ import { Icon } from "astro-icon/components";
     <p
       id="product-preview-title"
       data-preview-title
-      class="shrink-0 text-sm font-medium text-neutral-300"
+      class="shrink-0 text-center text-sm font-medium text-neutral-300"
     >
     </p>
   </div>
@@ -246,7 +246,7 @@ import { Icon } from "astro-icon/components";
         const openPreview = () => {
           previewImage.src = immediateSource;
           previewImage.alt = source.alt;
-          previewTitle.textContent = source.alt;
+          previewTitle.textContent = button.dataset.productTitle ?? source.alt;
           document.documentElement.dataset.productPreviewOpen = "true";
           dialog.showModal();
 
@@ -351,37 +351,5 @@ import { Icon } from "astro-icon/components";
       });
     }
 
-    if (
-      !window.matchMedia("(pointer: fine)").matches ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
-      return;
-
-    document.querySelectorAll<HTMLElement>("[data-product-tilt]").forEach((element) => {
-      if (element.dataset.tiltReady) return;
-      element.dataset.tiltReady = "true";
-      let frame = 0;
-
-      element.addEventListener("pointermove", (event) => {
-        cancelAnimationFrame(frame);
-        frame = requestAnimationFrame(() => {
-          const rect = element.getBoundingClientRect();
-          const x = (event.clientX - rect.left) / rect.width;
-          const y = (event.clientY - rect.top) / rect.height;
-          const maxTilt = Number(element.dataset.maxTilt ?? 3);
-
-          element.style.setProperty("--tilt-x", `${(0.5 - y) * maxTilt * 2}deg`);
-          element.style.setProperty("--tilt-y", `${(x - 0.5) * maxTilt * 2}deg`);
-          element.style.setProperty("--shadow-x", `${(0.5 - x) * 14}px`);
-        });
-      });
-
-      element.addEventListener("pointerleave", () => {
-        cancelAnimationFrame(frame);
-        element.style.setProperty("--tilt-x", "0deg");
-        element.style.setProperty("--tilt-y", "0deg");
-        element.style.setProperty("--shadow-x", "0px");
-      });
-    });
   });
 </script>

@@ -1,0 +1,165 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import corsairGalleon from "../assets/setup/corsair-galleon-no-cable.png";
+import codexMicro from "../assets/setup/codex-micro.png";
+import nuphyAir75 from "../assets/setup/nuphy-air75.png";
+import logitechG515 from "../assets/setup/logitech-g515.png";
+import logitechG815 from "../assets/setup/logitech-g815.png";
+import akkoMonetsPond from "../assets/setup/akko-monets-pond.png";
+import ps5SpiderMan from "../assets/consoles/ps5-spiderman.png";
+import steamDeck from "../assets/consoles/steam-deck.png";
+import nintendoSwitch from "../assets/consoles/nintendo-switch.png";
+import anbernicRgDs from "../assets/consoles/anbernic-rg-ds.png";
+import anbernicRgRotate from "../assets/consoles/anbernic-rg-rotate.png";
+import miyooMini from "../assets/consoles/miyoo-mini.png";
+
+type Gear = {
+  name: string;
+  image: ImageMetadata;
+  alt: string;
+  previewWidths: number[];
+};
+
+const gear: Gear[] = [
+  {
+    name: "Corsair GALLEON 100 SD",
+    image: corsairGalleon,
+    alt: "Corsair GALLEON 100 SD mechanical keyboard with its wrist rest",
+    previewWidths: [176, 264, 352, 800, 1400, 2000],
+  },
+  {
+    name: "Work Louder Codex Micro",
+    image: codexMicro,
+    alt: "White Work Louder Codex Micro macro pad with illuminated keys, a dial, and a joystick",
+    previewWidths: [176, 264, 352, 720, 1200],
+  },
+  {
+    name: "NuPhy Air75",
+    image: nuphyAir75,
+    alt: "Original NuPhy Air75 low-profile mechanical keyboard",
+    previewWidths: [160, 240, 320, 720, 1200],
+  },
+  {
+    name: "Logitech G515",
+    image: logitechG515,
+    alt: "White Logitech G515 TKL low-profile keyboard",
+    previewWidths: [160, 240, 320, 800, 1400, 1800],
+  },
+  {
+    name: "Logitech G815",
+    image: logitechG815,
+    alt: "Logitech G815 full-size low-profile mechanical keyboard",
+    previewWidths: [160, 240, 320, 800, 1400, 1800],
+  },
+  {
+    name: "Akko Monet's Pond 3108v2",
+    image: akkoMonetsPond,
+    alt: "Akko Monet's Pond 3108v2 mechanical keyboard in turquoise and white",
+    previewWidths: [160, 240, 320, 560, 720],
+  },
+  {
+    name: "PlayStation 5 Marvel's Spider-Man 2 Limited Edition",
+    image: ps5SpiderMan,
+    alt: "PlayStation 5 Marvel's Spider-Man 2 Limited Edition console with matching DualSense controller",
+    previewWidths: [160, 240, 320, 720, 1200, 1400],
+  },
+  {
+    name: "Steam Deck",
+    image: steamDeck,
+    alt: "Black Steam Deck handheld gaming PC",
+    previewWidths: [160, 240, 320, 720, 1200, 1600],
+  },
+  {
+    name: "Nintendo Switch",
+    image: nintendoSwitch,
+    alt: "Nintendo Switch with neon blue and neon red Joy-Con controllers",
+    previewWidths: [160, 240, 320, 720, 1200, 1600],
+  },
+  {
+    name: "Anbernic RG DS",
+    image: anbernicRgDs,
+    alt: "Black and crimson Anbernic RG DS dual-screen handheld",
+    previewWidths: [160, 240, 320, 720, 1200, 1600],
+  },
+  {
+    name: "Anbernic RG Rotate",
+    image: anbernicRgRotate,
+    alt: "Silver Anbernic RG Rotate handheld with its screen rotated open",
+    previewWidths: [160, 240, 320, 720, 1200, 1600],
+  },
+  {
+    name: "Miyoo Mini",
+    image: miyooMini,
+    alt: "Gray Miyoo Mini vertical retro handheld",
+    previewWidths: [160, 240, 320, 720, 1200, 1600],
+  },
+];
+---
+
+<div class="gear-gallery">
+  <ul class="gear-grid" role="list">
+    {
+      gear.map((item) => (
+        <li>
+          <button
+            type="button"
+            data-product-preview
+            data-product-title={item.name}
+            aria-haspopup="dialog"
+            aria-label={`View a larger image of ${item.name}`}
+            class="gear-image flex w-full cursor-zoom-in items-center justify-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-300"
+          >
+            <Image
+              src={item.image}
+              alt={item.alt}
+              widths={item.previewWidths}
+              sizes="(min-width: 768px) 180px, (min-width: 640px) 30vw, 45vw"
+              format="webp"
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-contain"
+            />
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .gear-gallery {
+    container-type: inline-size;
+  }
+
+  .gear-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .gear-image {
+    aspect-ratio: 4 / 3;
+    padding: 0.25rem;
+    transition: opacity 150ms ease;
+  }
+
+  @container (min-width: 28rem) {
+    .gear-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2rem 1.5rem;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .gear-image:hover {
+      opacity: 0.8;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gear-image {
+      transition: none;
+    }
+  }
+</style>
