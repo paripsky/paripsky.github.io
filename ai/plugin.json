@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "paripskills",
+  "version": "0.1.0",
+  "description": "Writing, planning and coding preferences for AI agents.",
+  "author": { "name": "paripsky" },
+  "homepage": "https://paripsky.github.io/ai/",
+  "repository": "https://github.com/paripsky/paripsky.github.io"
+}
