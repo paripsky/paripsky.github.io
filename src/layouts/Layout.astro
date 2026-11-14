@@ -7,11 +7,13 @@ import "../styles/global.css";
 
 interface Props {
   title: string;
+  description?: string;
 }
 
-const { title } = Astro.props;
-const description =
-  "Jonathan Paripsky is a Senior Software Engineer focused on JavaScript, React, Node.js, cloud platforms, and building thoughtful software products.";
+const {
+  title,
+  description = "Jonathan Paripsky is a Senior Software Engineer focused on JavaScript, React, Node.js, cloud platforms, and building thoughtful software products.",
+} = Astro.props;
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",

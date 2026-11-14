@@ -1,0 +1,177 @@
+---
+import { createSatteriMarkdownProcessor } from "@astrojs/markdown-satteri";
+import { Icon } from "astro-icon/components";
+import Layout from "../../layouts/Layout.astro";
+import Pill from "../../components/Pill.astro";
+import SectionNavigation from "../../components/SectionNavigation.astro";
+import { AGENT_SKILLS, readSkill, type SkillId } from "../../utils/agentSkills";
+import general from "../../../public/ai/AGENTS.md?raw";
+
+const markdown = await createSatteriMarkdownProcessor({
+  syntaxHighlight: "shiki",
+  shikiConfig: { theme: "github-dark", wrap: true },
+});
+
+async function renderDocument(content: string) {
+  const body = content
+    .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, "")
+    .replace(/^\s*# [^\n]+\r?\n/, "");
+  return (await markdown.render(body)).code;
+}
+
+const skills = await Promise.all(
+  (Object.keys(AGENT_SKILLS) as SkillId[]).map(async (id) => {
+    const info = AGENT_SKILLS[id];
+    const path = `skills/${id}/SKILL.md`;
+    const content = readSkill(id);
+    return { ...info, id, path: `/ai/${path}`, html: await renderDocument(content) };
+  }),
+);
+
+const generalHtml = await renderDocument(general);
+const installUrl = new URL("/ai/install.md", import.meta.env.DEV ? Astro.url.origin : Astro.site).href;
+---
+
+<Layout title="Agent skills" description="Writing, planning and coding skills for Codex and Claude Code.">
+  <main class="ai-layout w-full max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12" data-ai-page>
+    <aside class="intro md:sticky md:top-0 md:h-screen flex flex-col justify-center py-12">
+      <a class="back-link w-fit" href="/"><Icon name="mdi:arrow-left" class="size-4" /> Back to portfolio</a>
+      <h1 class="text-[clamp(2.5rem,5vw,4rem)] leading-tight font-medium tracking-tight mt-8">Agent skills</h1>
+      <p class="intro-copy text-lg font-light text-pretty leading-relaxed text-neutral-300 mt-6">The instructions I use with Codex and Claude Code for writing, planning and coding.</p>
+
+      <section class="install mt-8" aria-labelledby="install-heading">
+        <h2 id="install-heading" class="text-sm font-medium text-neutral-200">Install</h2>
+        <div class="install-actions flex mt-4">
+          <button
+            type="button"
+            class="install-button"
+            data-copy-text={`Install the paripskills plugin using ${installUrl}.`}
+            data-copy-label="install prompt"
+            aria-label="Copy install prompt"
+          >
+            <Icon name="mdi:content-copy" class="size-4" />
+            <span data-copy-feedback>Copy install prompt</span>
+          </button>
+        </div>
+        <p class="text-sm font-light text-neutral-400 mt-4">Install all three as the paripskills plugin, or ask for individual skills. General instructions are optional.</p>
+        <a href="/ai/install.md" class="instructions-link text-sm mt-3 inline-block">Installation instructions</a>
+      </section>
+
+      <SectionNavigation
+        items={[
+          ...skills.map((skill) => ({ href: `#${skill.id}`, label: skill.title })),
+          { href: "#general", label: "General instructions" },
+        ]}
+        label="Skill sections"
+        class="mt-12"
+      />
+      <span id="copy-status" class="sr-only" role="status" aria-live="polite"></span>
+    </aside>
+
+    <div class="documents flex flex-col gap-16 py-12">
+      {skills.map((skill) => (
+        <section id={skill.id} class="skill-section" aria-labelledby={`${skill.id}-heading`}>
+          <div class="document-heading">
+            <h2 id={`${skill.id}-heading`}><Pill><Icon name={skill.icon} class="size-4" /> {skill.title}</Pill></h2>
+            <div class="file-actions">
+              <a href={skill.path} aria-label={`View ${skill.title} Markdown`}><Icon name="mdi:code-braces" class="size-4" /> Source</a>
+              <button type="button" data-copy-file={skill.path} data-copy-label={`${skill.title} skill`} aria-label={`Copy ${skill.title} skill`}>
+                <Icon name="mdi:content-copy" class="size-4" /><span data-copy-feedback>Copy</span>
+              </button>
+            </div>
+          </div>
+          <div class="document" set:html={skill.html} />
+        </section>
+      ))}
+
+      <section id="general" class="skill-section" aria-labelledby="general-heading">
+        <div class="document-heading">
+          <h2 id="general-heading"><Pill><Icon name="mdi:tune-variant" class="size-4" /> General instructions</Pill></h2>
+          <div class="file-actions">
+            <a href="/ai/AGENTS.md" aria-label="View general instructions Markdown"><Icon name="mdi:code-braces" class="size-4" /> Source</a>
+            <button type="button" data-copy-file="/ai/AGENTS.md" data-copy-label="General instructions" aria-label="Copy general instructions">
+              <Icon name="mdi:content-copy" class="size-4" /><span data-copy-feedback>Copy</span>
+            </button>
+          </div>
+        </div>
+        <div class="document" set:html={generalHtml} />
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  document.addEventListener("click", async (event) => {
+    if (!(event.target instanceof Element)) return;
+    const button = event.target.closest<HTMLButtonElement>("[data-ai-page] button[data-copy-text], [data-ai-page] button[data-copy-file]");
+    if (!button || button.disabled) return;
+    const feedback = button.querySelector<HTMLElement>("[data-copy-feedback]");
+    const original = feedback?.textContent ?? "Copy";
+    const status = document.getElementById("copy-status");
+    button.disabled = true;
+    try {
+      let content = button.dataset.copyText;
+      if (content === undefined) {
+        const response = await fetch(button.dataset.copyFile!);
+        if (!response.ok) throw new Error("Could not read file");
+        content = await response.text();
+      }
+      await navigator.clipboard.writeText(content);
+      if (feedback) feedback.textContent = "Copied";
+      if (status) status.textContent = `Copied ${button.dataset.copyLabel}.`;
+    } catch {
+      if (feedback) feedback.textContent = "Try again";
+      if (status) status.textContent = "Could not copy. Open the source or installation instructions to copy the text.";
+    } finally {
+      button.disabled = false;
+      window.setTimeout(() => { if (feedback) feedback.textContent = original; }, 1800);
+    }
+  });
+</script>
+
+<style>
+  .intro { align-self: start; }
+  .intro-copy { max-width: 28rem; }
+  .back-link, .file-actions, .install-button { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .back-link { color: #a3a3a3; font-size: 0.875rem; }
+  .install { max-width: 28rem; }
+  .install-button { justify-content: center; min-width: 0; min-height: 2.75rem; padding: 0.5rem 1rem; border: 1px solid #e5e5e5; border-radius: 0.5rem; background: #e5e5e5; color: #0f172a; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background-color 160ms ease, border-color 160ms ease; }
+  .install-button:hover { background: #fff; border-color: #fff; }
+  .instructions-link { color: #7dd3fc; text-decoration: underline; text-underline-offset: 0.25em; }
+  .back-link { transition: color 160ms ease; }
+  .back-link:hover { color: #e5e5e5; }
+  .skill-section { min-width: 0; scroll-margin-top: 3rem; }
+  .document-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+  .file-actions { gap: 1rem; color: #a3a3a3; font-size: 0.75rem; }
+  .file-actions a, .file-actions button { display: inline-flex; align-items: center; gap: 0.375rem; min-height: 2.25rem; padding: 0; background: transparent; border: 0; color: inherit; cursor: pointer; transition: color 160ms ease; }
+  .file-actions a:hover, .file-actions button:hover { color: #e5e5e5; }
+  button:disabled { opacity: 0.6; cursor: wait; }
+  a:focus-visible, button:focus-visible { outline: 2px solid #7dd3fc; outline-offset: 4px; border-radius: 2px; }
+  .document { color: #a3a3a3; font-size: 0.875rem; font-weight: 300; line-height: 1.8; }
+  .document :global(h2) { margin: 1.5rem 0 0.75rem; color: #e5e5e5; font-size: 0.9375rem; font-weight: 500; }
+  .document :global(p) { margin: 0 0 1rem; }
+  .document :global(ul), .document :global(ol) { padding-left: 1.25rem; margin: 0 0 1rem; }
+  .document :global(ul) { list-style: disc; }
+  .document :global(ol) { list-style: decimal; }
+  .document :global(li) { padding-left: 0.25rem; margin-bottom: 0.75rem; }
+  .document :global(li::marker) { color: #64748b; }
+  .document :global(li:last-child) { margin-bottom: 0; }
+  .document :global(a) { color: #bae6fd; text-decoration: underline; text-underline-offset: 0.2em; }
+  .document :global(strong) { color: #e5e5e5; font-weight: 500; }
+  .document :global(:not(pre) > code) { color: #cbd5e1; background: #1e293b80; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.8125rem; }
+  .document :global(pre) { max-width: 100%; margin: 1.5rem 0; padding: 1.25rem; border: 1px solid #1e293b; border-radius: 0.75rem; background: #0b1220 !important; color: #e5e5e5; font-size: 0.8125rem; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; overflow-x: auto; }
+  .document :global(> :last-child) { margin-bottom: 0; }
+  .documents { min-width: 0; }
+
+  @media (max-width: 767px) {
+    .ai-layout { gap: 0; }
+    .intro { padding-bottom: 0; }
+    .install-button { padding: 0.5rem 0.75rem; font-size: 0.8125rem; }
+    .documents { gap: 3rem; }
+    .document-heading { margin-bottom: 1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .install-button, .back-link, .file-actions a, .file-actions button { transition: none; }
+  }
+</style>

@@ -1,0 +1,11 @@
+{
+  "name": "paripskills",
+  "owner": { "name": "paripsky" },
+  "plugins": [
+    {
+      "name": "paripskills",
+      "source": "./public/ai",
+      "description": "Writing, planning and coding preferences for AI agents."
+    }
+  ]
+}
